@@ -7,7 +7,19 @@
 #include <cstdlib>
 #include "Map.hpp"
 
-Map::Map() :
+Map::Map()
+{
+	auto map = createMap();
+	map = fillBoxes(map);
+	_map = map;
+}
+
+Map::~Map()
+{
+
+}
+
+std::array<std::array<int, MAP_SIZE>, MAP_SIZE> Map::createMap() const noexcept
 {
 	std::array<std::array<int, MAP_SIZE>, MAP_SIZE> map{};
 
@@ -28,13 +40,14 @@ Map::Map() :
 			}
 		}
 	}
+	return map;
+}
 
-	auto posx = 0;
-	auto posy = 0;
-
+std::array<std::array<int, MAP_SIZE>, MAP_SIZE> Map::fillBoxes(std::array<std::array<int, MAP_SIZE>, MAP_SIZE> map) const noexcept
+{
 	for (auto countBoxes = 0; countBoxes <= 75;) {
-		posx = std::rand() % (MAP_SIZE - 2) + 1;
-		posy = std::rand() % (MAP_SIZE - 2) + 1;
+		auto posx = std::rand() % (MAP_SIZE - 2) + 1;
+		auto posy = std::rand() % (MAP_SIZE - 2) + 1;
 
 		if (map.at(posx).at(posy) == 1 ) {
 			map.at(posx).at(posy) = 2;
@@ -46,11 +59,5 @@ Map::Map() :
 	map.at(13).at(13) = 1;
 	map.at(1).at(13) = 1;
 	map.at(13).at(1) = 1;
-
-	_map = map;
-}
-
-Map::~Map()
-{
-
+	return map;
 }
