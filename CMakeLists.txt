@@ -1,35 +1,10 @@
-cmake_minimum_required(VERSION 2.6)
-PROJECT(IrrlichtTests)
+cmake_minimum_required(VERSION 3.9)
+project(cpp_indie_studio)
 
-SET(CMAKE_CXX_FLAGS_RELEASE "-O3")
-SET(CMAKE_CXX_FLAGS_DEBUG  "-g")
-SET(CMAKE_CXX_FLAGS "-lXxf86vm")
-SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR})
+set(CMAKE_CXX_STANDARD 11)
 
+include_directories(src/Boxes
+                    src/Loot)
 
-IF(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
-    SET(CMAKE_BUILD_TYPE RelWithDebInfo)
-ENDIF(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
-
-FIND_PACKAGE(X11)
-FIND_PACKAGE(OpenGL)
-INCLUDE_DIRECTORIES(
-        ${PROJECT_SOURCE_DIR}/include
-        ${OPENGL_SOURCE_DIR}/include
-        ${X11_SOURCE_DIR}/include
-)
-
-FILE(GLOB SRCS src/*.cpp)
-FILE(GLOB HDRS include/*.h)
-
-ADD_EXECUTABLE(IrrlichtTests
-        ${SRCS}
-        ${HDRS}
-)
-
-TARGET_LINK_LIBRARIES(IrrlichtTests
-        ${PROJECT_SOURCE_DIR}/lib/libIrrlicht.a
-        ${OPENGL_LIBRARIES}
-        ${X11_LIBRARIES}
-
-)
+add_executable(cpp_indie_studio
+            src/main.cpp src/Boxes/Box.cpp src/Boxes/Box.hpp src/Loot/Loot.cpp src/Loot/Loot.hpp)

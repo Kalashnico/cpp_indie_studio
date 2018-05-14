@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/nicolasguerin/Workspace/School/Tek2/CPP/cpp_indie_studio/src/main.cpp
+iostream
+-
+ctime
+-
+Map.hpp
+/Users/nicolasguerin/Workspace/School/Tek2/CPP/cpp_indie_studio/src/Map.hpp
+
