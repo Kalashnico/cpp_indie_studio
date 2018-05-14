@@ -7,10 +7,13 @@
 #include <cstdlib>
 #include "Map.hpp"
 
+/**
+ * Constructor : Ready To Use.
+ */
 Map::Map()
 {
 	auto map = createMap();
-	map = fillBoxes(map);
+	map = addBoxes(map);
 	_map = map;
 }
 
@@ -18,6 +21,11 @@ Map::~Map()
 {
 
 }
+
+/**
+ * Create the initial map
+ * @return map without boxes
+ */
 
 std::array<std::array<int, MAP_SIZE>, MAP_SIZE> Map::createMap() const noexcept
 {
@@ -43,7 +51,12 @@ std::array<std::array<int, MAP_SIZE>, MAP_SIZE> Map::createMap() const noexcept
 	return map;
 }
 
-std::array<std::array<int, MAP_SIZE>, MAP_SIZE> Map::fillBoxes(std::array<std::array<int, MAP_SIZE>, MAP_SIZE> map) const noexcept
+/**
+ * Add boxes to fill the map (nearly ~90% of the map)
+ * @param map without boxes
+ * @return map done
+ */
+std::array<std::array<int, MAP_SIZE>, MAP_SIZE> Map::addBoxes(std::array<std::array<int, MAP_SIZE>, MAP_SIZE> map) const noexcept
 {
 	for (auto countBoxes = 0; countBoxes <= 75;) {
 		auto posx = std::rand() % (MAP_SIZE - 2) + 1;
