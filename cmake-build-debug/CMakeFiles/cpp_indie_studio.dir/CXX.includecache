@@ -1,0 +1,42 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../src/Boxes/Box.hpp
+Loot.hpp
+../src/Boxes/Loot.hpp
+
+../src/Loot/Loot.hpp
+string
+-
+array
+-
+
+/Users/nicolasguerin/Workspace/School/Tek2/CPP/cpp_indie_studio/src/Boxes/Box.cpp
+Box.hpp
+/Users/nicolasguerin/Workspace/School/Tek2/CPP/cpp_indie_studio/src/Boxes/Box.hpp
+
+/Users/nicolasguerin/Workspace/School/Tek2/CPP/cpp_indie_studio/src/Boxes/Box.hpp
+Loot.hpp
+/Users/nicolasguerin/Workspace/School/Tek2/CPP/cpp_indie_studio/src/Boxes/Loot.hpp
+
+/Users/nicolasguerin/Workspace/School/Tek2/CPP/cpp_indie_studio/src/Loot/Loot.cpp
+Loot.hpp
+/Users/nicolasguerin/Workspace/School/Tek2/CPP/cpp_indie_studio/src/Loot/Loot.hpp
+
+/Users/nicolasguerin/Workspace/School/Tek2/CPP/cpp_indie_studio/src/Loot/Loot.hpp
+string
+-
+array
+-
+
+/Users/nicolasguerin/Workspace/School/Tek2/CPP/cpp_indie_studio/src/main.cpp
+Loot.hpp
+-
+Box.hpp
+-
+
