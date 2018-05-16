@@ -24,8 +24,12 @@ namespace map {
 class IObject {
 	public:
 		virtual ~IObject() = default;
-
 		bool operator==(const IObject &rhs) { return _type == rhs._type; }
+
+		Type getType() const noexcept { return _type; }
+
+	protected:
+		void setType(Type type) noexcept { _type = type; }
 
 	private:
 		Type _type;
