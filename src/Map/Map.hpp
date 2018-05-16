@@ -4,9 +4,14 @@
 
 #pragma once
 
-#include <array>
+#include <vector>
+#include "Tile.hpp"
 
-#define MAP_SIZE 15
+#define MAP_SIZE	15
+#define BOX_COUNT	75
+#define INDEX(x, y)	(MAP_SIZE * x + y)
+
+namespace map {
 
 class Map {
 	public:
@@ -14,13 +19,18 @@ class Map {
 		~Map();
 
 		//Getter
-		std::array<std::array<int, MAP_SIZE>, MAP_SIZE> getMap() const noexcept { return _map; };
+		std::vector<Tile> &getMap() noexcept { return _map; };
+		Tile &getTileAt(size_t x, size_t y) noexcept { return _map[INDEX(x, y)]; }
+		size_t getTileIndex(size_t x, size_t y) const noexcept { return INDEX(x, y); }
+
 	private:
 		//Private member Functions
-		std::array<std::array<int, MAP_SIZE>, MAP_SIZE> createMap() const noexcept;
-		std::array<std::array<int, MAP_SIZE>, MAP_SIZE>	addBoxes(std::array<std::array<int, MAP_SIZE>, MAP_SIZE> map) const noexcept;
+		std::vector<Tile> createMap() const noexcept;
+		std::vector<Tile> addBoxes(std::vector<Tile> map) const noexcept;
 
 		//Variable
-		std::array<std::array<int, MAP_SIZE>, MAP_SIZE> _map;
+		std::vector<Tile> _map;
 
 };
+
+}

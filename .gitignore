@@ -1,7 +1,7 @@
 *
 !.gitignore
-!Makefile
+!CMakeLists.txt
 !src/
-!src/**/
+!src/**
 !src/**/*.cpp
 !src/**/*.hpp
