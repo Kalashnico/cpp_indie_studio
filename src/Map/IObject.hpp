@@ -10,10 +10,13 @@
 enum Type {
 	WALL,
 	BOX,
-	PLAYER,
 	LOOT,
 	BOMB,
-	FIRE
+	FIRE,
+	PLAYER1,
+	PLAYER2,
+	PLAYER3,
+	PLAYER4
 };
 
 namespace map {
