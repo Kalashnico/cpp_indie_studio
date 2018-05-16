@@ -26,7 +26,6 @@ Map::~Map()
  * Create the initial map
  * @return map without boxes
  */
-
 std::array<std::array<int, MAP_SIZE>, MAP_SIZE> Map::createMap() const noexcept
 {
 	std::array<std::array<int, MAP_SIZE>, MAP_SIZE> map{};
@@ -62,7 +61,7 @@ std::array<std::array<int, MAP_SIZE>, MAP_SIZE> Map::addBoxes(std::array<std::ar
 		auto posx = std::rand() % (MAP_SIZE - 2) + 1;
 		auto posy = std::rand() % (MAP_SIZE - 2) + 1;
 
-		if (map.at(posx).at(posy) == 1 ) {
+		if (map.at(posx).at(posy) == 1) {
 			map.at(posx).at(posy) = 2;
 			++countBoxes;
 		}

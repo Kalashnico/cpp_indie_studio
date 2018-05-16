@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <string>
 #include "Loot.hpp"
 
 class Box {
