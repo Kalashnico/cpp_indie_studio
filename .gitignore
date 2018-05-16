@@ -4,5 +4,4 @@
 !src/
 !src/**/
 !src/**/*.cpp
-!include/
-!include/*.hpp
+!src/**/*.hpp
