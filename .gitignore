@@ -1,0 +1,10 @@
+*
+!.gitignore
+!CMakeLists.txt
+!src/
+!src/**/
+!src/**/*.cpp
+!src/**/*.hpp
+!include/
+!include/Irrlicht/*.h
+!lib/libIrrlicht.a
