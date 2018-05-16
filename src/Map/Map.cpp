@@ -3,7 +3,9 @@
 //
 
 #include <vector>
+#include <random>
 #include "Map.hpp"
+#include "../Boxes/Box.hpp"
 
 namespace map {
 
@@ -12,9 +14,8 @@ namespace map {
  */
 Map::Map()
 {
-	auto map = createMap();
-	map = addBoxes(map);
-	_map = map;
+	createMap();
+	addBoxes();
 }
 
 Map::~Map()
@@ -27,19 +28,25 @@ Map::~Map()
  * @return map without boxes
  */
 
-std::vector<Tile> Map::createMap() const noexcept
+void Map::createMap() noexcept
 {
-	std::vector<Tile> map{};
-
 	for (int x = 0; x < MAP_SIZE; x++) {
 		for (int y = 0; y < MAP_SIZE; y++) {
-			map.emplace_back(Tile(x, y));
+			_map.emplace_back(std::make_unique<Tile>(x, y));
 			//if (x % 2 == 1 && y % 2 == 1)
 				//map.back().addObject(); // TODO: Add wall?
 		}
 	}
+}
 
-	return map;
+bool Map::isCornerTile(size_t x, size_t y) const noexcept
+{
+	if ((x == 0 && y == 0) || (x == 0 && y == 1) || (x == 1 && y == 0)
+		|| (x == 0 && y == MAP_SIZE - 1) || (x == 0 && y == MAP_SIZE - 2) || (x == 1 && y == MAP_SIZE - 1)
+		|| (x == MAP_SIZE - 1 && y == 0) || (x == MAP_SIZE - 2 && y == 0) || (x == MAP_SIZE - 1 && y == 1)
+		|| (x == MAP_SIZE - 1 && y == MAP_SIZE - 1) || (x == MAP_SIZE - 1 && y == MAP_SIZE - 2) || (x == MAP_SIZE - 2 && y == MAP_SIZE - 1))
+		return true;
+	return false;
 }
 
 /**
@@ -47,10 +54,27 @@ std::vector<Tile> Map::createMap() const noexcept
  * @param map without boxes
  * @return map done
  */
-std::vector<Tile> Map::addBoxes(std::vector<Tile> map) const noexcept
+void Map::addBoxes() noexcept
 {
-	// TODO
-	return map;
+	std::random_device randomDevice;				// Random device
+	std::mt19937 engine(randomDevice());				// Seed
+	std::uniform_int_distribution<> distribution(1, 10);		// Range
+
+	for (int x = 0; x < MAP_SIZE; x++) {
+		for (int y = 0; y < MAP_SIZE; y++) {
+			if (isCornerTile(x, y))				// Player spawn check
+				continue;
+
+			if (x % 2 == 1 && y % 2 == 1)			// Wall check
+				continue;
+
+			if (distribution(engine) < 9) {			// Generate random number - 8/10 chance to spawn box
+				auto box = std::unique_ptr<IObject>(new Box(Loot{}));
+				getTileAt(x, y)->addObject(std::move(box));
+			}
+
+		}
+	}
 }
 
 }

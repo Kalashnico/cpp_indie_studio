@@ -5,6 +5,7 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 #include "Tile.hpp"
 
 #define MAP_SIZE	15
@@ -19,17 +20,18 @@ class Map {
 		~Map();
 
 		//Getter
-		std::vector<Tile> &getMap() noexcept { return _map; };
-		Tile &getTileAt(size_t x, size_t y) noexcept { return _map[INDEX(x, y)]; }
+		std::vector<std::unique_ptr<Tile>> &getMap() noexcept { return _map; };
+		Tile *getTileAt(size_t x, size_t y) noexcept { return _map[INDEX(x, y)].get(); }
 		size_t getTileIndex(size_t x, size_t y) const noexcept { return INDEX(x, y); }
 
 	private:
 		//Private member Functions
-		std::vector<Tile> createMap() const noexcept;
-		std::vector<Tile> addBoxes(std::vector<Tile> map) const noexcept;
+		void createMap() noexcept;
+		void addBoxes() noexcept;
+		bool isCornerTile(size_t x, size_t y) const noexcept;
 
 		//Variable
-		std::vector<Tile> _map;
+		std::vector<std::unique_ptr<Tile>> _map;
 
 };
 
