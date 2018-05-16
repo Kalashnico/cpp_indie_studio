@@ -56,19 +56,19 @@ bool Map::isCornerTile(size_t x, size_t y) const noexcept
  */
 void Map::addBoxes() noexcept
 {
-	std::random_device randomDevice;				// Random device
-	std::mt19937 engine(randomDevice());				// Seed
-	std::uniform_int_distribution<> distribution(1, 10);		// Range
+	std::random_device randomDevice;						// Random device
+	std::mt19937 engine(randomDevice());						// Seed
+	std::uniform_int_distribution<> distribution(1, 10);				// Range
 
 	for (int x = 0; x < MAP_SIZE; x++) {
 		for (int y = 0; y < MAP_SIZE; y++) {
-			if (isCornerTile(x, y))				// Player spawn check
+			if (isCornerTile(x, y))						// Player spawn check
 				continue;
 
-			if (x % 2 == 1 && y % 2 == 1)			// Wall check
+			if (x % 2 == 1 && y % 2 == 1)					// Wall check
 				continue;
 
-			if (distribution(engine) < 9) {			// Generate random number - 8/10 chance to spawn box
+			if (distribution(engine) < 9) {					// Generate random number - 8/10 chance to spawn box
 				auto box = std::unique_ptr<IObject>(new Box(Loot{}));
 				getTileAt(x, y)->addObject(std::move(box));
 			}
