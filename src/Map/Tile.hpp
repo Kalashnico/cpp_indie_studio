@@ -9,6 +9,7 @@
 
 #include <algorithm>
 #include <vector>
+#include <memory>
 #include "IObject.hpp"
 
 namespace map {
@@ -20,16 +21,16 @@ class Tile {
 
 		size_t getX() const noexcept { return  _x; }
 		size_t getY() const noexcept { return _y; }
-		const std::vector<IObject> &getObjects() const noexcept { return _objects; }
+		std::vector<std::unique_ptr<IObject>> &getObjects() noexcept { return _objects; }
 
-		void addObject(const IObject &object) noexcept { _objects.emplace_back(object); }
-		void removeObject(const IObject &object) noexcept { _objects.erase(std::remove(_objects.begin(), _objects.end(), object), _objects.end()); }
+		void addObject(std::unique_ptr<IObject>) noexcept;
+		void removeObject(std::unique_ptr<IObject>) noexcept;
 
 	private:
 		size_t _x;
 		size_t _y;
 
-		std::vector<IObject> _objects;
+		std::vector<std::unique_ptr<IObject>> _objects;
 };
 
 }

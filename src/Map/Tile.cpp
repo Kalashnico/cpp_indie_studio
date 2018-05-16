@@ -16,4 +16,15 @@ Tile::Tile(size_t x, size_t y)
 Tile::~Tile()
 {}
 
+void Tile::addObject(std::unique_ptr<IObject> object) noexcept
+{
+	_objects.emplace_back(std::move(object));
+}
+
+void Tile::removeObject(std::unique_ptr<IObject> object) noexcept
+{
+	_objects.erase(std::remove(_objects.begin(), _objects.end(), object), _objects.end());
+	_objects.shrink_to_fit();
+}
+
 }
