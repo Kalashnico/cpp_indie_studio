@@ -4,7 +4,9 @@
 
 #include "Fire.hpp"
 
+namespace object {
+
 Fire::Fire() : AObject("BOMB PATH", FIRE)
-{
+{}
 
 }
