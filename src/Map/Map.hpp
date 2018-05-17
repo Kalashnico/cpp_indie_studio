@@ -9,7 +9,6 @@
 #include "Tile.hpp"
 
 #define MAP_SIZE	15
-#define BOX_COUNT	75
 #define INDEX(x, y)	(MAP_SIZE * x + y)
 
 namespace map {
