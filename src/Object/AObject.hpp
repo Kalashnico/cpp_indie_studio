@@ -30,7 +30,7 @@ class AObject {
 		virtual ~AObject() = default;
 
 		virtual void detonate() noexcept {}
-		virtual void bombFuse() noexcept {}
+		virtual void update() noexcept {}
 
 		//Getter
 		Type getType() const noexcept { return _type; }
