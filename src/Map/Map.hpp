@@ -19,7 +19,7 @@ class Map {
 		~Map();
 
 		//Getter
-		std::vector<std::unique_ptr<Tile>> &getMap() noexcept { return _map; };
+		const std::vector<std::unique_ptr<Tile>> &getMap() noexcept { return _map; };
 		Tile *getTileAt(size_t x, size_t y) noexcept { return _map[INDEX(x, y)].get(); }
 		size_t getTileIndex(size_t x, size_t y) const noexcept { return INDEX(x, y); }
 

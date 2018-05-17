@@ -5,7 +5,7 @@
 #include <vector>
 #include <random>
 #include "Map.hpp"
-#include "../Boxes/Box.hpp"
+#include "Box.hpp"
 
 namespace map {
 
@@ -19,9 +19,7 @@ Map::Map()
 }
 
 Map::~Map()
-{
-
-}
+{}
 
 /**
  * Create the initial map
@@ -41,12 +39,10 @@ void Map::createMap() noexcept
 
 bool Map::isCornerTile(size_t x, size_t y) const noexcept
 {
-	if ((x == 0 && y == 0) || (x == 0 && y == 1) || (x == 1 && y == 0)
+	return (x == 0 && y == 0) || (x == 0 && y == 1) || (x == 1 && y == 0)
 		|| (x == 0 && y == MAP_SIZE - 1) || (x == 0 && y == MAP_SIZE - 2) || (x == 1 && y == MAP_SIZE - 1)
 		|| (x == MAP_SIZE - 1 && y == 0) || (x == MAP_SIZE - 2 && y == 0) || (x == MAP_SIZE - 1 && y == 1)
-		|| (x == MAP_SIZE - 1 && y == MAP_SIZE - 1) || (x == MAP_SIZE - 1 && y == MAP_SIZE - 2) || (x == MAP_SIZE - 2 && y == MAP_SIZE - 1))
-		return true;
-	return false;
+		|| (x == MAP_SIZE - 1 && y == MAP_SIZE - 1) || (x == MAP_SIZE - 1 && y == MAP_SIZE - 2) || (x == MAP_SIZE - 2 && y == MAP_SIZE - 1);
 }
 
 /**
@@ -69,10 +65,9 @@ void Map::addBoxes() noexcept
 				continue;
 
 			if (distribution(engine) < 9) {					// Generate random number - 8/10 chance to spawn box
-				auto box = std::unique_ptr<IObject>(new Box(Loot{}));
+				auto box = std::unique_ptr<AObject>(new Box(Loot{}));
 				getTileAt(x, y)->addObject(std::move(box));
 			}
-
 		}
 	}
 }
