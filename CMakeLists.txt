@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.6)
-PROJECT(IrrlichtTests)
+PROJECT(PlayerTest)
 
 SET(CMAKE_CXX_FLAGS_RELEASE "-O3")
 SET(CMAKE_CXX_FLAGS_DEBUG  "-g")
@@ -17,19 +17,22 @@ INCLUDE_DIRECTORIES(
         ${PROJECT_SOURCE_DIR}/include
         ${OPENGL_SOURCE_DIR}/include
         ${X11_SOURCE_DIR}/include
+        src/Map
+        src/Boxes
+        src/Loot
+        src/Player_IA
 )
 
 FILE(GLOB SRCS src/*.cpp)
-FILE(GLOB HDRS include/*.h)
+FILE(GLOB HDRS src/*.hpp)
 
 ADD_EXECUTABLE(IrrlichtTests
         ${SRCS}
         ${HDRS}
-)
+        src/main.cpp src/Player_IA/IA.cpp src/Player_IA/IA.hpp src/Player_IA/Player.cpp src/Player_IA/Player.hpp)
 
 TARGET_LINK_LIBRARIES(IrrlichtTests
         ${PROJECT_SOURCE_DIR}/lib/libIrrlicht.a
         ${OPENGL_LIBRARIES}
         ${X11_LIBRARIES}
-
 )
