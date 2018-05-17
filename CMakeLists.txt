@@ -8,6 +8,7 @@ include_directories(src/Object
 		    src/Object/Bomb
 		    src/Object/Boxes
 		    src/Object/Wall
+			src/Object/Fire
 		    src/Map)
 
 file(GLOB sources main.cpp src/**/*.cpp src/**/**/*.cpp)

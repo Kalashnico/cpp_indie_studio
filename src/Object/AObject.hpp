@@ -29,6 +29,8 @@ class AObject {
 		AObject() = delete;
 		virtual ~AObject() = default;
 
+		virtual void detonate() noexcept {}
+
 		//Getter
 		Type getType() const noexcept { return _type; }
 		std::string getPathToMesh() const noexcept { return _pathToMesh; }

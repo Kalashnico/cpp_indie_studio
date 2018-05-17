@@ -4,17 +4,29 @@
 
 #pragma once
 
+#include <Map.hpp>
+#include <thread>
 #include "AObject.hpp"
 
 namespace object {
 
 class Bomb : public AObject {
 	public:
-		Bomb(int blast);
+		Bomb(int posx, int posy, int blast, map::Map &map);
 		~Bomb();
 
+		void detonate() noexcept { _detonate = true; }
+
 	private:
+		//Member Function
+		void  bombFuse();
+
+		int _posx;
+		int _posy;
 		int _blastSize;
+		map::Map &_map;
+		std::thread  _thread;
+		bool	_detonate;
 
 };
 }
