@@ -6,6 +6,7 @@
 #include <random>
 #include "Map.hpp"
 #include "Box.hpp"
+#include "Wall.hpp"
 
 namespace map {
 
@@ -31,8 +32,10 @@ void Map::createMap() noexcept
 	for (int x = 0; x < MAP_SIZE; x++) {
 		for (int y = 0; y < MAP_SIZE; y++) {
 			_map.emplace_back(std::make_unique<Tile>(x, y));
-			//if (x % 2 == 1 && y % 2 == 1)
-				//map.back().addObject(); // TODO: Add wall?
+			if (x % 2 == 1 && y % 2 == 1) {
+				std::unique_ptr<object::AObject> wall = std::make_unique<object::Wall>();
+				getTileAt(x, y)->addObject(std::move(wall));
+			}
 		}
 	}
 }
@@ -65,7 +68,7 @@ void Map::addBoxes() noexcept
 				continue;
 
 			if (distribution(engine) < 9) {					// Generate random number - 8/10 chance to spawn box
-				auto box = std::unique_ptr<AObject>(new Box(Loot{}));
+				std::unique_ptr<object::AObject> box = std::make_unique<object::Box>(object::Loot{});
 				getTileAt(x, y)->addObject(std::move(box));
 			}
 		}
