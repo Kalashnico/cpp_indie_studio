@@ -10,7 +10,6 @@
 #include <algorithm>
 #include <vector>
 #include <memory>
-#include <mutex>
 #include "AObject.hpp"
 
 namespace map {
@@ -35,8 +34,6 @@ class Tile {
 		size_t _y;
 
 		std::vector<std::unique_ptr<object::AObject>> _objects;
-
-		std::mutex tileGuard;
 };
 
 }

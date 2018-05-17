@@ -5,7 +5,6 @@
 ** Tiles
 */
 
-#include <iostream>
 #include "Tile.hpp"
 
 namespace map {
@@ -19,8 +18,6 @@ Tile::~Tile()
 
 object::AObject *Tile::getObject(Type objectType) noexcept
 {
-	std::lock_guard<std::mutex> lock(this->tileGuard);
-
 	for (auto &object : _objects) {
 		if (object.get()->getType() == objectType)
 			return object.get();
@@ -30,15 +27,11 @@ object::AObject *Tile::getObject(Type objectType) noexcept
 
 void Tile::addObject(std::unique_ptr<object::AObject> object) noexcept
 {
-	std::lock_guard<std::mutex> lock(this->tileGuard);
-
 	_objects.emplace_back(std::move(object));
 }
 
 void Tile::removeObject(Type objectType) noexcept
 {
-	std::lock_guard<std::mutex> lock(this->tileGuard);
-
 	auto toRemove = std::remove_if(_objects.begin(), _objects.end(),
 					[&objectType](std::unique_ptr<object::AObject> &object)
 					{
@@ -51,8 +44,6 @@ void Tile::removeObject(Type objectType) noexcept
 
 bool Tile::containsObject(Type objectType) noexcept
 {
-	std::lock_guard<std::mutex> lock(this->tileGuard);
-
 	for (auto &object : _objects) {
 		if (object.get()->getType() == objectType)
 			return true;

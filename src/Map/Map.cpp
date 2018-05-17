@@ -2,8 +2,6 @@
 // Created by Nicolas Guerin on 14/05/2018.
 //
 
-#include <iostream>
-#include <vector>
 #include <random>
 #include "Map.hpp"
 #include "Box.hpp"
@@ -38,6 +36,15 @@ void Map::createMap() noexcept
 				std::unique_ptr<object::AObject> wall = std::make_unique<object::Wall>();
 				getTileAt(x, y)->addObject(std::move(wall));
 			}
+		}
+	}
+}
+
+void Map::updateTileObjects() noexcept
+{
+	for (auto &tile : _map) {
+		for (auto &object : tile.get()->getObjects()) {
+			object.get()->update();
 		}
 	}
 }
@@ -79,13 +86,11 @@ void Map::addBoxes() noexcept
 
 void Map::addObjectToTile(size_t x, size_t y, std::unique_ptr<object::AObject> object) noexcept
 {
-	std::lock_guard<std::mutex> lock(this->mapMutex);
 	getTileAt(x, y)->addObject(std::move(object));
 }
 
 void Map::removeObjectFromTile(size_t x, size_t y, Type objectType) noexcept
 {
-	std::lock_guard<std::mutex> lock(this->mapMutex);
 	getTileAt(x, y)->removeObject(objectType);
 }
 
@@ -105,18 +110,18 @@ bool Map::placeFire(int i, size_t x, size_t y) noexcept
 
 	if (getTileAt(x, y)->containsObject(BOX)) {
 		removeObjectFromTile(x, y, BOX);
-		addObjectToTile(x, y, std::move(std::unique_ptr<object::AObject>(new object::Fire())));
+		addObjectToTile(x, y, std::move(std::unique_ptr<object::AObject>(new object::Fire(x, y, this))));
 		return false;
 	}
 
-	addObjectToTile(x, y, std::move(std::unique_ptr<object::AObject>(new object::Fire())));
+	addObjectToTile(x, y, std::move(std::unique_ptr<object::AObject>(new object::Fire(x, y, this))));
 	return true;
 }
 
 void Map::explodeBomb(size_t x, size_t y, size_t blastRadius) noexcept
 {
 	removeObjectFromTile(x, y, BOMB);
-	addObjectToTile(x, y, std::move(std::unique_ptr<object::AObject>(new object::Fire())));
+	addObjectToTile(x, y, std::move(std::unique_ptr<object::AObject>(new object::Fire(x, y, this))));
 
 	for (int i = x - 1; i >= x - blastRadius; i--)
 		if (!placeFire(i, i, y))
