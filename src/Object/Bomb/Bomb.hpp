@@ -12,20 +12,19 @@ namespace object {
 
 class Bomb : public AObject {
 	public:
-		Bomb(int posx, int posy, int blast, map::Map &map);
+		Bomb(int posx, int posy, int blast, map::Map *map);
 		~Bomb();
 
 		void detonate() noexcept { _detonate = true; }
+		void  bombFuse() noexcept;
 
 	private:
-		//Member Function
-		void  bombFuse();
 
 		int _posx;
 		int _posy;
 		int _blastSize;
-		map::Map &_map;
-		std::thread  _thread;
+		map::Map *_map;
+
 		bool	_detonate;
 
 };
