@@ -2,11 +2,13 @@
 // Created by Nicolas Guerin on 14/05/2018.
 //
 
+#include <iostream>
 #include <vector>
 #include <random>
 #include "Map.hpp"
 #include "Box.hpp"
 #include "Wall.hpp"
+#include "Fire.hpp"
 
 namespace map {
 
@@ -55,24 +57,82 @@ bool Map::isCornerTile(size_t x, size_t y) const noexcept
  */
 void Map::addBoxes() noexcept
 {
-	std::random_device randomDevice;						// Random device
-	std::mt19937 engine(randomDevice());						// Seed
-	std::uniform_int_distribution<> distribution(1, 10);				// Range
+	std::random_device randomDevice;			// Random device
+	std::mt19937 engine(randomDevice());			// Seed
+	std::uniform_int_distribution<> distribution(1, 10);	// Range
 
 	for (int x = 0; x < MAP_SIZE; x++) {
 		for (int y = 0; y < MAP_SIZE; y++) {
-			if (isCornerTile(x, y))						// Player spawn check
+			if (isCornerTile(x, y))			// Player spawn check
 				continue;
 
-			if (x % 2 == 1 && y % 2 == 1)					// Wall check
+			if (x % 2 == 1 && y % 2 == 1)		// Wall check
 				continue;
 
-			if (distribution(engine) < 9) {					// Generate random number - 8/10 chance to spawn box
+			if (distribution(engine) < 9) {		// Generate random number - 8/10 chance to spawn box
 				std::unique_ptr<object::AObject> box = std::make_unique<object::Box>(object::Loot{});
 				getTileAt(x, y)->addObject(std::move(box));
 			}
 		}
 	}
+}
+
+void Map::addObjectToTile(size_t x, size_t y, std::unique_ptr<object::AObject> object) noexcept
+{
+	std::lock_guard<std::mutex> lock(this->mapMutex);
+	getTileAt(x, y)->addObject(std::move(object));
+}
+
+void Map::removeObjectFromTile(size_t x, size_t y, Type objectType) noexcept
+{
+	std::lock_guard<std::mutex> lock(this->mapMutex);
+	getTileAt(x, y)->removeObject(objectType);
+}
+
+bool Map::placeFire(int i, size_t x, size_t y) noexcept
+{
+	if (i < 0 || getTileAt(x, y)->containsObject(WALL))
+		return false;
+
+	if (getTileAt(x, y)->containsObject(FIRE))
+		removeObjectFromTile(x, y, FIRE);
+
+	if (getTileAt(x, y)->containsObject(BOMB)) {
+		auto bomb = getTileAt(x, y)->getObject(BOMB);
+		if (bomb != nullptr)
+			bomb->detonate();
+	}
+
+	if (getTileAt(x, y)->containsObject(BOX)) {
+		removeObjectFromTile(x, y, BOX);
+		addObjectToTile(x, y, std::move(std::unique_ptr<object::AObject>(new object::Fire())));
+		return false;
+	}
+
+	addObjectToTile(x, y, std::move(std::unique_ptr<object::AObject>(new object::Fire())));
+	return true;
+}
+
+void Map::explodeBomb(size_t x, size_t y, size_t blastRadius) noexcept
+{
+	removeObjectFromTile(x, y, BOMB);
+	addObjectToTile(x, y, std::move(std::unique_ptr<object::AObject>(new object::Fire())));
+
+	for (int i = x - 1; i >= x - blastRadius; i--)
+		if (!placeFire(i, i, y))
+			break;
+
+	for (int i = x + 1; i <= x + blastRadius; i++)
+		if (!placeFire(i, i, y))
+			break;
+
+	for (int i = y - 1; i >= y - blastRadius; i--)
+		if (!placeFire(i, x, i))
+			break;
+
+	for (int i = y + 1; i <= y + blastRadius; i++)
+		if (!placeFire(i, x, i))
+			break;
 }
 
 }
