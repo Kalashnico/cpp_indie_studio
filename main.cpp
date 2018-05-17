@@ -1,33 +1,51 @@
 #include <iostream>
 #include <memory>
-#include <atomic>
 #include "Map.hpp"
 #include "Bomb.hpp"
 
-std::atomic<bool> _bombPlaced = false;
-
-void createBomb(map::Map *bomberMap)
+void fireTestLogic(map::Map *bomberMap)
 {
-	bomberMap->addObjectToTile(0, 0, std::move(std::unique_ptr<object::AObject>(new object::Bomb(0, 0, 2, bomberMap))));
-	_bombPlaced = true;
-	bomberMap->getTileAt(0, 0)->getObject(BOMB)->bombFuse();
+	while (bomberMap->getTileAt(0, 0)->containsObject(FIRE))		// Test conditon
+		bomberMap->updateTileObjects();
 }
 
-void bombTest(map::Map *bomberMap)
+bool fireTest(map::Map *bomberMap)
 {
-	std::cout << "Starting bomb test" << std::endl;
+	std::cout << std::endl << "Starting fire test" << std::endl << "Checking existing fire... ";
 
-	std::thread bomb(&createBomb, bomberMap);
+	if (bomberMap->getTileAt(0, 0)->containsObject(FIRE))
+		std::cout << "found" << std::endl;
+	else {
+		std::cout << "not found" << std::endl << "Test failed" << std::endl;
+		return false;
+	}
 
-	std::cout << "Waiting for thread to place bomb" << std::endl;
+	std::cout << "Starting fire test logic" << std::endl;
 
-	while (!_bombPlaced);
+	fireTestLogic(bomberMap);
 
-	std::cout << "Bomb placed" << std::endl << "Waiting for bomb to explode" << std::endl;
+	std::cout << "Fire dissipated" << std::endl << "Test passed" << std::endl;
 
-	while (bomberMap->getTileAt(0, 0)->containsObject(BOMB));
+	return true;
+}
 
-	std::cout << "Bomb has exploded" << std::endl << "Checking for fire on affected tiles... ";
+void bombTestlogic(map::Map *bomberMap)
+{
+	while (bomberMap->getTileAt(0, 0)->containsObject(BOMB))		// Test conditon
+		bomberMap->updateTileObjects();
+}
+
+bool bombTest(map::Map *bomberMap)
+{
+	std::cout << std::endl << "Starting bomb test" << std::endl;
+
+	bomberMap->addObjectToTile(0, 0, std::move(std::unique_ptr<object::AObject>(new object::Bomb(0, 0, 2, bomberMap))));
+
+	std::cout << "Bomb placed" << std::endl << "Starting bomb test logic loop" << std::endl;
+
+	bombTestlogic(bomberMap);
+
+	std::cout << "Bomb has exploded" << std::endl << "Ending bomb test logic loop" << std::endl << "Checking for fire on affected tiles... ";
 
 	if (bomberMap->getTileAt(0, 0)->containsObject(FIRE)
 		&& bomberMap->getTileAt(0, 1)->containsObject(FIRE)
@@ -35,36 +53,53 @@ void bombTest(map::Map *bomberMap)
 		&& bomberMap->getTileAt(1, 0)->containsObject(FIRE)
 		&& bomberMap->getTileAt(2, 0)->containsObject(FIRE))
 		std::cout << "Test passed" << std::endl;
-	else
+	else {
 		std::cout << "Test failed" << std::endl;
+		return false;
+	}
 
-	std::cout << "End of bomb test" << std::endl;
-	bomb.join();
+	return true;
 }
 
-void mapTest()
+bool mapTest(map::Map *bomberMap, bool verbose)
 {
-	map::Map *bomberMap = new map::Map();
+	std::cout << std::endl << "Starting map test - verbose: ";
+	(verbose) ? std::cout << "true" : std::cout << "false";
+	std::cout << std::endl;
 
-	std::cout << "Map size: " << bomberMap->getMap().size() << " Listing tiles: " << std::endl;
-	for (int x = 0; x < MAP_SIZE; x++) {
-		for (int y = 0; y < MAP_SIZE; y++) {
-			std::cout << "x: " << bomberMap->getTileAt(x, y)->getX() << " y: " << bomberMap->getTileAt(x, y)->getY() << " Objects: " << bomberMap->getTileAt(x, y)->getObjects().size();
-			if (bomberMap->getTileAt(x, y)->getObjects().size() > 0) {
-				std::cout << " Tile contains: ";
-				for (auto &object : bomberMap->getTileAt(x, y)->getObjects())
-					std::cout << object->getType() << " ";
+	if (verbose) {
+		std::cout << "Map size: " << bomberMap->getMap().size() << " Listing tiles: " << std::endl;
+		for (int x = 0; x < MAP_SIZE; x++) {
+			for (int y = 0; y < MAP_SIZE; y++) {
+				std::cout << "x: " << bomberMap->getTileAt(x, y)->getX() << " y: " << bomberMap->getTileAt(x, y)->getY() << " Objects: " << bomberMap->getTileAt(x, y)->getObjects().size();
+				if (bomberMap->getTileAt(x, y)->getObjects().size() > 0) {
+					std::cout << " Tile contains: ";
+					for (auto &object : bomberMap->getTileAt(x, y)->getObjects())
+						std::cout << object->getType() << " ";
+				}
+				std::cout << std::endl;
 			}
-			std::cout << std::endl;
 		}
 	}
 
-	bombTest(bomberMap);
-	delete bomberMap;
+	std::cout << "Test passed" << std::endl;
+	return true;
 }
 
 int main()
 {
-	mapTest();
+	size_t totalTests = 3;
+	size_t passedTests = 0;
+	map::Map *bomberMap = new map::Map();
+
+	std::cout << "Starting " << std::to_string(totalTests) << " tests" << std::endl;
+
+	passedTests += mapTest(bomberMap, false);
+	passedTests +=bombTest(bomberMap);
+	passedTests +=fireTest(bomberMap);
+
+	std::cout << std::endl << "Finished tests" << std::endl << "Tests passed " << std::to_string(passedTests) << "/" << std::to_string(totalTests) << std::endl;
+
+	delete bomberMap;
 	return (0);
 }
