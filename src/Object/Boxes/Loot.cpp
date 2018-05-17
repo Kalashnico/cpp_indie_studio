@@ -4,10 +4,22 @@
 
 #include "Loot.hpp"
 
+namespace object {
+
 /**
  * Constructor : Ready to use. It create randomly the loot which will be stored in a box.
  */
-Loot::Loot()
+Loot::Loot() : AObject(setPathToMesh(), LOOT)
+{
+
+}
+
+Loot::~Loot()
+{
+
+}
+
+std::string Loot::setPathToMesh()
 {
 	auto lootCategory = std::rand() % 4;
 
@@ -27,10 +39,6 @@ Loot::Loot()
 		default :
 			break;
 	}
-	_pathToMesh = meshPaths[_category];
+	return meshPaths[_category];
 }
-
-Loot::~Loot()
-{
-
 }

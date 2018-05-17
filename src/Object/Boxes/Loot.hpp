@@ -6,6 +6,9 @@
 
 #include <string>
 #include <array>
+#include <Object/AObject.hpp>
+
+namespace object {
 
 //Theses are the paths to loot meshs
 static std::array<std::string, 4> const meshPaths {"BOMB PATH",
@@ -21,17 +24,19 @@ enum LootCategory {
 };
 
 
-class Loot {
+class Loot : public AObject {
 	public:
 		Loot();
 		~Loot();
 
 		//Getters
 		LootCategory getCategory() const noexcept { return _category; };
-		std::string getPathToMesh() const noexcept { return _pathToMesh; };
 
 	private:
 		LootCategory _category;
-		std::string _pathToMesh;
+
+		//Member Function
+		std::string setPathToMesh() noexcept;
 
 };
+}

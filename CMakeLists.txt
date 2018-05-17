@@ -3,8 +3,12 @@ project(cpp_indie_studio)
 
 set(CMAKE_CXX_STANDARD 11)
 
-include_directories(src/Boxes
-                    src/Loot)
+include_directories(src/ src/Object/Boxes src/Loot src/Object/Bomb src/Object/Wall)
 
 add_executable(cpp_indie_studio
-            src/main.cpp src/Boxes/Box.cpp src/Boxes/Box.hpp src/Loot/Loot.cpp src/Loot/Loot.hpp)
+        src/Object/Bomb/Bomb.cpp
+        src/Object/Boxes/Box.cpp
+        src/Object/Boxes/Loot.cpp
+        src/Object/Wall/Wall.cpp
+        src/Object/AObject.cpp
+        src/main.cpp)
