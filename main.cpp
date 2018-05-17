@@ -3,58 +3,104 @@
 #include "Map.hpp"
 #include "Bomb.hpp"
 
-void fireTestLogic(map::Map *bomberMap)
+#define LOGIC_TIMEOUT_SECONDS 10
+
+std::clock_t begin;
+
+bool fireTestLogic(map::Map *bomberMap)
 {
-	while (bomberMap->getTileAt(0, 0)->containsObject(FIRE))		// Test conditon
+	begin = std::clock();
+
+	while (bomberMap->getTileAt(0, 0)->containsObject(FIRE)) {		// Test conditon
+		if (((std::clock() - begin) / (double) CLOCKS_PER_SEC) >= LOGIC_TIMEOUT_SECONDS)
+			return false;
 		bomberMap->updateTileObjects();
+	}
+	return true;
 }
 
 bool fireTest(map::Map *bomberMap)
 {
-	std::cout << std::endl << "Starting fire test" << std::endl << "Checking existing fire... ";
+	std::cout << std::endl << "Starting fire test" << std::endl << "Checking for existing fire... ";
 
 	if (bomberMap->getTileAt(0, 0)->containsObject(FIRE))
 		std::cout << "found" << std::endl;
 	else {
-		std::cout << "not found" << std::endl << "Test failed" << std::endl;
-		return false;
+		std::cout << "not found" << std::endl << "Force detonating bomb" << std::endl;
+
+		bomberMap->addObjectToTile(0, 0, std::move(std::unique_ptr<object::AObject>(new object::Bomb(0, 0, 2, bomberMap))));
+		bomberMap->getTileAt(0, 0)->getObject(BOMB)->detonate();
+		bomberMap->getTileAt(0, 0)->getObject(BOMB)->update();
+
+		std::cout << "Checking for fire... ";
+
+		if (bomberMap->getTileAt(0, 0)->containsObject(FIRE))
+			std::cout << "found" << std::endl;
+		else {
+			std::cout << "not found" << std::endl << "Test failed - please check bombs" << std::endl;
+			return false;
+		}
 	}
+
 
 	std::cout << "Starting fire test logic" << std::endl;
 
-	fireTestLogic(bomberMap);
+	if (!fireTestLogic(bomberMap)) {
+		std::cout << "Fire test logic timed out" << std::endl << "Test failed" << std::endl;
+		return false;
+	}
 
 	std::cout << "Fire dissipated" << std::endl << "Test passed" << std::endl;
 
 	return true;
 }
 
-void bombTestlogic(map::Map *bomberMap)
+bool bombTestlogic(map::Map *bomberMap)
 {
-	while (bomberMap->getTileAt(0, 0)->containsObject(BOMB))		// Test conditon
+	begin = std::clock();
+
+	while (bomberMap->getTileAt(0, 0)->containsObject(BOMB)) {		// Test conditon
+		if (((std::clock() - begin) / (double) CLOCKS_PER_SEC) >= LOGIC_TIMEOUT_SECONDS)
+			return false;
 		bomberMap->updateTileObjects();
+	}
+	return true;
 }
 
 bool bombTest(map::Map *bomberMap)
 {
 	std::cout << std::endl << "Starting bomb test" << std::endl;
 
+	std::cout << "Placing bomb" << std::endl;
+
 	bomberMap->addObjectToTile(0, 0, std::move(std::unique_ptr<object::AObject>(new object::Bomb(0, 0, 2, bomberMap))));
 
-	std::cout << "Bomb placed" << std::endl << "Starting bomb test logic loop" << std::endl;
+	std::cout << "Checking for bomb... ";
 
-	bombTestlogic(bomberMap);
+	if (bomberMap->getTileAt(0, 0)->containsObject(BOMB))
+			std::cout << "found" << std::endl;
+	else {
+		std::cout << "not found" << std::endl << "Test failed" << std::endl;
+		return false;
+	}
 
-	std::cout << "Bomb has exploded" << std::endl << "Ending bomb test logic loop" << std::endl << "Checking for fire on affected tiles... ";
+	std::cout << "Starting bomb test logic" << std::endl;
+
+	if (!bombTestlogic(bomberMap)) {
+		std::cout << "Bomb test logic timed out" << std::endl << "Test failed" << std::endl;
+		return false;
+	}
+
+	std::cout << "Bomb exploded" << std::endl << "Checking for fire on affected tiles... ";
 
 	if (bomberMap->getTileAt(0, 0)->containsObject(FIRE)
 		&& bomberMap->getTileAt(0, 1)->containsObject(FIRE)
 		&& bomberMap->getTileAt(0, 2)->containsObject(FIRE)
 		&& bomberMap->getTileAt(1, 0)->containsObject(FIRE)
 		&& bomberMap->getTileAt(2, 0)->containsObject(FIRE))
-		std::cout << "Test passed" << std::endl;
+		std::cout << "found" << std::endl << "Test passed" << std::endl;
 	else {
-		std::cout << "Test failed" << std::endl;
+		std::cout << "not found" << std::endl << "Test failed" << std::endl;
 		return false;
 	}
 
