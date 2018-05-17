@@ -5,6 +5,7 @@
 ** Tiles
 */
 
+#include <iostream>
 #include "Tile.hpp"
 
 namespace map {
@@ -16,15 +17,47 @@ Tile::Tile(size_t x, size_t y)
 Tile::~Tile()
 {}
 
+object::AObject *Tile::getObject(Type objectType) noexcept
+{
+	std::lock_guard<std::mutex> lock(this->tileGuard);
+
+	for (auto &object : _objects) {
+		if (object.get()->getType() == objectType)
+			return object.get();
+	}
+	return nullptr;
+}
+
 void Tile::addObject(std::unique_ptr<object::AObject> object) noexcept
 {
+	std::lock_guard<std::mutex> lock(this->tileGuard);
+
 	_objects.emplace_back(std::move(object));
 }
 
-void Tile::removeObject(std::unique_ptr<object::AObject> object) noexcept
+void Tile::removeObject(Type objectType) noexcept
 {
-	_objects.erase(std::remove(_objects.begin(), _objects.end(), object), _objects.end());
+	std::lock_guard<std::mutex> lock(this->tileGuard);
+
+	auto toRemove = std::remove_if(_objects.begin(), _objects.end(),
+					[&objectType](std::unique_ptr<object::AObject> &object)
+					{
+						return object.get()->getType() == objectType;
+					});
+
+	_objects.erase(toRemove, _objects.end());
 	_objects.shrink_to_fit();
+}
+
+bool Tile::containsObject(Type objectType) noexcept
+{
+	std::lock_guard<std::mutex> lock(this->tileGuard);
+
+	for (auto &object : _objects) {
+		if (object.get()->getType() == objectType)
+			return true;
+	}
+	return false;
 }
 
 }
