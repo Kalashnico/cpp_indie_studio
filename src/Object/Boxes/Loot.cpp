@@ -19,7 +19,7 @@ Loot::~Loot()
 
 }
 
-std::string Loot::setPathToMesh()
+std::string Loot::setPathToMesh() noexcept
 {
 	auto lootCategory = std::rand() % 4;
 

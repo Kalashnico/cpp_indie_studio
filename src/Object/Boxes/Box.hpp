@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <Object/AObject.hpp>
+#include "AObject.hpp"
 #include "Loot.hpp"
 
 namespace object {
