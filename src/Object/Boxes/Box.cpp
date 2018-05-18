@@ -12,13 +12,12 @@ namespace object {
  * @param posy
  * @param loot : if theres is no loot it is set to nullptr
  */
-Box::Box(Loot loot) : AObject("PATH BOXE", BOX), _loot{loot}, _destroy{false}
-{
-
-}
+Box::Box(std::unique_ptr<Loot> loot)
+	: AObject("PATH BOXE", BOX),
+	_loot{std::move(loot)}
+{}
 
 Box::~Box()
-{
+{}
 
-}
 }

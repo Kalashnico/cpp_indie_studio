@@ -11,17 +11,12 @@ namespace object {
 
 class Box : public AObject {
 	public:
-		explicit Box(Loot loot);
+		explicit Box(std::unique_ptr<Loot> loot);
 		~Box() ;
 
-		void destroyBox() noexcept { _destroy = true; };
-
-		//Getter
-		bool isDestroyed() const noexcept { return _destroy; }
-		Loot getLoot() const noexcept { return _loot; }
+		std::unique_ptr<Loot> getLoot() noexcept { return std::move(_loot); }
 
 	private:
-		Loot _loot;
-		bool _destroy;
+		std::unique_ptr<Loot> _loot;
 };
 }
