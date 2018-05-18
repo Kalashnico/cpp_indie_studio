@@ -2,10 +2,60 @@
 #include <memory>
 #include "Map.hpp"
 #include "Bomb.hpp"
+#include "Box.hpp"
 
 #define LOGIC_TIMEOUT_SECONDS 10
 
 std::clock_t begin;
+
+bool lootTest(map::Map *bomberMap)
+{
+	std::cout << std::endl << "Starting loot test" << std::endl << "Spawning for box... ";
+	std::cout.flush();
+
+	auto loot = std::make_unique<object::Loot>();
+	bomberMap->addObjectToTile(1, 0, std::move(std::unique_ptr<object::AObject>(new object::Box(std::move(loot)))));
+	if (bomberMap->getTileAt(1, 0)->containsObject(BOX))
+		std::cout << "passed" << std::endl;
+	else {
+		std::cout << "failed" << std::endl << "Test failed" << std::endl;
+		return false;
+	}
+
+	std::cout << "Force detonating a bomb... ";
+	std::cout.flush();
+
+	bomberMap->addObjectToTile(0, 0, std::move(std::unique_ptr<object::AObject>(new object::Bomb(0, 0, 2, bomberMap))));
+	bomberMap->getTileAt(0, 0)->getObject(BOMB)->detonate();
+	bomberMap->getTileAt(0, 0)->getObject(BOMB)->update();
+
+	if (bomberMap->getTileAt(0, 0)->containsObject(FIRE))
+		std::cout << "passed" << std::endl;
+	else {
+		std::cout << "failed" << std::endl << "Test failed - please check bombs" << std::endl;
+		return false;
+	}
+
+	std::cout << "Checking for destroyed box... ";
+	std::cout.flush();
+
+	if (!bomberMap->getTileAt(1, 0)->containsObject(BOX))
+		std::cout << "passed" << std::endl;
+	else {
+		std::cout << "failed" << std::endl << "Test failed - please check bombs" << std::endl;
+		return false;
+	}
+
+	std::cout << "Checking for loot... ";
+	std::cout.flush();
+
+	if (bomberMap->getTileAt(1, 0)->containsObject(LOOT))
+		std::cout << "found" << std::endl;
+	else
+		std::cout << "not found - box was probably empty" << std::endl;
+
+	return true;
+}
 
 bool fireTestLogic(map::Map *bomberMap)
 {
@@ -174,7 +224,7 @@ bool mapTest(map::Map *bomberMap)
 
 int main()
 {
-	size_t totalTests = 3;
+	size_t totalTests = 4;
 	size_t passedTests = 0;
 	map::Map *bomberMap = new map::Map();
 
@@ -183,8 +233,9 @@ int main()
 	passedTests += mapTest(bomberMap);
 
 	if (passedTests != 0) {
-		passedTests +=bombTest(bomberMap);
-		passedTests +=fireTest(bomberMap);
+		passedTests += bombTest(bomberMap);
+		passedTests += fireTest(bomberMap);
+		passedTests += lootTest(bomberMap);
 	}
 
 	std::cout << std::endl << "Finished tests" << std::endl << "Tests passed " << std::to_string(passedTests) << "/" << std::to_string(totalTests) << std::endl;
