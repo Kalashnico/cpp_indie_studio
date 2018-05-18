@@ -18,6 +18,9 @@ Fire::Fire(size_t posx, size_t posy, map::Map *map)
 
 void Fire::update() noexcept
 {
+	if (toBeDestroyed())
+		return;
+
 	if (((std::clock() - _begin) / (double) CLOCKS_PER_SEC) >= LIFE) {
 		dissipate();
 		return;

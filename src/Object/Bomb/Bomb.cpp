@@ -23,7 +23,10 @@ Bomb::~Bomb()
 
 void Bomb::update() noexcept
 {
-	if (this->_detonate || ((std::clock() - _begin) / (double) CLOCKS_PER_SEC) >= LIFE) {
+	if (toBeDestroyed())
+		return;
+
+	if (_detonate || ((std::clock() - _begin) / (double) CLOCKS_PER_SEC) >= LIFE) {
 		explode();
 		return;
 	}
