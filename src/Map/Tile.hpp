@@ -27,6 +27,7 @@ class Tile {
 
 		void addObject(std::unique_ptr<object::AObject>) noexcept;
 		void removeObject(Type objectType) noexcept;
+		void removedDestroyed() noexcept;
 		bool containsObject(Type objectType) noexcept;
 
 	private:

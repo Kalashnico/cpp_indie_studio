@@ -19,7 +19,7 @@ Tile::~Tile()
 object::AObject *Tile::getObject(Type objectType) noexcept
 {
 	for (auto &object : _objects) {
-		if (object.get()->getType() == objectType)
+		if (object.get()->getType() == objectType && !object.get()->toBeDestroyed())
 			return object.get();
 	}
 	return nullptr;
@@ -32,10 +32,18 @@ void Tile::addObject(std::unique_ptr<object::AObject> object) noexcept
 
 void Tile::removeObject(Type objectType) noexcept
 {
+	for (auto &object : _objects) {
+		if (object.get()->getType() == objectType)
+			object.get()->destroy();
+	}
+}
+
+void Tile::removedDestroyed() noexcept
+{
 	auto toRemove = std::remove_if(_objects.begin(), _objects.end(),
-					[&objectType](std::unique_ptr<object::AObject> &object)
+					[](std::unique_ptr<object::AObject> &object)
 					{
-						return object.get()->getType() == objectType;
+						return object.get()->toBeDestroyed();
 					});
 
 	_objects.erase(toRemove, _objects.end());
@@ -45,7 +53,7 @@ void Tile::removeObject(Type objectType) noexcept
 bool Tile::containsObject(Type objectType) noexcept
 {
 	for (auto &object : _objects) {
-		if (object.get()->getType() == objectType)
+		if (object.get()->getType() == objectType && !object.get()->toBeDestroyed())
 			return true;
 	}
 	return false;
