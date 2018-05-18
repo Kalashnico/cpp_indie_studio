@@ -3,6 +3,7 @@
 //
 
 #include <random>
+#include <iostream>
 #include "Map.hpp"
 #include "Box.hpp"
 #include "Wall.hpp"
@@ -46,6 +47,7 @@ void Map::updateTileObjects() noexcept
 		for (auto &object : tile.get()->getObjects()) {
 			object.get()->update();
 		}
+		tile.get()->removedDestroyed();
 	}
 }
 
@@ -77,7 +79,8 @@ void Map::addBoxes() noexcept
 				continue;
 
 			if (distribution(engine) < 9) {		// Generate random number - 8/10 chance to spawn box
-				std::unique_ptr<object::AObject> box = std::make_unique<object::Box>(object::Loot{});
+				auto loot = std::make_unique<object::Loot>();
+				std::unique_ptr<object::AObject> box = std::make_unique<object::Box>(std::move(loot));
 				getTileAt(x, y)->addObject(std::move(box));
 			}
 		}
@@ -109,8 +112,14 @@ bool Map::placeFire(int i, size_t x, size_t y) noexcept
 	}
 
 	if (getTileAt(x, y)->containsObject(BOX)) {
-		removeObjectFromTile(x, y, BOX);
-		addObjectToTile(x, y, std::move(std::unique_ptr<object::AObject>(new object::Fire(x, y, this))));
+		auto loot = getTileAt(x, y)->getObject(BOX)->getLoot(); 						// Remove loot from box
+
+		removeObjectFromTile(x, y, BOX);									// Remove box
+		addObjectToTile(x, y, std::move(std::unique_ptr<object::AObject>(new object::Fire(x, y, this))));	// Place fire
+
+		if (loot.get()->getLootCategory() != object::EMPTY)								// Check empty loot
+			addObjectToTile(x, y, std::move(loot));								// Add loot to tile
+
 		return false;
 	}
 
