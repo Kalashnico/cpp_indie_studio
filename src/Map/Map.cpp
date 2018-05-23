@@ -36,6 +36,7 @@ void Map::createMap() noexcept
 			if (x % 2 == 1 && y % 2 == 1) {
 				std::unique_ptr<object::AObject> wall = std::make_unique<object::Wall>();
 				getTileAt(x, y)->addObject(std::move(wall));
+				getTileAt(x, y)->setSetup(true);
 			}
 		}
 	}
@@ -47,7 +48,7 @@ void Map::updateTileObjects() noexcept
 		for (auto &object : tile.get()->getObjects()) {
 			object.get()->update();
 		}
-		tile.get()->removedDestroyed();
+		tile.get()->updateTile();
 	}
 }
 
@@ -72,8 +73,10 @@ void Map::addBoxes() noexcept
 
 	for (int x = 0; x < MAP_SIZE; x++) {
 		for (int y = 0; y < MAP_SIZE; y++) {
-			if (isCornerTile(x, y))			// Player spawn check
+			if (isCornerTile(x, y)) {		// Player spawn check
+				getTileAt(x, y)->setSetup(true);
 				continue;
+			}
 
 			if (x % 2 == 1 && y % 2 == 1)		// Wall check
 				continue;
@@ -83,6 +86,7 @@ void Map::addBoxes() noexcept
 				std::unique_ptr<object::AObject> box = std::make_unique<object::Box>(std::move(loot));
 				getTileAt(x, y)->addObject(std::move(box));
 			}
+			getTileAt(x, y)->setSetup(true);
 		}
 	}
 }

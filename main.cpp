@@ -10,11 +10,12 @@ std::clock_t begin;
 
 bool lootTest(map::Map *bomberMap)
 {
-	std::cout << std::endl << "Starting loot test" << std::endl << "Spawning for box... ";
+	std::cout << std::endl << "Starting loot test" << std::endl << "Spawning a box... ";
 	std::cout.flush();
 
 	auto loot = std::make_unique<object::Loot>();
 	bomberMap->addObjectToTile(1, 0, std::move(std::unique_ptr<object::AObject>(new object::Box(std::move(loot)))));
+	bomberMap->getTileAt(1, 0)->updateTile();
 	if (bomberMap->getTileAt(1, 0)->containsObject(BOX))
 		std::cout << "passed" << std::endl;
 	else {
@@ -26,8 +27,10 @@ bool lootTest(map::Map *bomberMap)
 	std::cout.flush();
 
 	bomberMap->addObjectToTile(0, 0, std::move(std::unique_ptr<object::AObject>(new object::Bomb(0, 0, 2, bomberMap))));
+	bomberMap->getTileAt(0, 0)->updateTile();
 	bomberMap->getTileAt(0, 0)->getObject(BOMB)->detonate();
 	bomberMap->getTileAt(0, 0)->getObject(BOMB)->update();
+	bomberMap->getTileAt(0, 0)->updateTile();
 
 	if (bomberMap->getTileAt(0, 0)->containsObject(FIRE))
 		std::cout << "passed" << std::endl;
@@ -80,8 +83,10 @@ bool fireTest(map::Map *bomberMap)
 		std::cout << "failed" << std::endl << "Force detonating bomb" << std::endl;
 
 		bomberMap->addObjectToTile(0, 0, std::move(std::unique_ptr<object::AObject>(new object::Bomb(0, 0, 2, bomberMap))));
+		bomberMap->getTileAt(0, 0)->updateTile();
 		bomberMap->getTileAt(0, 0)->getObject(BOMB)->detonate();
 		bomberMap->getTileAt(0, 0)->getObject(BOMB)->update();
+		bomberMap->getTileAt(0, 0)->updateTile();
 
 		std::cout << "Checking for fire... ";
 		std::cout.flush();
@@ -126,6 +131,7 @@ bool bombTest(map::Map *bomberMap)
 	std::cout.flush();
 
 	bomberMap->addObjectToTile(0, 0, std::move(std::unique_ptr<object::AObject>(new object::Bomb(0, 0, 2, bomberMap))));
+	bomberMap->getTileAt(0, 0)->updateTile();
 
 	if (bomberMap->getTileAt(0, 0)->containsObject(BOMB))
 			std::cout << "passed" << std::endl;

@@ -10,7 +10,7 @@
 namespace map {
 
 Tile::Tile(size_t x, size_t y)
-	: _x(x), _y(y)
+	: _x(x), _y(y), _setup(false)
 {}
 
 Tile::~Tile()
@@ -25,9 +25,18 @@ object::AObject *Tile::getObject(Type objectType) noexcept
 	return nullptr;
 }
 
+void Tile::updateTile() noexcept
+{
+	removeDestroyed();
+	addToBeAdded();
+}
+
 void Tile::addObject(std::unique_ptr<object::AObject> object) noexcept
 {
-	_objects.emplace_back(std::move(object));
+	if (!_setup)
+		_objects.emplace_back(std::move(object));
+	else
+		_objectsToBeAdded.emplace_back(std::move(object));
 }
 
 void Tile::removeObject(Type objectType) noexcept
@@ -38,7 +47,16 @@ void Tile::removeObject(Type objectType) noexcept
 	}
 }
 
-void Tile::removedDestroyed() noexcept
+void Tile::addToBeAdded() noexcept
+{
+	for (auto &object : _objectsToBeAdded)
+		_objects.emplace_back(std::move(object));
+
+	_objectsToBeAdded.clear();
+	_objectsToBeAdded.shrink_to_fit();
+}
+
+void Tile::removeDestroyed() noexcept
 {
 	auto toRemove = std::remove_if(_objects.begin(), _objects.end(),
 					[](std::unique_ptr<object::AObject> &object)
