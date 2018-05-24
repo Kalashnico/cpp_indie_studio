@@ -11,19 +11,20 @@
 #include <bits/unique_ptr.h>
 #include "Map.hpp"
 #include "Player.hpp"
+#include "Tile.hpp"
 
 class IA {
 	public:
-		IA();
+		IA(map::Map *map);
 		~IA();
-		void update(std::vector );
+		void update();
 		std::unique_ptr<Player> getPlayer();
 	private:
 		bool move();
 		void find_closest_player();
 		std::array<int, 2> _closest_player;
 		std::unique_ptr<Player> _player;
-		std::array<std::array<int, 15>, 15> *_map;
+		map::Map *_map;
 };
 
 #endif //INDIESTUDIO_IA_HPP
