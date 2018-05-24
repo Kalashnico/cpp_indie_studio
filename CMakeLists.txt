@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 2.6)
-PROJECT(IrrlichtTests)
+PROJECT(bomberman)
 
 SET(CMAKE_CXX_FLAGS_RELEASE "-O3")
 SET(CMAKE_CXX_FLAGS_DEBUG  "-g")
-SET(CMAKE_CXX_FLAGS "-lXxf86vm")
+SET(CMAKE_CXX_FLAGS "-lXxf86vm -lpthread")
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR})
-
+SET(RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/..)
 
 IF(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
     SET(CMAKE_BUILD_TYPE RelWithDebInfo)
@@ -15,21 +15,27 @@ FIND_PACKAGE(X11)
 FIND_PACKAGE(OpenGL)
 INCLUDE_DIRECTORIES(
         ${PROJECT_SOURCE_DIR}/include
+        ${PROJECT_SOURCE_DIR}/src/Graphic
         ${OPENGL_SOURCE_DIR}/include
         ${X11_SOURCE_DIR}/include
 )
 
 FILE(GLOB SRCS src/*.cpp)
-FILE(GLOB HDRS include/*.h)
 
-ADD_EXECUTABLE(IrrlichtTests
+FILE(GLOB HDRS_IRR include/*.h)
+
+FILE(GLOB SRCS_GRAPHICS src/Graphic/*.cpp)
+FILE(GLOB HDRS_GRAPHICS src/Graphic/*.hpp)
+
+ADD_EXECUTABLE(bomberman
         ${SRCS}
-        ${HDRS}
+        ${HDRS_IRR}
+        ${SRCS_GRAPHICS}
+        ${HDRS_CUSTOM}
 )
 
-TARGET_LINK_LIBRARIES(IrrlichtTests
+TARGET_LINK_LIBRARIES(bomberman
         ${PROJECT_SOURCE_DIR}/lib/libIrrlicht.a
         ${OPENGL_LIBRARIES}
         ${X11_LIBRARIES}
-
 )
