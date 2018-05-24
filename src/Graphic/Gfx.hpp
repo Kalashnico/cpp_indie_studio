@@ -9,8 +9,8 @@
 #include <unordered_map>
 #include "Irrlicht/irrlicht.h"
 
-#define WIN_WIDTH	600
-#define WIN_HEIGHT	400
+#define WIN_WIDTH	1920
+#define WIN_HEIGHT	1080
 
 using namespace irr;
 

@@ -19,9 +19,11 @@ int main()
 	Gfx gfx(eventReceiver);
 	CollisionsHandler collisionsHandler(gfx);
 	Player player(&gfx, POMMY, 0, 0.1f, 0, false, 1);
+	Player player2(&gfx, POMMY, 0, 0.1f, 5, false, 2);
 	Map map(gfx.getSceneManager());
 	try {
 		collisionsHandler.addObjectToCollisions(player);
+		collisionsHandler.addObjectToCollisions(player2);
 		collisionsHandler.addMapToCollision(map);
 		gfx.addCameraFPS();
 		gfx.addLight(vector3df(-30, 30, -30), SColorf(1.0f, 1.0f, 1.0f),
@@ -50,6 +52,8 @@ int main()
 			player.setAbsoluteRotation(FORWARD);
 		if (gfx.isKeyDown(KEY_F4))
 			player.setAbsoluteRotation(BACKWARD);
+
+
 		if (gfx.isKeyDown(KEY_KEY_D))
 			player.rotate(LEFT);
 		if (gfx.isKeyDown(KEY_KEY_A))
@@ -58,6 +62,15 @@ int main()
 			player.moveForward();
 		if (gfx.isKeyDown(KEY_KEY_S))
 			player.moveForward(BACKWARD);
+
+		if (gfx.isKeyDown(KEY_RIGHT))
+			player2.rotate(LEFT);
+		if (gfx.isKeyDown(KEY_LEFT))
+			player2.rotate(RIGHT);
+		if (gfx.isKeyDown(KEY_UP))
+			player2.moveForward();
+		if (gfx.isKeyDown(KEY_DOWN))
+			player2.moveForward(BACKWARD);
 	}
 	return 0;
 }
