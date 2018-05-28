@@ -6,31 +6,32 @@
 */
 
 #include <vector>
-#include "IA.hpp"
+#include "AI.hpp"
 
-IA::IA(map::Map *map) : _player(new Player), _map(map)
+AI::AI(map::Map *map, std::string mesh, Type type) : _player(
+	new object::Player(mesh, type)), _map(map)
 {
 }
 
-IA::~IA()
+AI::~AI()
 {
 }
 
-std::unique_ptr<Player> IA::getPlayer()
+std::unique_ptr<object::Player> AI::getPlayer()
 {
 	return _player;
 }
 
-void IA::update()
+void AI::update()
 {
 	this->find_closest_player();
 }
 
-bool IA::move()
+bool AI::move()
 {
 }
 
-void IA::find_closest_player()
+void AI::find_closest_player()
 {
 	std::array<int, 2> xy{};
 	std::vector<std::unique_ptr<map::Tile>> map;
@@ -41,6 +42,9 @@ void IA::find_closest_player()
 			if ((object.get()->getType() == PLAYER1 ||
 				object.get()->getType() == PLAYER2 ||
 				object.get()->getType() == PLAYER3 ||
-				object.get()->getType() == PLAYER4))
+				object.get()->getType() == PLAYER4) &&
+				object.get()->getType() !=
+					_player.get()->getType())
+				return;
 	}
 }

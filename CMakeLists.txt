@@ -18,6 +18,14 @@ INCLUDE_DIRECTORIES(
         ${PROJECT_SOURCE_DIR}/src/Graphic
         ${OPENGL_SOURCE_DIR}/include
         ${X11_SOURCE_DIR}/include
+        src/Player_AI
+        src/Object
+        src/Object/Boxes
+        src/Object/Wall
+        src/Object/Fire
+        src/Object/Bomb
+        src/Map
+        src/Graphic
 )
 
 FILE(GLOB SRCS src/*.cpp)

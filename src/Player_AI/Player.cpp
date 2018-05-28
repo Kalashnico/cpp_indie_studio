@@ -7,10 +7,14 @@
 
 #include "Player.hpp"
 
-Player::Player()
-{
-}
+namespace object {
 
-Player::~Player()
-{
+	Player::Player(std::string path, Type type)
+	: AObject(path, type)
+	{
+	}
+
+	Player::~Player()
+	{
+	}
 }
