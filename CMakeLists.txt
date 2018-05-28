@@ -25,12 +25,16 @@ FILE(GLOB SRCS src/*.cpp)
 FILE(GLOB HDRS_IRR include/*.h)
 
 FILE(GLOB SRCS_GRAPHICS src/Graphic/*.cpp)
+FILE(GLOB SRCS_MAP src/Map/*.cpp)
+FILE(GLOB SRCS_PLAYER src/Player_AI/*.cpp)
 FILE(GLOB HDRS_GRAPHICS src/Graphic/*.hpp)
 
 ADD_EXECUTABLE(bomberman
         ${SRCS}
         ${HDRS_IRR}
         ${SRCS_GRAPHICS}
+        ${SRCS_MAP}
+        ${SRCS_PLAYER}
         ${HDRS_CUSTOM}
 )
 

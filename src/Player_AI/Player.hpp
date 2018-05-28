@@ -40,7 +40,6 @@ enum playerSprite_e {
 };
 
 #define MOVEMENT_SPEED 0.2
-#define ROTATION_SPEED 10
 
 class Player {
 	private:
@@ -55,21 +54,18 @@ class Player {
 		void rotateThreadHandler(float maxAngle, float curAngle,
 			std::string name);
 
-		// Movements
-		std::thread _movementThread;
-		bool _movementStop;
-
 	public:
 
 		Player(Gfx *gfx, playerSprite_e playerType, float x, float y,
 			float z, bool useController, unsigned long playerNb);
 
 		virtual ~Player();
-		vector3df getPosition();
+		vector2di getPosition();
 
-		void moveForward(enum rotationDirection_e dir = FORWARD,
-			float spd = MOVEMENT_SPEED);
-		void rotate(enum rotationDirection_e dir);
+		void move(enum rotationDirection_e dir = FORWARD,
+			float spd = MOVEMENT_SPEED
+		);
+
 		void setAbsoluteRotation(float maxAngle);
 		void setAbsoluteRotation(enum rotationDirection_e rotation);
 

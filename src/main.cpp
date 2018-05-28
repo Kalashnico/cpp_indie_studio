@@ -55,22 +55,22 @@ int main()
 
 
 		if (gfx.isKeyDown(KEY_KEY_D))
-			player.rotate(LEFT);
+			player.move(LEFT);
 		if (gfx.isKeyDown(KEY_KEY_A))
-			player.rotate(RIGHT);
+			player.move(RIGHT);
 		if (gfx.isKeyDown(KEY_KEY_W))
-			player.moveForward();
+			player.move(FORWARD);
 		if (gfx.isKeyDown(KEY_KEY_S))
-			player.moveForward(BACKWARD);
+			player.move(BACKWARD);
 
 		if (gfx.isKeyDown(KEY_RIGHT))
-			player2.rotate(LEFT);
+			player2.move(LEFT);
 		if (gfx.isKeyDown(KEY_LEFT))
-			player2.rotate(RIGHT);
+			player2.move(RIGHT);
 		if (gfx.isKeyDown(KEY_UP))
-			player2.moveForward();
+			player2.move(FORWARD);
 		if (gfx.isKeyDown(KEY_DOWN))
-			player2.moveForward(BACKWARD);
+			player2.move(BACKWARD);
 	}
 	return 0;
 }
