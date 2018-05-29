@@ -15,16 +15,20 @@
 
 class AI {
 	public:
-		AI(map::Map *map, std::string mesh, Type type);
+		AI(::map::Map *map, std::string mesh, Type type, Gfx *gfx, playerSprite_e playerType, float x,
+			float y, float z, bool useController,
+			unsigned long playerNb);
 		~AI();
 		void update();
-		std::unique_ptr<object::Player> getPlayer();
+		object::Player &getPlayer();
 	private:
-		bool move();
+		void moveCase(rotationDirection_e dir, float spd = MOVEMENT_SPEED);
 		void find_closest_player();
 		std::array<int, 2> _closest_player;
-		std::unique_ptr<object::Player> _player;
-		map::Map *_map;
+		object::Player _player;
+		::map::Map *_map;
+		rotationDirection_e _to_go;
+		vector2di _past_co;
 };
 
 #endif //INDIESTUDIO_AI_HPP
