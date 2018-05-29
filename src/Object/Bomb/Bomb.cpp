@@ -6,7 +6,7 @@
 
 namespace object {
 
-Bomb::Bomb(int posx, int posy, int blast, map::Map *map)
+Bomb::Bomb(int posx, int posy, int blast, ::map::Map *map)
 	: AObject("PATH BOMB MESH", BOMB),
 	_posx{posx},
 	_posy{posy},

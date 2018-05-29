@@ -16,7 +16,7 @@ class Bomb : public AObject {
 	#define CYCLE 0.5
 
 	public:
-		Bomb(int posx, int posy, int blast, map::Map *map);
+		Bomb(int posx, int posy, int blast, ::map::Map *map);
 		~Bomb();
 
 		void detonate() noexcept { _detonate = true; }
@@ -28,7 +28,7 @@ class Bomb : public AObject {
 		int _posx;
 		int _posy;
 		int _blastSize;
-		map::Map *_map;
+		::map::Map *_map;
 		std::clock_t _begin;
 
 		bool _detonate;

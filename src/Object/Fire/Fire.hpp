@@ -15,7 +15,7 @@ class Fire : public object::AObject {
 	#define LIFE 0.4
 
 	public:
-		Fire(size_t posx, size_t posy, map::Map *map);
+		Fire(size_t posx, size_t posy, ::map::Map *map);
 		~Fire() = default;
 
 		void update() noexcept;
@@ -25,7 +25,7 @@ class Fire : public object::AObject {
 
 		size_t _posx;
 		size_t _posy;
-		map::Map *_map;
+		::map::Map *_map;
 		bool _dissipated;
 		std::clock_t _begin;
 };

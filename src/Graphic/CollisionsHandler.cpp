@@ -15,7 +15,7 @@ CollisionsHandler::~CollisionsHandler()
 	_metaTriangleSelector->drop();
 }
 
-void CollisionsHandler::addObjectToCollisions(Player const &player)
+void CollisionsHandler::addObjectToCollisions(object::Player const &player)
 {
 	this->addObjectToCollisions(player.getNode(), vector3df(1.f, 1.f, 1.f));
 }
@@ -34,7 +34,7 @@ void CollisionsHandler::addObjectToCollisions(IAnimatedMeshSceneNode *node,
 	selector->drop();
 }
 
-void CollisionsHandler::addMapToCollision(Map const &map)
+void CollisionsHandler::addMapToCollision(::map::Map const &map)
 {
 	auto selector = map.getSelector();
 	_metaTriangleSelector->addTriangleSelector(selector);

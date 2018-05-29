@@ -6,7 +6,7 @@
 
 namespace object {
 
-Fire::Fire(size_t posx, size_t posy, map::Map *map)
+Fire::Fire(size_t posx, size_t posy, ::map::Map *map)
 	: AObject("BOMB PATH", FIRE),
 	_posx{posx},
 	_posy{posy},

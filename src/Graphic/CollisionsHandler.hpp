@@ -25,11 +25,11 @@ class CollisionsHandler {
 		explicit CollisionsHandler(Gfx const &gfx);
 		virtual ~CollisionsHandler();
 
-		void addObjectToCollisions(Player const &player);
+		void addObjectToCollisions(object::Player const &player);
 		void addObjectToCollisions(IAnimatedMeshSceneNode *node,
 			vector3df const &size
 		);
-		void addMapToCollision(Map const &map);
+		void addMapToCollision(::map::Map const &map);
 };
 
 #endif //IRRLICHTTESTS_COLLIONSHANDLER_HPP
