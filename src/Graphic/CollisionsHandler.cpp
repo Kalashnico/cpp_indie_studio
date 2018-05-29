@@ -28,7 +28,7 @@ void CollisionsHandler::addObjectToCollisions(IAnimatedMeshSceneNode *node,
 	_metaTriangleSelector->addTriangleSelector(selector);
 
 	auto anim = _sceneManager->createCollisionResponseAnimator(
-		_metaTriangleSelector, node, size, vector3df(0, 0, 0));
+		_metaTriangleSelector, node, size, vector3df(0, -10.f, 0));
 	node->addAnimator(anim);
 	anim->drop();
 	selector->drop();

@@ -6,8 +6,8 @@
 #define IRRLICHTTESTS_COLLIONSHANDLER_HPP
 
 #include "Irrlicht/irrlicht.h"
-#include "Player.hpp"
-#include "Map.hpp"
+#include "../Player_AI/Player.hpp"
+#include "../Map/Map.hpp"
 
 using namespace irr;
 

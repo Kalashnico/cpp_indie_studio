@@ -42,7 +42,8 @@ int main()
 	player.setAbsoluteRotation(180);
 	while (gfx.isRunning()) {
 		gfx.update();
-		if (gfx.isKeyDown(KEY_ESCAPE))
+
+		/*if (gfx.isKeyDown(KEY_ESCAPE))
 			return 0;
 		if (gfx.isKeyDown(KEY_F1))
 			player.setAbsoluteRotation(LEFT);
@@ -55,22 +56,22 @@ int main()
 
 
 		if (gfx.isKeyDown(KEY_KEY_D))
-			player.rotate(LEFT);
+			player.move(LEFT);
 		if (gfx.isKeyDown(KEY_KEY_A))
-			player.rotate(RIGHT);
+			player.move(RIGHT);
 		if (gfx.isKeyDown(KEY_KEY_W))
-			player.moveForward();
+			player.move(FORWARD);
 		if (gfx.isKeyDown(KEY_KEY_S))
-			player.moveForward(BACKWARD);
+			player.move(BACKWARD);
 
 		if (gfx.isKeyDown(KEY_RIGHT))
-			player2.rotate(LEFT);
+			player2.moveCase(LEFT);
 		if (gfx.isKeyDown(KEY_LEFT))
-			player2.rotate(RIGHT);
+			player2.moveCase(RIGHT);
 		if (gfx.isKeyDown(KEY_UP))
-			player2.moveForward();
+			player2.moveCase(FORWARD);
 		if (gfx.isKeyDown(KEY_DOWN))
-			player2.moveForward(BACKWARD);
+			player2.moveCase(BACKWARD);*/
 	}
 	return 0;
 }
