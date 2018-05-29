@@ -135,6 +135,7 @@ void Player::move(rotationDirection_e dir, float spd)
 		vec = {0., 0., 1.};
 		break;
 	default:
+		std::cout << "test" << std::endl;
 		break;
 	}
 	vec *= spd;
@@ -157,4 +158,33 @@ vector2di Player::getPosition()
 IAnimatedMeshSceneNode *Player::getNode() const
 {
 	return _playerNode;
+}
+
+void Player::moveCase(rotationDirection_e dir, float spd)
+{
+	const vector2di test = this->getPosition();
+
+	std::cout << test.X << " " << test.Y << std::endl;
+	switch (dir) {
+	case BACKWARD:
+		while (test.Y - this->getPosition().Y != -1)
+			this->move(dir, spd);
+		break;
+	case FORWARD:
+		while (test.Y - this->getPosition().Y != 1) {
+			this->move(dir, spd);
+			_gfx->update();
+		}
+		break;
+	case LEFT:
+		while (test.X - this->getPosition().X != 1)
+			this->move(dir, spd);
+		break;
+	case RIGHT:
+		while (test.X - this->getPosition().X != -1)
+			this->move(dir, spd);
+		break;
+	default:
+		break;
+	}
 }

@@ -28,8 +28,8 @@ enum rotationDirection_e {
 };
 
 struct playerSpriteInfo_s {
-	std::string	path;
-	vector3df	scale;
+	std::string path;
+	vector3df scale;
 };
 
 using playerSpriteInfo_t = playerSpriteInfo_s;
@@ -51,22 +51,31 @@ class Player {
 		// Rotation
 		std::thread _rotationThread;
 		bool _rotateStop;
+
 		void rotateThreadHandler(float maxAngle, float curAngle,
-			std::string name);
+			std::string name
+		);
 
 	public:
 
 		Player(Gfx *gfx, playerSprite_e playerType, float x, float y,
-			float z, bool useController, unsigned long playerNb);
+			float z, bool useController, unsigned long playerNb
+		);
 
 		virtual ~Player();
+
 		vector2di getPosition();
 
 		void move(enum rotationDirection_e dir = FORWARD,
 			float spd = MOVEMENT_SPEED
 		);
 
+		void moveCase(enum rotationDirection_e dir = FORWARD,
+			float spd = MOVEMENT_SPEED
+		);
+
 		void setAbsoluteRotation(float maxAngle);
+
 		void setAbsoluteRotation(enum rotationDirection_e rotation);
 
 		IAnimatedMeshSceneNode *getNode() const;
