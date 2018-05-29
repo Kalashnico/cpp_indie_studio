@@ -11,6 +11,7 @@
 #include "Irrlicht/irrlicht.h"
 #include "CustomEventReceiver.hpp"
 #include "Gfx.hpp"
+#include "AObject.hpp"
 
 using namespace irr;
 
@@ -24,7 +25,8 @@ enum rotationDirection_e {
 	LEFT,
 	RIGHT,
 	FORWARD,
-	BACKWARD
+	BACKWARD,
+	NONE
 };
 
 struct playerSpriteInfo_s {
@@ -41,44 +43,46 @@ enum playerSprite_e {
 
 #define MOVEMENT_SPEED 0.2
 
-class Player {
-	private:
-		Gfx *_gfx;
-		bool _useController;
-		size_t _playerNb;
-		IAnimatedMeshSceneNode *_playerNode;
+namespace object {
 
-		// Rotation
-		std::thread _rotationThread;
-		bool _rotateStop;
+	class Player : public AObject {
+		private:
+			Gfx *_gfx;
+			bool _useController;
+			size_t _playerNb;
+			IAnimatedMeshSceneNode *_playerNode;
 
-		void rotateThreadHandler(float maxAngle, float curAngle,
-			std::string name
-		);
+			// Rotation
+			std::thread _rotationThread;
+			bool _rotateStop;
 
-	public:
+			void rotateThreadHandler(float maxAngle, float curAngle,
+				std::string name
+			);
 
-		Player(Gfx *gfx, playerSprite_e playerType, float x, float y,
-			float z, bool useController, unsigned long playerNb
-		);
+		public:
 
-		virtual ~Player();
+			Player(std::string path, Type type, Gfx *gfx, playerSprite_e playerType, float x,
+				float y, float z, bool useController,
+				unsigned long playerNb
+			);
 
-		vector2di getPosition();
+			virtual ~Player();
 
-		void move(enum rotationDirection_e dir = FORWARD,
-			float spd = MOVEMENT_SPEED
-		);
+			vector2di getPosition();
 
-		void moveCase(enum rotationDirection_e dir = FORWARD,
-			float spd = MOVEMENT_SPEED
-		);
+			void move(enum rotationDirection_e dir = FORWARD,
+				float spd = MOVEMENT_SPEED
+			);
 
-		void setAbsoluteRotation(float maxAngle);
+			void setAbsoluteRotation(float maxAngle);
 
-		void setAbsoluteRotation(enum rotationDirection_e rotation);
+			void setAbsoluteRotation(
+				enum rotationDirection_e rotation
+			);
 
-		IAnimatedMeshSceneNode *getNode() const;
+			IAnimatedMeshSceneNode *getNode() const;
+	};
 };
 
 #endif //IRRLICHTTESTS_PLAYER_HPP

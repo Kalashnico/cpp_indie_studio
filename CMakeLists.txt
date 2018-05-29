@@ -36,6 +36,7 @@ FILE(GLOB SRCS_GRAPHICS src/Graphic/*.cpp)
 FILE(GLOB SRCS_MAP src/Map/*.cpp)
 FILE(GLOB SRCS_PLAYER src/Player_AI/*.cpp)
 FILE(GLOB HDRS_GRAPHICS src/Graphic/*.hpp)
+FILE(GLOB SRCS_OBJECTS src/Object/*.cpp src/Object/Bomb/*.cpp src/Object/Boxes/*.cpp src/Object/Fire/*.cpp src/Object/Wall/*.cpp)
 
 ADD_EXECUTABLE(bomberman
         ${SRCS}
@@ -43,6 +44,7 @@ ADD_EXECUTABLE(bomberman
         ${SRCS_GRAPHICS}
         ${SRCS_MAP}
         ${SRCS_PLAYER}
+        ${SRCS_OBJECTS}
         ${HDRS_CUSTOM}
 )
 
