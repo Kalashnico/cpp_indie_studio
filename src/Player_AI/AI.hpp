@@ -11,7 +11,6 @@
 #include <bits/unique_ptr.h>
 #include "Map.hpp"
 #include "Player.hpp"
-#include "Tile.hpp"
 
 class AI {
 	public:
@@ -24,7 +23,10 @@ class AI {
 	private:
 		void moveCase(rotationDirection_e dir, float spd = MOVEMENT_SPEED);
 		void find_closest_player();
-		std::array<int, 2> _closest_player;
+		void set_direction();
+		bool move_X(vector2di tmp);
+		bool move_Y(vector2di tmp);
+		vector2di _closest_player;
 		object::Player _player;
 		::map::Map *_map;
 		rotationDirection_e _to_go;

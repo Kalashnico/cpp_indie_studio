@@ -21,10 +21,16 @@ int main()
 	CollisionsHandler collisionsHandler(gfx);
 	::map::Map map(gfx.getSceneManager());
 	AI player2(&map, "", PLAYER2, &gfx, POMMY, 0, 0.1f, 0, false, 1);
-	object::Player player1("", PLAYER1, &gfx, POMMY, 0, 0.1f, 5, false, 2);
+	object::Player player("", PLAYER1, &gfx, POMMY, 0, 0.1f, 5, false, 2);
+	auto tmp = player.getPosition();
+	auto tmp2 = player2.getPlayer().getPosition();
+	map.addObjectToTile(static_cast<size_t>(tmp.X),
+		static_cast<size_t>(tmp.Y), &player);
+	map.addObjectToTile(static_cast<size_t>(tmp2.X),
+		static_cast<size_t>(tmp2.Y), &player2.getPlayer());
 	try {
 		collisionsHandler.addObjectToCollisions(player2.getPlayer());
-		collisionsHandler.addObjectToCollisions(player1);
+		collisionsHandler.addObjectToCollisions(player);
 		collisionsHandler.addMapToCollision(map);
 		gfx.addCameraFPS();
 		gfx.addLight(vector3df(-30, 30, -30), SColorf(1.0f, 1.0f, 1.0f),
@@ -40,7 +46,7 @@ int main()
 		return -1;
 	}
 
-	//player1.setAbsoluteRotation(180);
+	player.setAbsoluteRotation(180);
 	while (gfx.isRunning()) {
 		gfx.update();
 
@@ -56,16 +62,18 @@ int main()
 			player2.setAbsoluteRotation(FORWARD);
 		if (gfx.isKeyDown(KEY_F4))
 			player2.setAbsoluteRotation(BACKWARD);
+		*/
 
 		if (gfx.isKeyDown(KEY_KEY_D))
 			player.move(LEFT);
-		if (gfx.isKeyDown(KEY_KEY_A))
+		else if (gfx.isKeyDown(KEY_KEY_Q))
 			player.move(RIGHT);
-		if (gfx.isKeyDown(KEY_KEY_W))
+		else if (gfx.isKeyDown(KEY_KEY_Z))
 			player.move(FORWARD);
-		if (gfx.isKeyDown(KEY_KEY_S))
+		else if (gfx.isKeyDown(KEY_KEY_S))
 			player.move(BACKWARD);
 
+		/*
 		if (gfx.isKeyDown(KEY_RIGHT))
 			player2.moveCase(LEFT);
 		if (gfx.isKeyDown(KEY_LEFT))
