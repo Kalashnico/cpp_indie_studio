@@ -10,9 +10,11 @@
 #include <iostream>
 #include "AI.hpp"
 
+namespace object {
+
 AI::AI(::map::Map *map, std::string mesh, Type type, Gfx *gfx, playerSprite_e playerType, float x,
 	float y, float z, bool useController,
-	unsigned long playerNb) : _player(mesh, type, gfx, playerType, x, y, z, useController, playerNb), _map(map), _to_go(NONE), _closest_player(-1, -1)
+	unsigned long playerNb) : AObject(mesh, type), _player(map, mesh, type, gfx, playerType, x, y, z, useController, playerNb), _map(map), _to_go(NONE), _closest_player(-1, -1)
 {
 }
 
@@ -25,7 +27,7 @@ object::Player &AI::getPlayer()
 	return _player;
 }
 
-void AI::update()
+void AI::update() noexcept
 {
 	if (_to_go == NONE) {
 		this->find_closest_player();
@@ -153,4 +155,6 @@ bool AI::move_Y(vector2di tmp)
 			return false;
 		}
 	}
+}
+
 }

@@ -16,6 +16,7 @@ namespace map {
 	{
 		createMap();
 		addBoxes();
+
 		auto mesh = _sceneManager->getMesh("./media/map/map_indie.obj");
 		if (!mesh)
 			throw std::exception();
@@ -94,30 +95,23 @@ namespace map {
 	void Map::addBoxes() noexcept
 	{
 		std::random_device randomDevice;                        // Random device
-		std::mt19937 engine(
-			randomDevice());                        // Seed
-		std::uniform_int_distribution<> distribution(1,
-			10);        // Range
+		std::mt19937 engine(randomDevice());                        // Seed
+		std::uniform_int_distribution<> distribution(1, 10);        // Range
 
 		for (int x = 0; x < MAP_SIZE; x++) {
 			for (int y = 0; y < MAP_SIZE; y++) {
-				if (isCornerTile(x,
-					y)) {                // Player spawn check
+				if (isCornerTile(x, y)) {                // Player spawn check
 					getTileAt(x, y)->setSetup(true);
 					continue;
 				}
 
-				if (x % 2 == 1 &&
-					y % 2 == 1)                // Wall check
+				if (x % 2 == 1 && y % 2 == 1)                // Wall check
 					continue;
 
-				if (distribution(engine) <
-					9) {                // Generate random number - 8/10 chance to spawn box
+				if (distribution(engine) < 9) {                // Generate random number - 8/10 chance to spawn box
 					auto loot = std::make_unique<object::Loot>();
-					std::unique_ptr<object::AObject> box = std::make_unique<object::Box>(
-						std::move(loot));
-					getTileAt(x, y)->addObject(
-						std::move(box));
+					std::unique_ptr<object::AObject> box = std::make_unique<object::Box>(std::move(loot));
+					getTileAt(x, y)->addObject(std::move(box));
 				}
 				getTileAt(x, y)->setSetup(true);
 			}

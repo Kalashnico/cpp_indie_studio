@@ -12,6 +12,7 @@
 #include "CustomEventReceiver.hpp"
 #include "Gfx.hpp"
 #include "AObject.hpp"
+#include "Map.hpp"
 
 using namespace irr;
 
@@ -47,6 +48,7 @@ namespace object {
 
 	class Player : public AObject {
 		private:
+			::map::Map *_map;
 			Gfx *_gfx;
 			bool _useController;
 			size_t _playerNb;
@@ -62,12 +64,14 @@ namespace object {
 
 		public:
 
-			Player(std::string path, Type type, Gfx *gfx, playerSprite_e playerType, float x,
+			Player(::map::Map *map, std::string path, Type type, Gfx *gfx, playerSprite_e playerType, float x,
 				float y, float z, bool useController,
 				unsigned long playerNb
 			);
 
 			virtual ~Player();
+
+			void update() noexcept;
 
 			vector2di getPosition();
 

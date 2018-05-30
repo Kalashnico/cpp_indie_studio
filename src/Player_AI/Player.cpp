@@ -22,9 +22,9 @@ namespace object {
 		{POMMY, {"./media/models/pommy/pommyV3.obj", {2.f, 2.f, 2.f}}},
 		{UNKNOWN, {"", {0, 0, 0}}}};
 
-	Player::Player(std::string path, Type type, Gfx *gfx, playerSprite_e playerType, float x, float y,
+	Player::Player(::map::Map *map, std::string path, Type type, Gfx *gfx, playerSprite_e playerType, float x, float y,
 		float z, bool useController, unsigned long playerNb
-	) : AObject(std::move(path), type), _gfx(gfx), _useController(useController), _playerNb(playerNb),
+	) : AObject(path, type), _map(map), _gfx(gfx), _useController(useController), _playerNb(playerNb),
 		_playerNode(nullptr)
 	{
 
@@ -40,6 +40,18 @@ namespace object {
 		if (_rotationThread.joinable())
 			_rotationThread.join();
 		this->_gfx->deleteElement("Player" + this->_playerNb);
+	}
+
+	void Player::update() noexcept
+	{
+		if (_gfx->isKeyDown(KEY_KEY_D))
+			move(LEFT);
+		else if (_gfx->isKeyDown(KEY_KEY_Q))
+			move(RIGHT);
+		else if (_gfx->isKeyDown(KEY_KEY_Z))
+			move(FORWARD);
+		else if (_gfx->isKeyDown(KEY_KEY_S))
+			move(BACKWARD);
 	}
 
 	/*

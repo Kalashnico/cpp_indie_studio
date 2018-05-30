@@ -1,6 +1,7 @@
+#include <memory>
 #include <iostream>
-#include <AI.hpp>
 
+#include "AI.hpp"
 #include "Irrlicht/irrlicht.h"
 #include "Graphic/CustomEventReceiver.hpp"
 #include "Graphic/Gfx.hpp"
@@ -20,17 +21,14 @@ int main()
 	Gfx gfx(eventReceiver);
 	CollisionsHandler collisionsHandler(gfx);
 	::map::Map map(gfx.getSceneManager());
-	AI player2(&map, "", PLAYER2, &gfx, POMMY, 0, 0.1f, 0, false, 1);
-	object::Player player("", PLAYER1, &gfx, POMMY, 0, 0.1f, 5, false, 2);
-	auto tmp = player.getPosition();
-	auto tmp2 = player2.getPlayer().getPosition();
-	map.addObjectToTile(static_cast<size_t>(tmp.X),
-		static_cast<size_t>(tmp.Y), &player);
-	map.addObjectToTile(static_cast<size_t>(tmp2.X),
-		static_cast<size_t>(tmp2.Y), &player2.getPlayer());
+	auto player2 = std::make_unique<object::AI>(&map, "", PLAYER2, &gfx, POMMY, 0, 0.1f, 0, false, 2);
+	auto player = std::make_unique<object::Player>(&map, "", PLAYER1, &gfx, POMMY, 0, 0.1f, 5, false, 1);
+	auto tmp = player.get()->getPosition();
+	auto tmp2 = player2.get()->getPlayer().getPosition();
+
 	try {
-		collisionsHandler.addObjectToCollisions(player2.getPlayer());
-		collisionsHandler.addObjectToCollisions(player);
+		collisionsHandler.addObjectToCollisions(player2.get()->getPlayer());
+		collisionsHandler.addObjectToCollisions(*player.get());
 		collisionsHandler.addMapToCollision(map);
 		gfx.addCameraFPS();
 		gfx.addLight(vector3df(-30, 30, -30), SColorf(1.0f, 1.0f, 1.0f),
@@ -46,11 +44,16 @@ int main()
 		return -1;
 	}
 
-	player.setAbsoluteRotation(180);
+	player.get()->setAbsoluteRotation(180);
+
+	std::unique_ptr<object::AObject> playerObject = std::move(player);
+	std::unique_ptr<object::AObject> player2Object = std::move(player2);
+	map.addObjectToTile(static_cast<size_t>(tmp.X), static_cast<size_t>(tmp.Y), std::move(playerObject));
+	map.addObjectToTile(static_cast<size_t>(tmp2.X), static_cast<size_t>(tmp2.Y), std::move(player2Object));
 	while (gfx.isRunning()) {
 		gfx.update();
+		map.updateTileObjects();
 
-		player2.update();
 		if (gfx.isKeyDown(KEY_ESCAPE))
 			return 0;
 		/*
@@ -64,6 +67,8 @@ int main()
 			player2.setAbsoluteRotation(BACKWARD);
 		*/
 
+
+		/*
 		if (gfx.isKeyDown(KEY_KEY_D))
 			player.move(LEFT);
 		else if (gfx.isKeyDown(KEY_KEY_Q))
@@ -72,6 +77,7 @@ int main()
 			player.move(FORWARD);
 		else if (gfx.isKeyDown(KEY_KEY_S))
 			player.move(BACKWARD);
+		*/
 
 		/*
 		if (gfx.isKeyDown(KEY_RIGHT))

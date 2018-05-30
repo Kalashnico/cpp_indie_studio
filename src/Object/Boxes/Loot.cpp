@@ -2,6 +2,7 @@
 // Created by Nicolas Guerin on 14/05/2018.
 //
 
+#include <iostream>
 #include <random>
 #include "Loot.hpp"
 
