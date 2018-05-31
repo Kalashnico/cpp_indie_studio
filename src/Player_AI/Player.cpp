@@ -172,9 +172,9 @@ namespace object {
 	vector2di Player::getPosition()
 	{
 		auto vectorFloat = this->_playerNode->getPosition() / 4;
+		vectorFloat += 7.5f;
 		vector2di value = {static_cast<s32>(vectorFloat.Z - 1),
 			static_cast<s32>(vectorFloat.X - 1)};
-		value += 7;
 		return value;
 	}
 
