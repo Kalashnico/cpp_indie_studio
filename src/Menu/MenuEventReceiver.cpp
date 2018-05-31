@@ -41,8 +41,7 @@ bool MenuEventReceiver::OnEvent(const irr::SEvent &event)
 
                         IGUIWindow* window = env->addWindow(
                                 rect<s32>(100 + Context.counter, 100 + Context.counter, 300 + Context.counter, 200 + Context.counter),
-                                false, // modal?
-                                L"Test window");
+                                false, L"Option");
 
                         env->addStaticText(L"Please close me",
                                            rect<s32>(35,35,140,50),

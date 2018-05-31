@@ -57,8 +57,7 @@ int main(void)
     // And tell the device to use our custom event receiver.
     device->setEventReceiver(&receiver);
 
-    env->addImage(driver->getTexture("../../media/irrlichtlogo2.png"),
-                  position2d<int>(10,10));
+    env->addImage(driver->getTexture(""), position2d<int>(10,10));
 
     while(device->run() && driver)
         if (device->isWindowActive())

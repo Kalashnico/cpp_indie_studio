@@ -23,16 +23,6 @@ struct SAppContext
     IGUIListBox*    listbox;
 };
 
-// Define some values that we'll use to identify individual GUI controls.
-enum
-{
-    QUIT_BUTTON ,
-    OPTION_BUTTON,
-    FILE_OPEN_BUTTON,
-    PLAY_BUTTON,
-    GUI_ID_TRANSPARENCY_SCROLL_BAR
-};
-
 void setSkinTransparency(s32 alpha, irr::gui::IGUISkin * skin)
 {
     for (s32 i=0; i<irr::gui::EGDC_COUNT ; ++i)

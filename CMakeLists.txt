@@ -3,9 +3,8 @@ PROJECT(IrrlichtTests)
 
 SET(CMAKE_CXX_FLAGS_RELEASE "-O3")
 SET(CMAKE_CXX_FLAGS_DEBUG  "-g")
-SET(CMAKE_CXX_FLAGS "-lXxf86vm")
+SET(CMAKE_CXX_FLAGS "-lXxf86vm -lpthread")
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR})
-SET(OpenGL_GL_PREFERENCE LEGACY)
 
 
 IF(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
@@ -26,11 +25,10 @@ FILE(GLOB HDRS include/*.h)
 ADD_EXECUTABLE(IrrlichtTests
         ${SRCS}
         ${HDRS}
-        src/main.cpp src/Menu/MenuEventReceiver.hpp src/Menu/MenuEventReceiver.cpp)
+        )
 
 TARGET_LINK_LIBRARIES(IrrlichtTests
         ${PROJECT_SOURCE_DIR}/lib/libIrrlicht.a
         ${OPENGL_LIBRARIES}
         ${X11_LIBRARIES}
-
-)
+        )
