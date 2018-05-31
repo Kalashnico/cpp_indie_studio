@@ -26,7 +26,7 @@ FILE(GLOB HDRS include/*.h)
 ADD_EXECUTABLE(IrrlichtTests
         ${SRCS}
         ${HDRS}
-)
+        src/main.cpp src/Menu/MenuEventReceiver.hpp src/Menu/MenuEventReceiver.cpp)
 
 TARGET_LINK_LIBRARIES(IrrlichtTests
         ${PROJECT_SOURCE_DIR}/lib/libIrrlicht.a
