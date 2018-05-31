@@ -38,6 +38,14 @@ void AI::update() noexcept
 	this->moveCase(_to_go);
 }
 
+void AI::updatePosition(size_t oldx, size_t oldy) noexcept
+{
+	auto position = _player.getPosition();
+
+	if (position.X != oldx || position.Y != oldy)
+		_map->movePlayer(getType(), oldx, oldy, position.X, position.Y);
+}
+
 void AI::moveCase(rotationDirection_e dir, float spd)
 {
 	const vector2di tmp = _player.getPosition();

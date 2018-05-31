@@ -20,7 +20,7 @@ using namespace video;
 using namespace io;
 using namespace gui;
 
-#define MAP_SIZE	15
+#define MAP_SIZE	13
 #define INDEX(x, y)	(MAP_SIZE * x + y)
 
 namespace map {
@@ -59,6 +59,7 @@ namespace map {
 			void addObjectToTile(size_t x, size_t y, std::unique_ptr<object::AObject>) noexcept;
 			void updateTileObjects() noexcept;
 			void removeObjectFromTile(size_t x, size_t y, Type objectType) noexcept;
+			void movePlayer(Type type, size_t oldx, size_t oldy, size_t newx, size_t newy) noexcept;
 
 			void explodeBomb(size_t x, size_t y, size_t blastRadius) noexcept;
 

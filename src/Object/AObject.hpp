@@ -44,6 +44,7 @@ class AObject {
 		virtual std::unique_ptr<Loot> getLoot() noexcept;
 		virtual LootCategory getLootCategory() const noexcept {}
 		virtual void update() noexcept {}
+		virtual void updatePosition(size_t oldx, size_t oldy) noexcept {}
 
 		//Getter
 		Type getType() const noexcept { return _type; }

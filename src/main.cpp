@@ -50,44 +50,21 @@ int main()
 	std::unique_ptr<object::AObject> player2Object = std::move(player2);
 	map.addObjectToTile(static_cast<size_t>(tmp.X), static_cast<size_t>(tmp.Y), std::move(playerObject));
 	map.addObjectToTile(static_cast<size_t>(tmp2.X), static_cast<size_t>(tmp2.Y), std::move(player2Object));
+
+	auto begin = std::clock();
+
 	while (gfx.isRunning()) {
-		gfx.update();
-		map.updateTileObjects();
 
 		if (gfx.isKeyDown(KEY_ESCAPE))
 			return 0;
-		/*
-		if (gfx.isKeyDown(KEY_F1))
-			player2.setAbsoluteRotation(LEFT);
-		if (gfx.isKeyDown(KEY_F2))
-			player2.setAbsoluteRotation(RIGHT);
-		if (gfx.isKeyDown(KEY_F3))
-			player2.setAbsoluteRotation(FORWARD);
-		if (gfx.isKeyDown(KEY_F4))
-			player2.setAbsoluteRotation(BACKWARD);
-		*/
 
+		if (((std::clock() - begin) / (double) CLOCKS_PER_SEC) < (1.0 / 60.0))
+			continue;
 
-		/*
-		if (gfx.isKeyDown(KEY_KEY_D))
-			player.move(LEFT);
-		else if (gfx.isKeyDown(KEY_KEY_Q))
-			player.move(RIGHT);
-		else if (gfx.isKeyDown(KEY_KEY_Z))
-			player.move(FORWARD);
-		else if (gfx.isKeyDown(KEY_KEY_S))
-			player.move(BACKWARD);
-		*/
+		begin = std::clock();
 
-		/*
-		if (gfx.isKeyDown(KEY_RIGHT))
-			player2.moveCase(LEFT);
-		if (gfx.isKeyDown(KEY_LEFT))
-			player2.moveCase(RIGHT);
-		if (gfx.isKeyDown(KEY_UP))
-			player2.moveCase(FORWARD);
-		if (gfx.isKeyDown(KEY_DOWN))
-			player2.moveCase(BACKWARD);*/
+		gfx.update();
+		map.updateTileObjects();
 	}
 	return 0;
 }

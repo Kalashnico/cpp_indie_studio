@@ -21,6 +21,7 @@ class AI : public AObject {
 			unsigned long playerNb);
 		~AI();
 		void update() noexcept;
+		void updatePosition(size_t oldx, size_t oldy) noexcept;
 		object::Player &getPlayer();
 	private:
 		void moveCase(rotationDirection_e dir, float spd = MOVEMENT_SPEED);

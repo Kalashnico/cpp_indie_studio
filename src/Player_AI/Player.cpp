@@ -54,6 +54,14 @@ namespace object {
 			move(BACKWARD);
 	}
 
+	void Player::updatePosition(size_t oldx, size_t oldy) noexcept
+	{
+		auto position = getPosition();
+
+		if (position.X != oldx || position.Y != oldy)
+			_map->movePlayer(getType(), oldx, oldy, position.X, position.Y);
+	}
+
 	/*
 	 * Rotations
 	 */
@@ -164,8 +172,8 @@ namespace object {
 	vector2di Player::getPosition()
 	{
 		auto vectorFloat = this->_playerNode->getPosition() / 4;
-		vector2di value = {static_cast<s32>(vectorFloat.X),
-			static_cast<s32>(vectorFloat.Z)};
+		vector2di value = {static_cast<s32>(vectorFloat.Z - 1),
+			static_cast<s32>(vectorFloat.X - 1)};
 		value += 7;
 		return value;
 	}

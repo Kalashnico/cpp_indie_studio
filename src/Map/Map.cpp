@@ -131,6 +131,16 @@ namespace map {
 		getTileAt(x, y)->removeObject(objectType);
 	}
 
+	void Map::movePlayer(Type type, size_t oldx, size_t oldy, size_t newx, size_t newy) noexcept
+	{
+		auto player = getTileAt(oldx, oldy)->removePlayer(type);
+
+		if (player == nullptr)
+			return;
+
+		addObjectToTile(newx, newy, std::move(player));
+	}
+
 	bool Map::placeFire(int i, size_t x, size_t y) noexcept
 	{
 		if (i < 0 || getTileAt(x, y)->containsObject(WALL))

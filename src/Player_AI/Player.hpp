@@ -72,6 +72,7 @@ namespace object {
 			virtual ~Player();
 
 			void update() noexcept;
+			void updatePosition(size_t oldx, size_t oldy) noexcept;
 
 			vector2di getPosition();
 

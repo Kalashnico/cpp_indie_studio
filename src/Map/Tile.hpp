@@ -30,6 +30,7 @@ class Tile {
 		void updateTile() noexcept;
 		void addObject(std::unique_ptr<object::AObject>) noexcept;
 		void removeObject(Type objectType) noexcept;
+		std::unique_ptr<object::AObject> removePlayer(Type objectType) noexcept;
 		bool containsObject(Type objectType) noexcept;
 
 	private:
@@ -42,6 +43,7 @@ class Tile {
 
 		void addToBeAdded() noexcept;
 		void removeDestroyed() noexcept;
+		void updatePlayerPositions() noexcept;
 };
 
 }
