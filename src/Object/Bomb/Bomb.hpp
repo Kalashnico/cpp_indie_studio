@@ -7,6 +7,7 @@
 #include <ctime>
 #include "AObject.hpp"
 #include "Map.hpp"
+#include "Gfx.hpp"
 
 namespace object {
 
@@ -16,8 +17,10 @@ class Bomb : public AObject {
 	#define CYCLE 0.5
 
 	public:
-		Bomb(int posx, int posy, int blast, ::map::Map *map);
+		Bomb(int posx, int posy, int blast, ::map::Map *map, Gfx *gfx);
 		~Bomb();
+
+		IAnimatedMeshSceneNode *getNode() const { return _node; }
 
 		void detonate() noexcept { _detonate = true; }
 		void update() noexcept;
@@ -29,6 +32,9 @@ class Bomb : public AObject {
 		int _posy;
 		int _blastSize;
 		::map::Map *_map;
+		Gfx *_gfx;
+		IAnimatedMeshSceneNode *_node;
+
 		std::clock_t _begin;
 
 		bool _detonate;

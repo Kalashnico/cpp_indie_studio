@@ -3,6 +3,9 @@
 //
 
 #include "CollisionsHandler.hpp"
+#include "Player.hpp"
+#include "Box.hpp"
+#include "Bomb.hpp"
 
 CollisionsHandler::CollisionsHandler(Gfx const &gfx)
 {
@@ -40,3 +43,20 @@ void CollisionsHandler::addMapToCollision(::map::Map const &map)
 	_metaTriangleSelector->addTriangleSelector(selector);
 }
 
+void CollisionsHandler::addBoxToCollisions(::object::Box *box, vector3df const &size)
+{
+	auto selector = this->_sceneManager->createTriangleSelector(box->getNode());
+	_metaTriangleSelector->addTriangleSelector(selector);
+	box->setSelector(selector);
+}
+
+void CollisionsHandler::addBombToCollisions(::object::Bomb const &bomb, vector3df const &size)
+{
+	auto selector = this->_sceneManager->createTriangleSelector(bomb.getNode());
+	_metaTriangleSelector->addTriangleSelector(selector);
+}
+
+void CollisionsHandler::removeCollisions(ITriangleSelector *selector)
+{
+	_metaTriangleSelector->removeTriangleSelector(selector);
+}

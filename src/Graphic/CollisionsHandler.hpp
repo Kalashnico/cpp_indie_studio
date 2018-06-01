@@ -6,8 +6,7 @@
 #define IRRLICHTTESTS_COLLIONSHANDLER_HPP
 
 #include "Irrlicht/irrlicht.h"
-#include "../Player_AI/Player.hpp"
-#include "../Map/Map.hpp"
+#include "Gfx.hpp"
 
 using namespace irr;
 
@@ -16,6 +15,16 @@ using namespace scene;
 using namespace video;
 using namespace io;
 using namespace gui;
+
+namespace map {
+	class Map;
+}
+
+namespace object {
+	class Player;
+	class Box;
+	class Bomb;
+}
 
 class CollisionsHandler {
 		ISceneManager *_sceneManager;
@@ -29,7 +38,11 @@ class CollisionsHandler {
 		void addObjectToCollisions(IAnimatedMeshSceneNode *node,
 			vector3df const &size
 		);
+		void addBombToCollisions(::object::Bomb const &bomb, vector3df const &size);
+		void addBoxToCollisions(::object::Box *box, vector3df const &size);
 		void addMapToCollision(::map::Map const &map);
+
+		void removeCollisions(ITriangleSelector *selector);
 };
 
 #endif //IRRLICHTTESTS_COLLIONSHANDLER_HPP

@@ -5,12 +5,13 @@
 #include <cmath>
 #include <cstddef>
 #include <string>
-#include "CustomEventReceiver.hpp"
-#include "Gfx.hpp"
 #include <iostream>
 #include <future>
 #include <utility>
+#include "Gfx.hpp"
 #include "Player.hpp"
+#include "Bomb.hpp"
+#include "CustomEventReceiver.hpp"
 
 
 namespace object {
@@ -52,6 +53,9 @@ namespace object {
 			move(FORWARD);
 		else if (_gfx->isKeyDown(KEY_KEY_S))
 			move(BACKWARD);
+
+		if (_gfx->isKeyDown(KEY_SPACE))
+			placeBomb();
 	}
 
 	void Player::updatePosition(size_t oldx, size_t oldy) noexcept
@@ -60,6 +64,18 @@ namespace object {
 
 		if (position.X != oldx || position.Y != oldy)
 			_map->movePlayer(getType(), oldx, oldy, position.X, position.Y);
+	}
+
+	void Player::placeBomb() noexcept
+	{
+		auto pos = getPosition();
+
+		if (_map->getTileAt(pos.X, pos.Y)->containsObject(BOMB))
+			return;
+
+		auto bomb = std::make_unique<object::Bomb>(pos.X, pos.Y, _blastRadius, _map, _gfx);
+		//_map->getCollisionsHandler()->addBombToCollisions(*bomb.get(), {1.f, 1.f, 1.f});
+		_map->addObjectToTile(pos.X, pos.Y, std::move(bomb));
 	}
 
 	/*

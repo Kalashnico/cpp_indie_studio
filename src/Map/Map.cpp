@@ -12,7 +12,7 @@
 
 namespace map {
 
-	Map::Map(ISceneManager *sceneManager) : _sceneManager(sceneManager)
+	Map::Map(Gfx *gfx, CollisionsHandler *collisionsHandler) : _gfx(gfx), _sceneManager(gfx->getSceneManager()), _collisionsHandler(collisionsHandler)
 	{
 		createMap();
 		addBoxes();
@@ -108,9 +108,10 @@ namespace map {
 				if (x % 2 == 1 && y % 2 == 1)                // Wall check
 					continue;
 
-				if (distribution(engine) < 9) {                // Generate random number - 8/10 chance to spawn box
+				if (distribution(engine) < 8) {                // Generate random number - 8/10 chance to spawn box
 					auto loot = std::make_unique<object::Loot>();
-					std::unique_ptr<object::AObject> box = std::make_unique<object::Box>(std::move(loot));
+					auto box = std::make_unique<object::Box>(std::move(loot), this, _gfx, x, y);
+					_collisionsHandler->addBoxToCollisions(box.get(), {1.f, 1.f, 1.f});
 					getTileAt(x, y)->addObject(std::move(box));
 				}
 				getTileAt(x, y)->setSetup(true);
@@ -141,18 +142,25 @@ namespace map {
 		addObjectToTile(newx, newy, std::move(player));
 	}
 
-	bool Map::placeFire(int i, size_t x, size_t y) noexcept
+	bool Map::placeFire(int i, int x, int y) noexcept
 	{
-		if (i < 0 || getTileAt(x, y)->containsObject(WALL))
+		if (i < 0 || i > MAP_SIZE - 1)
+			return true;
+
+		if (getTileAt(x, y)->containsObject(WALL))
 			return false;
 
-		if (getTileAt(x, y)->containsObject(FIRE))
-			removeObjectFromTile(x, y, FIRE);
+		if (getTileAt(x, y)->containsObject(FIRE)) {
+			if (getTileAt(x, y)->getObject(FIRE) != nullptr)
+				getTileAt(x, y)->getObject(FIRE)->resetGfx();
+			return true;
+		}
 
 		if (getTileAt(x, y)->containsObject(BOMB)) {
 			auto bomb = getTileAt(x, y)->getObject(BOMB);
 			if (bomb != nullptr)
 				bomb->detonate();
+			return false;
 		}
 
 		if (getTileAt(x, y)->containsObject(BOX)) {
@@ -164,7 +172,7 @@ namespace map {
 			addObjectToTile(x, y, std::move(
 				std::unique_ptr<object::AObject>(
 					new object::Fire(x, y,
-						this))));        // Place fire
+						this, _gfx))));        // Place fire
 
 			if (loot.get()->getLootCategory() !=
 				object::EMPTY)                                                                // Check empty loot
@@ -176,7 +184,7 @@ namespace map {
 
 		addObjectToTile(x, y, std::move(
 			std::unique_ptr<object::AObject>(
-				new object::Fire(x, y, this))));
+				new object::Fire(x, y, this, _gfx))));
 		return true;
 	}
 
@@ -185,21 +193,21 @@ namespace map {
 		removeObjectFromTile(x, y, BOMB);
 		addObjectToTile(x, y, std::move(
 			std::unique_ptr<object::AObject>(
-				new object::Fire(x, y, this))));
+				new object::Fire(x, y, this, _gfx))));
 
-		for (int i = x - 1; i >= x - blastRadius; i--)
+		for (int i = x - 1; i >= (int)(x - blastRadius); i--)
 			if (!placeFire(i, i, y))
 				break;
 
-		for (int i = x + 1; i <= x + blastRadius; i++)
+		for (int i = x + 1; i <= (int)(x + blastRadius); i++)
 			if (!placeFire(i, i, y))
 				break;
 
-		for (int i = y - 1; i >= y - blastRadius; i--)
+		for (int i = y - 1; i >= (int)(y - blastRadius); i--)
 			if (!placeFire(i, x, i))
 				break;
 
-		for (int i = y + 1; i <= y + blastRadius; i++)
+		for (int i = y + 1; i <= (int)(y + blastRadius); i++)
 			if (!placeFire(i, x, i))
 				break;
 	}

@@ -62,6 +62,10 @@ namespace object {
 				std::string name
 			);
 
+			int _placedBombs = 0;
+			int _maxBombs = 1;
+			int _blastRadius = 2;
+
 		public:
 
 			Player(::map::Map *map, std::string path, Type type, Gfx *gfx, playerSprite_e playerType, float x,
@@ -73,6 +77,8 @@ namespace object {
 
 			void update() noexcept;
 			void updatePosition(size_t oldx, size_t oldy) noexcept;
+
+			void placeBomb() noexcept;
 
 			vector2di getPosition();
 

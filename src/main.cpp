@@ -20,15 +20,23 @@ int main()
 	CustomEventReceiver eventReceiver;
 	Gfx gfx(eventReceiver);
 	CollisionsHandler collisionsHandler(gfx);
-	::map::Map map(gfx.getSceneManager());
-	auto player2 = std::make_unique<object::AI>(&map, "", PLAYER2, &gfx, POMMY, 0, 0.1f, 0, false, 2);
-	auto player = std::make_unique<object::Player>(&map, "", PLAYER1, &gfx, POMMY, 0, 0.1f, 5, false, 1);
+	::map::Map map(&gfx, &collisionsHandler);
+	vector3df pos = {0.f, 0.f, 0.f};
+	pos -= 6.f;
+	pos *= 4.f;
+	pos.Y = 0.1f;
+	auto player = std::make_unique<object::Player>(&map, "", PLAYER1, &gfx, POMMY, pos.X, pos.Y, pos.Z, false, 1);
+	vector3df pos2 = {0.f, 0.f, MAP_SIZE - 1.f};
+	pos2 -= 6.f;
+	pos2 *= 4.f;
+	pos2.Y = 0.1f;
+	auto player2 = std::make_unique<object::AI>(&map, "", PLAYER2, &gfx, POMMY, pos2.X, pos2.Y, pos2.Z, false, 2);
 	auto tmp = player.get()->getPosition();
 	auto tmp2 = player2.get()->getPlayer().getPosition();
 
 	try {
-		collisionsHandler.addObjectToCollisions(player2.get()->getPlayer());
 		collisionsHandler.addObjectToCollisions(*player.get());
+		collisionsHandler.addObjectToCollisions(player2.get()->getPlayer());
 		collisionsHandler.addMapToCollision(map);
 		gfx.addCameraFPS();
 		gfx.addLight(vector3df(-30, 30, -30), SColorf(1.0f, 1.0f, 1.0f),
@@ -46,10 +54,8 @@ int main()
 
 	player.get()->setAbsoluteRotation(180);
 
-	std::unique_ptr<object::AObject> playerObject = std::move(player);
-	std::unique_ptr<object::AObject> player2Object = std::move(player2);
-	map.addObjectToTile(static_cast<size_t>(tmp.X), static_cast<size_t>(tmp.Y), std::move(playerObject));
-	map.addObjectToTile(static_cast<size_t>(tmp2.X), static_cast<size_t>(tmp2.Y), std::move(player2Object));
+	map.addObjectToTile(static_cast<size_t>(tmp.X), static_cast<size_t>(tmp.Y), std::move(player));
+	map.addObjectToTile(static_cast<size_t>(tmp2.X), static_cast<size_t>(tmp2.Y), std::move(player2));
 
 	auto begin = std::clock();
 

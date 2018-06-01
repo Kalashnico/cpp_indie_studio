@@ -40,9 +40,12 @@ class AObject {
 		AObject() = delete;
 		virtual ~AObject() = default;
 
+		virtual void resetGfx() noexcept {}
+
 		virtual void detonate() noexcept {}
 		virtual std::unique_ptr<Loot> getLoot() noexcept;
 		virtual LootCategory getLootCategory() const noexcept {}
+
 		virtual void update() noexcept {}
 		virtual void updatePosition(size_t oldx, size_t oldy) noexcept {}
 

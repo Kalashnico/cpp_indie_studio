@@ -11,6 +11,8 @@
 #include <memory>
 #include "Tile.hpp"
 #include "Irrlicht/irrlicht.h"
+#include "Gfx.hpp"
+#include "CollisionsHandler.hpp"
 
 using namespace irr;
 
@@ -33,21 +35,24 @@ namespace map {
 			void addBoxes() noexcept;
 			bool isCornerTile(size_t x, size_t y) const noexcept;
 
-			bool placeFire(int i, size_t x, size_t y) noexcept;
+			bool placeFire(int i, int x, int y) noexcept;
 
 			//Variable
 			std::vector<std::unique_ptr<Tile>> _map;
+			Gfx *_gfx;
 			ISceneManager *_sceneManager;
+			CollisionsHandler *_collisionsHandler;
 			IMeshSceneNode *_mapNode;
 			ITriangleSelector *_selector;
 
 		public:
 
-			Map(ISceneManager *sceneManager);
+			Map(Gfx *gfx, CollisionsHandler *collisionsHandler);
 
 
 			//Getter
 
+			CollisionsHandler *getCollisionsHandler() noexcept { return _collisionsHandler; }
 			IMeshSceneNode *getMapNode() const;
 			ITriangleSelector *getSelector() const;
 			std::vector<std::unique_ptr<Tile>> &getMap() noexcept { return _map; };

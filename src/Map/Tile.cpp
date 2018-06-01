@@ -52,16 +52,20 @@ void Tile::removeObject(Type objectType) noexcept
 void Tile::updatePlayerPositions() noexcept
 {
 	if (containsObject(PLAYER1))
-		getObject(PLAYER1)->updatePosition(_x, _y);
+		if (getObject(PLAYER1) != nullptr)
+			getObject(PLAYER1)->updatePosition(_x, _y);
 
 	if (containsObject(PLAYER2))
-		getObject(PLAYER2)->updatePosition(_x, _y);
+		if (getObject(PLAYER2) != nullptr)
+			getObject(PLAYER2)->updatePosition(_x, _y);
 
 	if (containsObject(PLAYER3))
-		getObject(PLAYER3)->updatePosition(_x, _y);
+		if (getObject(PLAYER3) != nullptr)
+			getObject(PLAYER3)->updatePosition(_x, _y);
 
 	if (containsObject(PLAYER4))
-		getObject(PLAYER4)->updatePosition(_x, _y);
+		if (getObject(PLAYER4) != nullptr)
+			getObject(PLAYER4)->updatePosition(_x, _y);
 }
 
 std::unique_ptr<object::AObject> Tile::removePlayer(Type objectType) noexcept
@@ -115,6 +119,12 @@ bool Tile::containsObject(Type objectType) noexcept
 		if (object.get()->getType() == objectType && !object.get()->toBeDestroyed())
 			return true;
 	}
+
+	for (auto &object : _objectsToBeAdded) {
+		if (object.get()->getType() == objectType && !object.get()->toBeDestroyed())
+			return true;
+	}
+
 	return false;
 }
 
