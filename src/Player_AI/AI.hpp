@@ -9,6 +9,7 @@
 #define INDIESTUDIO_AI_HPP
 
 #include <bits/unique_ptr.h>
+#include <random>
 #include "Map.hpp"
 #include "Player.hpp"
 
@@ -27,13 +28,14 @@ class AI : public AObject {
 		void moveCase(rotationDirection_e dir, float spd = MOVEMENT_SPEED);
 		void find_closest_player();
 		void set_direction();
-		bool move_X(vector2di tmp);
-		bool move_Y(vector2di tmp);
+		bool move_X(vector2di tmp, bool invert);
+		bool move_Y(vector2di tmp, bool invert);
 		vector2di _closest_player;
 		object::Player _player;
 		::map::Map *_map;
 		rotationDirection_e _to_go;
-		vector2di _past_co;
+		vector2df _co_to_go;
+		std::random_device _random;
 };
 
 }

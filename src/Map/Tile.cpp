@@ -128,4 +128,8 @@ bool Tile::containsObject(Type objectType) noexcept
 	return false;
 }
 
+	bool Tile::containsSomethings() noexcept
+	{
+		return _objects.size() + _objectsToBeAdded.size() != 0;
+	}
 }

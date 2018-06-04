@@ -32,6 +32,7 @@ class Tile {
 		void removeObject(Type objectType) noexcept;
 		std::unique_ptr<object::AObject> removePlayer(Type objectType) noexcept;
 		bool containsObject(Type objectType) noexcept;
+		bool containsSomethings() noexcept;
 
 	private:
 		size_t _x;
