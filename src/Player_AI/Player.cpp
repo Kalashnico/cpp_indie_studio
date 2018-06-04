@@ -26,12 +26,12 @@ namespace object {
 	Player::Player(::map::Map *map, Type type, Gfx *gfx, playerSprite_e playerType, float x, float y,
 		float z, bool useController, unsigned long playerNb
 	) : AObject(type), _map(map), _gfx(gfx), _useController(useController), _playerNb(playerNb),
-		_playerNode(nullptr)
+		_playerNode(nullptr), _dead(false)
 	{
 
 		auto modelInfo = playersPossibilities[playerType];
 		this->_playerNode = this->_gfx->drawMesh(modelInfo.path, "",
-			false, "Player" + this->_playerNb, {x, y, z});
+			false, "Player " + std::to_string(_playerNb), {x, y, z});
 		this->_playerNode->setScale(modelInfo.scale);
 		this->_rotateStop = false;
 	}
@@ -40,11 +40,17 @@ namespace object {
 	{
 		if (_rotationThread.joinable())
 			_rotationThread.join();
-		this->_gfx->deleteElement("Player" + this->_playerNb);
+		this->_gfx->deleteElement("Player " + std::to_string(_playerNb));
 	}
 
 	void Player::update() noexcept
 	{
+
+		if (checkDeath()) {
+			die();
+			return;
+		}
+
 		if (_gfx->isKeyDown(KEY_KEY_D))
 			move(LEFT);
 		else if (_gfx->isKeyDown(KEY_KEY_Q))
@@ -152,7 +158,7 @@ namespace object {
 			else
 				maxAngle += 360;
 		}
-		auto name = std::string("Player") + std::to_string(_playerNb);
+
 		if (_rotationThread.joinable()) {
 			_rotateStop = true;
 			_rotationThread.join();
@@ -160,7 +166,7 @@ namespace object {
 		_rotateStop = false;
 		this->_rotationThread = std::thread(
 			&Player::rotateThreadHandler, this, maxAngle, curAngle,
-			"Player" + _playerNb);
+			"Player " + std::to_string(_playerNb));
 	}
 
 	/*
@@ -226,7 +232,7 @@ namespace object {
 		if (hasCollided(tilePos))
 			return;
 
-		this->_gfx->moveElement("Player" + this->_playerNb, vec);
+		this->_gfx->moveElement("Player " + std::to_string(_playerNb), vec);
 	}
 
 	/*
@@ -253,5 +259,31 @@ namespace object {
 		vectorFloat += 6.5f;
 		vector2df value = {vectorFloat.Z, vectorFloat.X};
 		return value;
+	}
+
+	bool Player::checkDeath() noexcept
+	{
+		auto tile = getPosition();
+
+		if (_map->getTileAt(tile.X, tile.Y)->containsObject(FIRE))
+			return true;
+
+		return false;
+	}
+
+	void Player::die() noexcept
+	{
+		if (_dead)
+			return;
+
+		_dead = true;
+
+		auto tile = getPosition();
+
+		if (!_map->getTileAt(tile.X, tile.Y)->containsObject(getType()))
+			return;
+
+		_map->removeObjectFromTile(tile.X, tile.Y, getType());
+		_gfx->deleteElement("Player " + std::to_string(_playerNb));
 	}
 }

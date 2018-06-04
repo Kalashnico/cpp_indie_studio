@@ -28,11 +28,16 @@ object::Player &AI::getPlayer()
 
 void AI::update() noexcept
 {
+
+	if (_player.checkDeath()) {
+		_player.die();
+		return;
+	}
+
 	if (_to_go == NONE) {
 		this->find_closest_player();
 		_co_to_go = _player.getPositionFloat();
 		set_direction();
-		std::cout << _closest_player.X << " " << _closest_player.Y << std::endl;
 	}
 	this->moveCase(_to_go);
 }
@@ -48,8 +53,6 @@ void AI::updatePosition(size_t oldx, size_t oldy) noexcept
 void AI::moveCase(rotationDirection_e dir, float spd)
 {
 	const vector2df tmp = _player.getPositionFloat();
-
-	std::cout << _co_to_go.X << " " << _co_to_go.Y << " " << tmp.X << " " << tmp.Y << std::endl;
 
 	switch (dir) {
 	case BACKWARD:

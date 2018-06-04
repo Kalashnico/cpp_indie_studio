@@ -24,6 +24,7 @@ class AI : public AObject {
 		void update() noexcept;
 		void updatePosition(size_t oldx, size_t oldy) noexcept;
 		object::Player &getPlayer();
+		bool isDead() noexcept { return _player.isDead(); }
 	private:
 		void moveCase(rotationDirection_e dir, float spd = MOVEMENT_SPEED);
 		void find_closest_player();

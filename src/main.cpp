@@ -49,11 +49,15 @@ int main()
 
 	player.get()->setAbsoluteRotation(180);
 
+	auto player1Check = player.get();
+	auto player2Check = player2.get();
+
 	map.addObjectToTile(static_cast<size_t>(tmp.X), static_cast<size_t>(tmp.Y), std::move(player));
 	map.addObjectToTile(static_cast<size_t>(tmp2.X), static_cast<size_t>(tmp2.Y), std::move(player2));
 
 	auto begin = std::clock();
 
+	// TODO: Add end check then move to core
 	while (gfx.isRunning()) {
 
 		if (gfx.isKeyDown(KEY_ESCAPE))

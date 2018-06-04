@@ -41,7 +41,7 @@ enum playerSprite_e {
 	UNKNOWN = 1 << 1
 };
 
-#define MOVEMENT_SPEED 0.6
+#define MOVEMENT_SPEED 0.3
 
 namespace object {
 
@@ -64,6 +64,8 @@ namespace object {
 			int _placedBombs = 0;
 			int _maxBombs = 1;
 			int _blastRadius = 2;
+
+			bool _dead;
 
 		public:
 
@@ -93,6 +95,10 @@ namespace object {
 			void setAbsoluteRotation(
 				enum rotationDirection_e rotation
 			);
+
+			bool checkDeath() noexcept;
+			void die() noexcept;
+			bool isDead() noexcept { return _dead; }
 
 			IAnimatedMeshSceneNode *getNode() const;
 	};
