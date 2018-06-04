@@ -323,6 +323,7 @@ namespace object {
 		if (!_map->getTileAt(tile.X, tile.Y)->containsObject(getType()))
 			return;
 
+		_map->playerDied(_playerNb);
 		_map->removeObjectFromTile(tile.X, tile.Y, getType());
 		_gfx->deleteElement("Player " + std::to_string(_playerNb));
 	}
