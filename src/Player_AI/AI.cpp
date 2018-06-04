@@ -98,8 +98,6 @@ void AI::find_closest_player()
 				object->getType() == PLAYER4) && object->getType() !=
 					_player.getType()) {
 				tmp = dynamic_cast<object::Player*>(object.get());
-				std::cout << "FUCK YOU" << std::endl;
-				std::cout << "test" << tile.get()->getX() << " " << tile.get()->getY() << std::endl;
 				if (_closest_player.X == -1 || _closest_player.Y == -1) {
 					_closest_player = tmp->getPosition();
 					continue;
