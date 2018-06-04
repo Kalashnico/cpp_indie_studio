@@ -41,7 +41,7 @@ enum playerSprite_e {
 	UNKNOWN = 1 << 1
 };
 
-#define MOVEMENT_SPEED 0.3
+#define MOVEMENT_SPEED 0.2
 
 namespace object {
 
@@ -61,9 +61,14 @@ namespace object {
 				std::string name
 			);
 
+			std::clock_t _placementCooldownClock;
+			float _placementCooldown = 0.25f;
+
 			int _placedBombs = 0;
 			int _maxBombs = 1;
 			int _blastRadius = 2;
+			float _speedBonus = 0.f;
+			bool _walkThroughBoxes = false;
 
 			bool _dead;
 
@@ -78,6 +83,8 @@ namespace object {
 
 			void update() noexcept;
 			void updatePosition(size_t oldx, size_t oldy) noexcept;
+
+			void pickupLoot(vector2di tilePos) noexcept;
 
 			void bombExploaded() noexcept;
 			void placeBomb() noexcept;

@@ -34,6 +34,8 @@ namespace object {
 			false, "Player " + std::to_string(_playerNb), {x, y, z});
 		this->_playerNode->setScale(modelInfo.scale);
 		this->_rotateStop = false;
+
+		_placementCooldownClock = std::clock();
 	}
 
 	Player::~Player()
@@ -68,8 +70,40 @@ namespace object {
 	{
 		auto position = getPosition();
 
-		if ((position.X != oldx || position.Y != oldy))
+		if ((position.X != oldx || position.Y != oldy)) {
 			_map->movePlayer(getType(), oldx, oldy, position.X, position.Y);
+			if (_map->getTileAt(position.X, position.Y)->containsObject(LOOT))
+				pickupLoot(position);
+		}
+	}
+
+	void Player::pickupLoot(vector2di tilePos) noexcept
+	{
+		auto loot = _map->getTileAt(tilePos.X, tilePos.Y)->getObject(LOOT);
+		auto lootCategory = loot->getLootCategory();
+
+		switch (lootCategory){
+			case BOMB_UP:
+				_maxBombs++;
+				std::cout << "Player " << std::to_string(_playerNb) << " pickup up a bomb up" << std::endl;
+				break;
+			case FIRE_UP:
+				_blastRadius++;
+				std::cout << "Player " << std::to_string(_playerNb) << " pickup up a fire up" << std::endl;
+				break;
+			case SPEED_UP:
+				_speedBonus += 0.1f;
+				std::cout << "Player " << std::to_string(_playerNb) << " pickup up a speed up" << std::endl;
+				break;
+			case WALL_PASS:
+				_walkThroughBoxes = true;
+				std::cout << "Player " << std::to_string(_playerNb) << " pickup up a wall pass" << std::endl;
+				break;
+			default:
+				std::cout << "This isn't possible" << std::endl;
+		}
+
+		_map->removeObjectFromTile(tilePos.X, tilePos.Y, LOOT);
 	}
 
 	void Player::bombExploaded() noexcept
@@ -83,10 +117,16 @@ namespace object {
 	{
 		auto pos = getPosition();
 
+		if (((std::clock() - _placementCooldownClock) / (double) CLOCKS_PER_SEC) < _placementCooldown)
+			return;
+
+		_placementCooldownClock = std::clock();
+
 		if (_placedBombs >= _maxBombs)
 			return;
 
-		if (_map->getTileAt(pos.X, pos.Y)->containsObject(BOMB))
+		if (_map->getTileAt(pos.X, pos.Y)->containsObject(BOMB)
+			|| _map->getTileAt(pos.X, pos.Y)->containsObject(BOX))
 			return;
 
 		_placedBombs++;
@@ -179,7 +219,7 @@ namespace object {
 
 		if (!(position.X == tilePos.X && position.Y == tilePos.Y)
 			&& (_map->getTileAt(tilePos.X, tilePos.Y)->containsObject(WALL)
-			|| _map->getTileAt(tilePos.X, tilePos.Y)->containsObject(BOX)
+			|| (_map->getTileAt(tilePos.X, tilePos.Y)->containsObject(BOX) && !_walkThroughBoxes)
 			|| _map->getTileAt(tilePos.X, tilePos.Y)->containsObject(BOMB)
 			|| (_map->getTileAt(tilePos.X, tilePos.Y)->containsObject(PLAYER1) && getType() != PLAYER1)
 			|| (_map->getTileAt(tilePos.X, tilePos.Y)->containsObject(PLAYER2) && getType() != PLAYER2)
@@ -221,7 +261,7 @@ namespace object {
 			break;
 		}
 
-		vec *= spd;
+		vec *= (spd + _speedBonus);
 
 		auto newPos = _playerNode->getPosition() + vec;
 		newPos /= 4;
