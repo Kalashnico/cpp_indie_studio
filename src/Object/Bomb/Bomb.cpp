@@ -7,13 +7,14 @@
 
 namespace object {
 
-Bomb::Bomb(int posx, int posy, int blast, ::map::Map *map, Gfx *gfx)
-	: AObject("PATH BOMB MESH", BOMB),
+Bomb::Bomb(int posx, int posy, int blast, ::map::Map *map, Gfx *gfx, Player *parent)
+	: AObject(BOMB),
 	_posx{posx},
 	_posy{posy},
 	_blastSize{blast},
 	_map{map},
 	_gfx{gfx},
+	_parent{parent},
 	_node{nullptr},
 	_detonate{false},
 	_hasExploded{false}
@@ -53,6 +54,7 @@ void Bomb::explode() noexcept
 
 	_hasExploded = true;
 
+	_parent->bombExploaded();
 	_map->explodeBomb(_posx, _posy, _blastSize);
 }
 
