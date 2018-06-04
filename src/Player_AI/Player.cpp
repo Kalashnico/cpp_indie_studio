@@ -188,14 +188,22 @@ namespace object {
 	vector2di Player::getPosition()
 	{
 		auto vectorFloat = this->_playerNode->getPosition() / 4;
-		vectorFloat += 7.5f;
-		vector2di value = {static_cast<s32>(vectorFloat.Z - 1),
-			static_cast<s32>(vectorFloat.X - 1)};
+		vectorFloat += 6.5f;
+		vector2di value = {static_cast<s32>(vectorFloat.Z),
+			static_cast<s32>(vectorFloat.X)};
 		return value;
 	}
 
 	IAnimatedMeshSceneNode *Player::getNode() const
 	{
 		return _playerNode;
+	}
+
+	vector2df Player::getPositionFloat()
+	{
+		auto vectorFloat = this->_playerNode->getPosition() / 4;
+		vectorFloat += 6.5f;
+		vector2df value = {vectorFloat.Z, vectorFloat.X};
+		return value;
 	}
 }

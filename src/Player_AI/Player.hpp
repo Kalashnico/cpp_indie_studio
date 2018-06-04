@@ -42,7 +42,7 @@ enum playerSprite_e {
 	UNKNOWN = 1 << 1
 };
 
-#define MOVEMENT_SPEED 0.2
+#define MOVEMENT_SPEED 0.6
 
 namespace object {
 
@@ -81,6 +81,7 @@ namespace object {
 			void placeBomb() noexcept;
 
 			vector2di getPosition();
+			vector2df getPositionFloat();
 
 			void move(enum rotationDirection_e dir = FORWARD,
 				float spd = MOVEMENT_SPEED
