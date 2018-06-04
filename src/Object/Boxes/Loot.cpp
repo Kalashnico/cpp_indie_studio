@@ -11,13 +11,13 @@ namespace object {
 /**
  * Constructor : Ready to use. It create randomly the loot which will be stored in a box.
  */
-Loot::Loot() : AObject(setPathToMesh(), LOOT)
+Loot::Loot() : AObject(LOOT)
 {}
 
 Loot::~Loot()
 {}
 
-std::string Loot::setPathToMesh() noexcept
+void Loot::setupLoot() noexcept
 {
 	std::random_device randomDevice;			// Random device
 	std::mt19937 engine(randomDevice());			// Seed
@@ -25,7 +25,7 @@ std::string Loot::setPathToMesh() noexcept
 
 	if (distribution(engine) < 4) {
 		_category = EMPTY;
-		return "empty";
+		return;
 	}
 
 	auto lootCategory = std::rand() % 4;
@@ -44,8 +44,8 @@ std::string Loot::setPathToMesh() noexcept
 			_category = WALL_PASS;
 			break;
 		default :
+			_category = EMPTY;
 			break;
 	}
-	return meshPaths[_category];
 }
 }

@@ -14,12 +14,11 @@ namespace object {
  * @param loot : if theres is no loot it is set to nullptr
  */
 Box::Box(std::unique_ptr<Loot> loot, ::map::Map *map, Gfx *gfx, int posx, int posy)
-	: AObject("PATH BOXE", BOX),
+	: AObject(BOX),
 	_loot{std::move(loot)},
 	_map{map},
 	_gfx{gfx},
 	_node{nullptr},
-	_selector{nullptr},
 	_posx{posx},
 	_posy{posy}
 {
@@ -35,10 +34,6 @@ Box::Box(std::unique_ptr<Loot> loot, ::map::Map *map, Gfx *gfx, int posx, int po
 
 Box::~Box()
 {
-	if (_selector != nullptr) {
-		_map->getCollisionsHandler()->removeCollisions(_selector);
-		_selector->drop();
-	}
 	_gfx->deleteElement("box " + std::to_string(_posx) + " " + std::to_string(_posy));
 }
 

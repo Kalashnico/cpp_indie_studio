@@ -22,15 +22,11 @@ class Box : public AObject {
 		std::unique_ptr<Loot> getLoot() noexcept { return std::move(_loot); }
 		IAnimatedMeshSceneNode *getNode() const { return _node; }
 
-		void setSelector(ITriangleSelector *selector) { _selector = selector; }
-		ITriangleSelector *getSelector() const { return _selector; }
-
 	private:
 		std::unique_ptr<Loot> _loot;
 		::map::Map *_map;
 		Gfx *_gfx;
 		IAnimatedMeshSceneNode *_node;
-		ITriangleSelector *_selector;
 
 		int _posx;
 		int _posy;

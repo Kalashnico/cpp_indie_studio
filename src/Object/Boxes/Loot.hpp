@@ -11,11 +11,6 @@
 namespace object {
 
 //Theses are the paths to loot meshs
-static std::array<std::string, 4> const meshPaths {"BOMB PATH",
-						   "FIRE PATH",
-						   "SPEED PATH",
-						   "WALL PATH"};
-
 class Loot : public AObject {
 	public:
 		Loot();
@@ -28,7 +23,7 @@ class Loot : public AObject {
 		LootCategory _category;
 
 		//Member Function
-		std::string setPathToMesh() noexcept;
+		void setupLoot() noexcept;
 
 };
 }

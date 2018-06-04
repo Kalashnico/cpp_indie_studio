@@ -12,9 +12,9 @@
 
 namespace object {
 
-AI::AI(::map::Map *map, std::string mesh, Type type, Gfx *gfx, playerSprite_e playerType, float x,
+AI::AI(::map::Map *map, Type type, Gfx *gfx, playerSprite_e playerType, float x,
 	float y, float z, bool useController,
-	unsigned long playerNb) : AObject(mesh, type), _player(map, mesh, type, gfx, playerType, x, y, z, useController, playerNb), _map(map), _to_go(NONE), _closest_player(-1, -1)
+	unsigned long playerNb) : AObject(type), _player(map, type, gfx, playerType, x, y, z, useController, playerNb), _map(map), _to_go(NONE), _closest_player(-1, -1)
 {
 }
 

@@ -16,7 +16,7 @@ namespace object {
 
 class AI : public AObject {
 	public:
-		AI(::map::Map *map, std::string mesh, Type type, Gfx *gfx, playerSprite_e playerType, float x,
+		AI(::map::Map *map, Type type, Gfx *gfx, playerSprite_e playerType, float x,
 			float y, float z, bool useController,
 			unsigned long playerNb);
 		~AI();

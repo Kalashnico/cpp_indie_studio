@@ -6,13 +6,10 @@
 
 namespace object {
 
-Wall::Wall() : AObject("WALL PATH", WALL)
-{
-
-}
+Wall::Wall() : AObject(WALL)
+{}
 
 Wall::~Wall()
-{
+{}
 
-}
 }
