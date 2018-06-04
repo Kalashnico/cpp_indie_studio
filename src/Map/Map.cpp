@@ -12,8 +12,28 @@
 
 namespace map {
 
+	Map::Map() : _gfx(nullptr), _sceneManager(nullptr)
+	{}
+
 	Map::Map(Gfx *gfx) : _gfx(gfx), _sceneManager(gfx->getSceneManager())
 	{
+		generateMap();
+	}
+
+	Map::~Map() = default;
+
+	void Map::setGfx(Gfx *gfx)
+	{
+		_gfx = gfx;
+		_sceneManager = _gfx->getSceneManager();
+		generateMap();
+	}
+
+	void Map::generateMap()
+	{
+		for (auto value : _playersDead)
+			value = false;
+
 		createMap();
 		addBoxes();
 
@@ -28,8 +48,6 @@ namespace map {
 		_selector = _sceneManager->createOctreeTriangleSelector(
 			_mapNode->getMesh(), _mapNode, 128);
 	}
-
-	Map::~Map() = default;
 
 	ITriangleSelector *Map::getSelector() const
 	{
@@ -209,5 +227,23 @@ namespace map {
 		for (int i = y + 1; i <= (int)(y + blastRadius); i++)
 			if (!placeFire(i, x, i))
 				break;
+	}
+
+	void Map::playerDied(int playerNb) noexcept
+	{
+		_playersDead[playerNb - 1] = true;
+	}
+
+	bool Map::shouldEndGame() noexcept
+	{
+		int numDead = 0;
+
+		for (auto value : _playersDead)
+			numDead += value;
+
+		if (numDead >= 3)
+			return true;
+
+		return false;
 	}
 }

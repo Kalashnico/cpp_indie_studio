@@ -15,7 +15,7 @@
 
 using namespace irr;
 
-using namespace core;
+using namespace irr::core;
 using namespace scene;
 using namespace video;
 using namespace io;
@@ -43,9 +43,15 @@ namespace map {
 			IMeshSceneNode *_mapNode;
 			ITriangleSelector *_selector;
 
-		public:
+			bool _playersDead[4];
 
+		public:
+			Map();
 			Map(Gfx *gfx);
+
+			void setGfx(Gfx *gfx);
+
+			void generateMap();
 
 
 			//Getter
@@ -64,6 +70,10 @@ namespace map {
 			void movePlayer(Type type, size_t oldx, size_t oldy, size_t newx, size_t newy) noexcept;
 
 			void explodeBomb(size_t x, size_t y, size_t blastRadius) noexcept;
+
+			void playerDied(int playerNb) noexcept;
+
+			bool shouldEndGame() noexcept;
 
 			virtual ~Map();
 	};
