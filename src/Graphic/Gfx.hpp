@@ -13,7 +13,7 @@
 
 using namespace irr;
 
-using namespace core;
+using namespace irr::core;
 using namespace scene;
 using namespace video;
 using namespace io;
@@ -40,6 +40,8 @@ class Gfx {
 		bool _gamepadActive;
 
 		EKEY_CODE translateButton(GamepadButtons button) const noexcept;
+
+		void setupGamepads() noexcept;
 
 	public:
 		Gfx();

@@ -48,6 +48,17 @@ Gfx::Gfx(IEventReceiver &receiver)
 	this->_device->getCursorControl()->setVisible(false);
 	this->_eventReceiver = _device->getEventReceiver();
 
+	setupGamepads();
+}
+
+Gfx::~Gfx()
+{
+	_device->drop();
+	_nodeCache.clear();
+}
+
+void Gfx::setupGamepads() noexcept
+{
 	core::array<SJoystickInfo> joystickInfo;
 	if(_device->activateJoysticks(joystickInfo)) {
 
@@ -81,12 +92,6 @@ Gfx::Gfx(IEventReceiver &receiver)
 		}
 	} else
 		std::cout << "Joystick support is not enabled." << std::endl;
-}
-
-Gfx::~Gfx()
-{
-	_device->drop();
-	_nodeCache.clear();
 }
 
 void Gfx::update()
@@ -146,6 +151,8 @@ void Gfx::addCameraFPS()
 void Gfx::setEventReceiver(IEventReceiver &receiver)
 {
 	this->_device->setEventReceiver(&receiver);
+	_eventReceiver = _device->getEventReceiver();
+	setupGamepads();
 }
 
 bool Gfx::isKeyDown(EKEY_CODE keyCode) const noexcept
