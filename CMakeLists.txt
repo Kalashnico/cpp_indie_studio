@@ -23,7 +23,8 @@ INCLUDE_DIRECTORIES(
         src/Object/Boxes
         src/Object/Wall
         src/Object/Fire
-        src/Object/Bomb
+	src/Object/Bomb
+	src/Core
         src/Map
         src/Graphic
 )
@@ -33,10 +34,11 @@ FILE(GLOB SRCS src/*.cpp)
 FILE(GLOB HDRS_IRR include/*.h)
 
 FILE(GLOB SRCS_GRAPHICS src/Graphic/*.cpp)
+FILE(GLOB HDRS_CORE src/Core/*.hpp)
 FILE(GLOB SRCS_MAP src/Map/*.cpp)
 FILE(GLOB SRCS_PLAYER src/Player_AI/*.cpp)
 FILE(GLOB HDRS_GRAPHICS src/Graphic/*.hpp)
-FILE(GLOB SRCS_OBJECTS src/Object/*.cpp src/Object/Bomb/*.cpp src/Object/Boxes/*.cpp src/Object/Fire/*.cpp src/Object/Wall/*.cpp)
+FILE(GLOB SRCS_OBJECTS src/Core/*.cpp src/Object/*.cpp src/Object/Bomb/*.cpp src/Object/Boxes/*.cpp src/Object/Fire/*.cpp src/Object/Wall/*.cpp)
 
 ADD_EXECUTABLE(bomberman
         ${SRCS}
