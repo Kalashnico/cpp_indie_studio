@@ -23,9 +23,9 @@ namespace object {
 		{POMMY, {"./media/models/pommy/pommyV3.obj", {2.f, 2.f, 2.f}}},
 		{UNKNOWN, {"", {0, 0, 0}}}};
 
-	Player::Player(::map::Map *map, std::string path, Type type, Gfx *gfx, playerSprite_e playerType, float x, float y,
+	Player::Player(::map::Map *map, Type type, Gfx *gfx, playerSprite_e playerType, float x, float y,
 		float z, bool useController, unsigned long playerNb
-	) : AObject(path, type), _map(map), _gfx(gfx), _useController(useController), _playerNb(playerNb),
+	) : AObject(type), _map(map), _gfx(gfx), _useController(useController), _playerNb(playerNb),
 		_playerNode(nullptr)
 	{
 
@@ -62,19 +62,32 @@ namespace object {
 	{
 		auto position = getPosition();
 
-		if (position.X != oldx || position.Y != oldy)
+		if ((position.X != oldx || position.Y != oldy))
 			_map->movePlayer(getType(), oldx, oldy, position.X, position.Y);
+	}
+
+	void Player::bombExploaded() noexcept
+	{
+		_placedBombs--;
+		if (_placedBombs < 0)
+			_placedBombs = 0;
 	}
 
 	void Player::placeBomb() noexcept
 	{
 		auto pos = getPosition();
 
+		if (_placedBombs >= _maxBombs)
+			return;
+
 		if (_map->getTileAt(pos.X, pos.Y)->containsObject(BOMB))
 			return;
 
-		auto bomb = std::make_unique<object::Bomb>(pos.X, pos.Y, _blastRadius, _map, _gfx);
-		//_map->getCollisionsHandler()->addBombToCollisions(*bomb.get(), {1.f, 1.f, 1.f});
+		_placedBombs++;
+		if (_placedBombs > _maxBombs)
+			_placedBombs = _maxBombs;
+
+		auto bomb = std::make_unique<object::Bomb>(pos.X, pos.Y, _blastRadius, _map, _gfx, this);
 		_map->addObjectToTile(pos.X, pos.Y, std::move(bomb));
 	}
 
@@ -154,6 +167,23 @@ namespace object {
 	 * Movements
 	 */
 
+	bool Player::hasCollided(vector2di tilePos) noexcept
+	{
+		auto position = getPosition();
+
+		if (!(position.X == tilePos.X && position.Y == tilePos.Y)
+			&& (_map->getTileAt(tilePos.X, tilePos.Y)->containsObject(WALL)
+			|| _map->getTileAt(tilePos.X, tilePos.Y)->containsObject(BOX)
+			|| _map->getTileAt(tilePos.X, tilePos.Y)->containsObject(BOMB)
+			|| (_map->getTileAt(tilePos.X, tilePos.Y)->containsObject(PLAYER1) && getType() != PLAYER1)
+			|| (_map->getTileAt(tilePos.X, tilePos.Y)->containsObject(PLAYER2) && getType() != PLAYER2)
+			|| (_map->getTileAt(tilePos.X, tilePos.Y)->containsObject(PLAYER3) && getType() != PLAYER3)
+			|| (_map->getTileAt(tilePos.X, tilePos.Y)->containsObject(PLAYER4) && getType() != PLAYER4)))
+			return true;
+
+		return false;
+	}
+
 	void Player::move(rotationDirection_e dir, float spd)
 	{
 		vector3df vec = {0, 0, 0};
@@ -162,22 +192,40 @@ namespace object {
 
 		switch (dir) {
 		case BACKWARD:
+			if (_playerNode->getPosition().X >= 25)
+				return;
 			vec = {1., 0., 0.};
 			break;
 		case FORWARD:
+			if (_playerNode->getPosition().X <= -25)
+				return;
 			vec = {-1., 0., 0.};
 			break;
 		case RIGHT:
+			if (_playerNode->getPosition().Z <= -25)
+				return;
 			vec = {0., 0., -1.};
 			break;
 		case LEFT:
+			if (_playerNode->getPosition().Z >= 25)
+				return;
 			vec = {0., 0., 1.};
 			break;
 		default:
-			std::cout << "test" << std::endl;
 			break;
 		}
+
 		vec *= spd;
+
+		auto newPos = _playerNode->getPosition() + vec;
+		newPos /= 4;
+		newPos += 7.5f;
+		vector2di tilePos = {static_cast<s32>(newPos.Z - 1),
+			static_cast<s32>(newPos.X - 1)};
+
+		if (hasCollided(tilePos))
+			return;
+
 		this->_gfx->moveElement("Player" + this->_playerNb, vec);
 	}
 
@@ -185,7 +233,7 @@ namespace object {
 	 * Getters
 	 */
 
-	vector2di Player::getPosition()
+	vector2di Player::getPosition() noexcept
 	{
 		auto vectorFloat = this->_playerNode->getPosition() / 4;
 		vectorFloat += 7.5f;

@@ -2,8 +2,7 @@
 // Created by jdecombe on 14/05/18.
 //
 
-#ifndef IRRLICHTTESTS_PLAYER_HPP
-#define IRRLICHTTESTS_PLAYER_HPP
+#pragma once
 
 #include <string>
 #include <thread>
@@ -68,7 +67,7 @@ namespace object {
 
 		public:
 
-			Player(::map::Map *map, std::string path, Type type, Gfx *gfx, playerSprite_e playerType, float x,
+			Player(::map::Map *map, Type type, Gfx *gfx, playerSprite_e playerType, float x,
 				float y, float z, bool useController,
 				unsigned long playerNb
 			);
@@ -78,10 +77,12 @@ namespace object {
 			void update() noexcept;
 			void updatePosition(size_t oldx, size_t oldy) noexcept;
 
+			void bombExploaded() noexcept;
 			void placeBomb() noexcept;
 
-			vector2di getPosition();
+			vector2di getPosition() noexcept;
 
+			bool hasCollided(vector2di tilePos) noexcept;
 			void move(enum rotationDirection_e dir = FORWARD,
 				float spd = MOVEMENT_SPEED
 			);
@@ -95,5 +96,3 @@ namespace object {
 			IAnimatedMeshSceneNode *getNode() const;
 	};
 };
-
-#endif //IRRLICHTTESTS_PLAYER_HPP
