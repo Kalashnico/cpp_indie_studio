@@ -81,7 +81,6 @@ namespace object {
 			void placeBomb() noexcept;
 
 			vector2di getPosition() noexcept;
-			vector2di getPosition();
 			vector2df getPositionFloat();
 
 			bool hasCollided(vector2di tilePos) noexcept;
