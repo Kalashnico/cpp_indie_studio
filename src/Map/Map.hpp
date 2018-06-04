@@ -12,7 +12,6 @@
 #include "Tile.hpp"
 #include "Irrlicht/irrlicht.h"
 #include "Gfx.hpp"
-#include "CollisionsHandler.hpp"
 
 using namespace irr;
 
@@ -41,18 +40,16 @@ namespace map {
 			std::vector<std::unique_ptr<Tile>> _map;
 			Gfx *_gfx;
 			ISceneManager *_sceneManager;
-			CollisionsHandler *_collisionsHandler;
 			IMeshSceneNode *_mapNode;
 			ITriangleSelector *_selector;
 
 		public:
 
-			Map(Gfx *gfx, CollisionsHandler *collisionsHandler);
+			Map(Gfx *gfx);
 
 
 			//Getter
 
-			CollisionsHandler *getCollisionsHandler() noexcept { return _collisionsHandler; }
 			IMeshSceneNode *getMapNode() const;
 			ITriangleSelector *getSelector() const;
 			std::vector<std::unique_ptr<Tile>> &getMap() noexcept { return _map; };

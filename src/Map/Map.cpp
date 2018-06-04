@@ -12,7 +12,7 @@
 
 namespace map {
 
-	Map::Map(Gfx *gfx, CollisionsHandler *collisionsHandler) : _gfx(gfx), _sceneManager(gfx->getSceneManager()), _collisionsHandler(collisionsHandler)
+	Map::Map(Gfx *gfx) : _gfx(gfx), _sceneManager(gfx->getSceneManager())
 	{
 		createMap();
 		addBoxes();
@@ -111,7 +111,6 @@ namespace map {
 				if (distribution(engine) < 8) {                // Generate random number - 8/10 chance to spawn box
 					auto loot = std::make_unique<object::Loot>();
 					auto box = std::make_unique<object::Box>(std::move(loot), this, _gfx, x, y);
-					_collisionsHandler->addBoxToCollisions(box.get(), {1.f, 1.f, 1.f});
 					getTileAt(x, y)->addObject(std::move(box));
 				}
 				getTileAt(x, y)->setSetup(true);
