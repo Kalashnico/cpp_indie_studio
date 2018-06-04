@@ -12,7 +12,9 @@ namespace object {
  * Constructor : Ready to use. It create randomly the loot which will be stored in a box.
  */
 Loot::Loot() : AObject(LOOT)
-{}
+{
+	setupLoot();
+}
 
 Loot::~Loot()
 {}
@@ -21,9 +23,9 @@ void Loot::setupLoot() noexcept
 {
 	std::random_device randomDevice;			// Random device
 	std::mt19937 engine(randomDevice());			// Seed
-	std::uniform_int_distribution<> distribution(1, 4);	// Range
+	std::uniform_int_distribution<> distribution(1, 3);	// Range
 
-	if (distribution(engine) < 4) {
+	if (distribution(engine) < 3) {
 		_category = EMPTY;
 		return;
 	}
