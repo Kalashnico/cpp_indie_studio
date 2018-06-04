@@ -8,7 +8,6 @@
 #ifndef INDIESTUDIO_AI_HPP
 #define INDIESTUDIO_AI_HPP
 
-#include <bits/unique_ptr.h>
 #include <random>
 #include "Map.hpp"
 #include "Player.hpp"
@@ -24,6 +23,7 @@ class AI : public AObject {
 		void update() noexcept;
 		void updatePosition(size_t oldx, size_t oldy) noexcept;
 		object::Player &getPlayer();
+		vector2di getPosition() noexcept { return _player.getPosition(); }
 		bool isDead() noexcept { return _player.isDead(); }
 	private:
 		void moveCase(rotationDirection_e dir, float spd = MOVEMENT_SPEED);

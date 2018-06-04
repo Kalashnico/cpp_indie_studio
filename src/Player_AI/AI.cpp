@@ -14,8 +14,7 @@ namespace object {
 AI::AI(::map::Map *map, Type type, Gfx *gfx, playerSprite_e playerType, float x,
 	float y, float z, bool useController,
 	unsigned long playerNb) : AObject(type), _player(map, type, gfx, playerType, x, y, z, useController, playerNb), _map(map), _to_go(NONE), _closest_player(-1, -1)
-{
-}
+{}
 
 AI::~AI()
 {
@@ -28,7 +27,6 @@ object::Player &AI::getPlayer()
 
 void AI::update() noexcept
 {
-
 	if (_player.checkDeath()) {
 		_player.die();
 		return;
@@ -100,14 +98,13 @@ void AI::find_closest_player()
 				object->getType() == PLAYER3 ||
 				object->getType() == PLAYER4) && object->getType() !=
 					_player.getType()) {
-				tmp = dynamic_cast<object::Player*>(object.get());
 				if (_closest_player.X == -1 || _closest_player.Y == -1) {
-					_closest_player = tmp->getPosition();
+					_closest_player = object->getPosition();
 					continue;
 				}
 				distance = abs(_closest_player.X - _player.getPosition().X) + abs(_closest_player.Y - _player.getPosition().Y);
-				distance_tmp = abs(tmp->getPosition().X - _player.getPosition().X) + abs(tmp->getPosition().Y - _player.getPosition().Y);
-				_closest_player = (distance_tmp <= distance) ? tmp->getPosition() : _closest_player;
+				distance_tmp = abs(object->getPosition().X - _player.getPosition().X) + abs(object->getPosition().Y - _player.getPosition().Y);
+				_closest_player = (distance_tmp <= distance) ? object->getPosition() : _closest_player;
 		}
 	}
 }
