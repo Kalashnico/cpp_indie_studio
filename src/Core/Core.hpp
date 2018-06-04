@@ -6,22 +6,26 @@
 
 #include <memory>
 #include "Map.hpp"
+#include "AI.hpp"
 
 namespace core {
 
 class Core {
 	public:
-		Core(size_t numPlayers);
+		Core(int numPlayers);
 		~Core();
 
 		void run() noexcept;
 
 	private:
-		std::unique_ptr<map::Map> _map;
-		std::unique_ptr<object::AObject> _player1;
-		std::unique_ptr<object::AObject> _player2;
-		std::unique_ptr<object::AObject> _player3;
-		std::unique_ptr<object::AObject> _player4;
+		CustomEventReceiver _eventReceiver;
+		Gfx _gfx;
+		::map::Map _map;
+
+		std::clock_t _begin;
+
+		bool shouldEndGame() const noexcept;
+		vector3df tileToIrrlicht(vector3df tilePos) noexcept;
 };
 
 }
