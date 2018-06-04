@@ -7,8 +7,8 @@
 
 CustomEventReceiver::CustomEventReceiver()
 {
-	for (bool &i : this->_keyIsDown)
-		i = false;
+	for (auto value : _keyIsDown)
+		value = false;
 }
 
 CustomEventReceiver::~CustomEventReceiver()
@@ -18,8 +18,7 @@ CustomEventReceiver::~CustomEventReceiver()
 bool CustomEventReceiver::OnEvent(const SEvent &event)
 {
 	if (event.EventType == irr::EET_KEY_INPUT_EVENT)
-		this->_keyIsDown[event.KeyInput.Key]
-			= event.KeyInput.PressedDown;
+		_keyIsDown[event.KeyInput.Key] = event.KeyInput.PressedDown;
 
 	if (event.EventType == irr::EET_JOYSTICK_INPUT_EVENT) {
 		if (event.JoystickEvent.Joystick == 0)
@@ -31,12 +30,13 @@ bool CustomEventReceiver::OnEvent(const SEvent &event)
 		else if (event.JoystickEvent.Joystick == 3)
 			_joystickStates[3] = event.JoystickEvent;
 	}
+
 	return false;
 }
 
 bool CustomEventReceiver::isKeyDown(EKEY_CODE keyCode) const noexcept
 {
-	return this->_keyIsDown[keyCode];
+	return _keyIsDown[keyCode];
 }
 
 bool CustomEventReceiver::isGamepadButtonDown(int joystick, GamepadButtons button) const noexcept

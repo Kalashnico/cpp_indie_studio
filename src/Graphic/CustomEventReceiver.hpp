@@ -9,7 +9,7 @@
 
 using namespace irr;
 
-using namespace core;
+using namespace irr::core;
 using namespace scene;
 using namespace video;
 using namespace io;
