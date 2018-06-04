@@ -33,8 +33,7 @@ class Loot;
 
 class AObject {
 	protected:
-		AObject(std::string path, Type type);
-		std::string _pathToMesh;
+		AObject(Type type);
 
 	public:
 		AObject() = delete;
@@ -51,7 +50,6 @@ class AObject {
 
 		//Getter
 		Type getType() const noexcept { return _type; }
-		std::string getPathToMesh() const noexcept { return _pathToMesh; }
 
 		bool toBeDestroyed() const noexcept { return _toBeDestroyed; }
 		void destroy() noexcept { _toBeDestroyed = true; }

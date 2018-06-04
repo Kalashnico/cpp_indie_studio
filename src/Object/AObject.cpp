@@ -7,9 +7,8 @@
 
 namespace object {
 
-AObject::AObject(std::string path, Type type)
-	: _pathToMesh{std::move(path)},
-	_type{type},
+AObject::AObject(Type type)
+	: _type{type},
 	_toBeDestroyed{false}
 {}
 
