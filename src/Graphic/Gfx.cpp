@@ -33,6 +33,7 @@ Gfx::Gfx()
 }
 
 Gfx::Gfx(IEventReceiver &receiver)
+	: _gamepadActive(false)
 {
 	this->_device = irr::createDevice(irr::video::EDT_OPENGL,
 		dimension2d<u32>(WIN_WIDTH, WIN_HEIGHT), 32, false, false, true,
@@ -46,6 +47,40 @@ Gfx::Gfx(IEventReceiver &receiver)
 	this->_guiEnv = _device->getGUIEnvironment();
 	this->_device->getCursorControl()->setVisible(false);
 	this->_eventReceiver = _device->getEventReceiver();
+
+	core::array<SJoystickInfo> joystickInfo;
+	if(_device->activateJoysticks(joystickInfo)) {
+
+		std::cout << "Joystick support is enabled and " << joystickInfo.size() << " joystick(s) are present." << std::endl;
+
+		if (joystickInfo.size() > 0)
+			_gamepadActive = true;
+
+		for(u32 joystick = 0; joystick < joystickInfo.size(); ++joystick) {
+			std::cout << "Joystick " << joystick << ":" << std::endl;
+			std::cout << "\tName: '" << joystickInfo[joystick].Name.c_str() << "'" << std::endl;
+			std::cout << "\tAxes: " << joystickInfo[joystick].Axes << std::endl;
+			std::cout << "\tButtons: " << joystickInfo[joystick].Buttons << std::endl;
+
+			std::cout << "\tHat is: ";
+
+			switch(joystickInfo[joystick].PovHat) {
+				case SJoystickInfo::POV_HAT_PRESENT:
+					std::cout << "present" << std::endl;
+					break;
+
+				case SJoystickInfo::POV_HAT_ABSENT:
+					std::cout << "absent" << std::endl;
+					break;
+
+				case SJoystickInfo::POV_HAT_UNKNOWN:
+				default:
+					std::cout << "unknown" << std::endl;
+					break;
+			}
+		}
+	} else
+		std::cout << "Joystick support is not enabled." << std::endl;
 }
 
 Gfx::~Gfx()
@@ -113,15 +148,47 @@ void Gfx::setEventReceiver(IEventReceiver &receiver)
 	this->_device->setEventReceiver(&receiver);
 }
 
-bool Gfx::isKeyDown(EKEY_CODE keyCode) const
+bool Gfx::isKeyDown(EKEY_CODE keyCode) const noexcept
+{
+	if (keyCode == -1)
+		return false;
+
+	auto eventReceiver = dynamic_cast<CustomEventReceiver *>(
+		this->_eventReceiver);
+	return eventReceiver->isKeyDown(keyCode);
+}
+
+bool Gfx::isGamepadButtonDown(int playerNb, GamepadButtons button) const noexcept
 {
 	if (this->_eventReceiver == nullptr)
-		throw std::exception();
+		return false;
 	auto eventReceiver = dynamic_cast<CustomEventReceiver *>(
 		this->_eventReceiver);
 	if (eventReceiver == nullptr)
-		throw std::exception();
-	return eventReceiver->isKeyDown(keyCode);
+		return false;
+
+	if (_gamepadActive)
+		return eventReceiver->isGamepadButtonDown(playerNb - 1, button);
+
+	return isKeyDown(translateButton(button));
+}
+
+EKEY_CODE Gfx::translateButton(GamepadButtons button) const noexcept
+{
+	switch (button) {
+		case GAMEPAD_A:
+			return KEY_SPACE;
+		case GAMEPAD_PAD_UP:
+			return KEY_UP;
+		case GAMEPAD_PAD_DOWN:
+			return KEY_DOWN;
+		case GAMEPAD_PAD_LEFT:
+			return KEY_RIGHT;
+		case GAMEPAD_PAD_RIGHT:
+			return KEY_LEFT;
+	}
+
+	return (EKEY_CODE)-1;
 }
 
 void Gfx::moveElement(std::string const &name, vector3df const &vec, float speed

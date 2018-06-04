@@ -2,8 +2,7 @@
 // Created by jdecombe on 08/05/18.
 //
 
-#ifndef INC_1_GFX_HPP
-#define INC_1_GFX_HPP
+#pragma once
 
 #include <string>
 #include <unordered_map>
@@ -20,6 +19,15 @@ using namespace video;
 using namespace io;
 using namespace gui;
 
+enum GamepadButtons {
+	GAMEPAD_A = 0,
+	GAMEPAD_START =  7,
+	GAMEPAD_PAD_UP =  13,
+	GAMEPAD_PAD_DOWN =  14,
+	GAMEPAD_PAD_RIGHT =  15,
+	GAMEPAD_PAD_LEFT =  16
+};
+
 class Gfx {
 	private:
 		IrrlichtDevice *_device;
@@ -28,6 +36,10 @@ class Gfx {
 		ISceneManager *_sceneManager;
 		IEventReceiver *_eventReceiver;
 		std::unordered_map<std::string, ISceneNode *> _nodeCache;
+
+		bool _gamepadActive;
+
+		EKEY_CODE translateButton(GamepadButtons button) const noexcept;
 
 	public:
 		Gfx();
@@ -55,7 +67,11 @@ class Gfx {
 
 		void setEventReceiver(IEventReceiver &receiver);
 
-		bool isKeyDown(EKEY_CODE keyCode) const;
+		bool isKeyDown(EKEY_CODE keyCode) const noexcept;
+
+		bool isGamepadButtonDown(int playerNb, GamepadButtons button) const noexcept;
+
+		bool isGamepadActive() const noexcept { return _gamepadActive; }
 
 		void moveElement(std::string const &name, vector3df const &vec,
 			float speed = 100.0
@@ -72,5 +88,3 @@ class Gfx {
 
 
 };
-
-#endif //INC_1_GFX_HPP

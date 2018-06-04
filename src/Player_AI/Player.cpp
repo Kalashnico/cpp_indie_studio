@@ -53,16 +53,16 @@ namespace object {
 			return;
 		}
 
-		if (_gfx->isKeyDown(KEY_KEY_D))
+		if (_gfx->isGamepadButtonDown(_playerNb, GAMEPAD_PAD_LEFT))
 			move(LEFT);
-		else if (_gfx->isKeyDown(KEY_KEY_Q))
+		else if (_gfx->isGamepadButtonDown(_playerNb, GAMEPAD_PAD_RIGHT))
 			move(RIGHT);
-		else if (_gfx->isKeyDown(KEY_KEY_Z))
+		else if (_gfx->isGamepadButtonDown(_playerNb, GAMEPAD_PAD_UP))
 			move(FORWARD);
-		else if (_gfx->isKeyDown(KEY_KEY_S))
+		else if (_gfx->isGamepadButtonDown(_playerNb, GAMEPAD_PAD_DOWN))
 			move(BACKWARD);
 
-		if (_gfx->isKeyDown(KEY_SPACE))
+		if (_gfx->isGamepadButtonDown(_playerNb, GAMEPAD_A))
 			placeBomb();
 	}
 
