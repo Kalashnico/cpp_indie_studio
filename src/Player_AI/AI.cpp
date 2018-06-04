@@ -123,11 +123,11 @@ void AI::set_direction()
 	bool done = false;
 
 	while (!done && tryRemainingX != 0 && tryRemainingY != 0) {
-		if (distribution(engine) == 0 && tryRemainingX != 0) {
+		if ((distribution(engine) == 0 || tryRemainingY == 0) && tryRemainingX != 0) {
 			done = move_X(tmp, invertX);
 			tryRemainingX -= 1;
 			invertX = true;
-		} else {
+		} else if (tryRemainingY != 0) {
 			done = move_Y(tmp, invertY);
 			tryRemainingY -= 1;
 			invertY = true;
@@ -137,8 +137,8 @@ void AI::set_direction()
 
 bool AI::move_X(vector2di tmp, bool invert)
 {
-	if (tmp.X < _closest_player.X || invert) {
-		if (tmp.X + 1 <= MAP_SIZE && !_map->getTileAt(static_cast<size_t>(tmp.X + 1),
+	if ((tmp.X < _closest_player.X && !invert) || invert) {
+		if (tmp.X + 1 <= MAP_SIZE - 1 && !_map->getTileAt(static_cast<size_t>(tmp.X + 1),
 			static_cast<size_t>(tmp.Y))->containsSomethings()) {
 			_to_go = LEFT;
 			_co_to_go.X += 1;
@@ -160,8 +160,8 @@ bool AI::move_X(vector2di tmp, bool invert)
 
 bool AI::move_Y(vector2di tmp, bool invert)
 {
-	if (tmp.Y < _closest_player.Y || invert) {
-		if (tmp.Y + 1 <= MAP_SIZE && !_map->getTileAt(static_cast<size_t>(tmp.X),
+	if ((tmp.Y < _closest_player.Y && !invert) || invert) {
+		if (tmp.Y + 1 <= MAP_SIZE - 1 && !_map->getTileAt(static_cast<size_t>(tmp.X),
 			static_cast<size_t>(tmp.Y + 1))->containsSomethings()) {
 			_to_go = BACKWARD;
 			_co_to_go.Y += 1;
