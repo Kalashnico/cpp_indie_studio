@@ -180,6 +180,9 @@ namespace map {
 			return false;
 		}
 
+		if (getTileAt(x, y)->containsObject(LOOT))
+			removeObjectFromTile(x, y, LOOT);
+
 		if (getTileAt(x, y)->containsObject(BOX)) {
 			auto loot = getTileAt(x, y)->getObject(
 				BOX)->getLoot();                                                // Remove loot from box
