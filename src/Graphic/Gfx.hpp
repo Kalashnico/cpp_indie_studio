@@ -21,11 +21,7 @@ using namespace gui;
 
 enum GamepadButtons {
 	GAMEPAD_A = 0,
-	GAMEPAD_START =  7,
-	GAMEPAD_PAD_UP =  13,
-	GAMEPAD_PAD_DOWN =  14,
-	GAMEPAD_PAD_LEFT =  15,
-	GAMEPAD_PAD_RIGHT =  16
+	GAMEPAD_START =  7
 };
 
 class Gfx {
@@ -70,6 +66,10 @@ class Gfx {
 		void setEventReceiver(IEventReceiver &receiver);
 
 		bool isKeyDown(EKEY_CODE keyCode) const noexcept;
+
+		f32 getXJoystickStatus(int playerNb) const noexcept;
+
+		f32 getYJoystickStatus(int playerNb) const noexcept;
 
 		bool isGamepadButtonDown(int playerNb, GamepadButtons button) const noexcept;
 

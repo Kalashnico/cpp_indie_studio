@@ -15,6 +15,8 @@ using namespace video;
 using namespace io;
 using namespace gui;
 
+#define DEAD_ZONE 0.70
+
 class CustomEventReceiver : public IEventReceiver {
 	private:
 		bool _keyIsDown[KEY_KEY_CODES_COUNT];
@@ -25,5 +27,7 @@ class CustomEventReceiver : public IEventReceiver {
 		virtual ~CustomEventReceiver();
 		bool OnEvent(const SEvent &event) override;
 		bool isKeyDown(EKEY_CODE keyCode) const noexcept;
+		f32 getXJoystickStatus(int joystick) const noexcept;
+		f32 getYJoystickStatus(int joystick) const noexcept;
 		bool isGamepadButtonDown(int joystick, GamepadButtons button) const noexcept;
 };

@@ -2,6 +2,7 @@
 // Created by jdecombe on 09/05/18.
 //
 
+#include <iostream>
 #include "CustomEventReceiver.hpp"
 
 CustomEventReceiver::CustomEventReceiver()
@@ -36,6 +37,24 @@ bool CustomEventReceiver::OnEvent(const SEvent &event)
 bool CustomEventReceiver::isKeyDown(EKEY_CODE keyCode) const noexcept
 {
 	return _keyIsDown[keyCode];
+}
+
+f32 CustomEventReceiver::getXJoystickStatus(int joystick) const noexcept
+{
+	f32 value = (f32)_joystickStates[joystick].Axis[SEvent::SJoystickEvent::AXIS_X] / 32767.f;
+
+	if (fabs(value) < (f32)DEAD_ZONE)
+		value = 0.f;
+	return value;
+}
+
+f32 CustomEventReceiver::getYJoystickStatus(int joystick) const noexcept
+{
+	f32 value = (f32)_joystickStates[joystick].Axis[SEvent::SJoystickEvent::AXIS_Y] / 32767.f;
+
+	if (fabs(value) < (f32)DEAD_ZONE)
+		value = 0.f;
+	return value;
 }
 
 bool CustomEventReceiver::isGamepadButtonDown(int joystick, GamepadButtons button) const noexcept

@@ -53,13 +53,16 @@ namespace object {
 			return;
 		}
 
-		if (_gfx->isGamepadButtonDown(_playerNb, GAMEPAD_PAD_LEFT))
+		auto moveHorizontal = _gfx->getXJoystickStatus(_playerNb);
+		auto moveVertical = _gfx->getYJoystickStatus(_playerNb);
+
+		if (moveHorizontal < 0)
 			move(LEFT);
-		else if (_gfx->isGamepadButtonDown(_playerNb, GAMEPAD_PAD_RIGHT))
+		else if (moveHorizontal > 0)
 			move(RIGHT);
-		else if (_gfx->isGamepadButtonDown(_playerNb, GAMEPAD_PAD_UP))
+		else if (moveVertical < 0)
 			move(FORWARD);
-		else if (_gfx->isGamepadButtonDown(_playerNb, GAMEPAD_PAD_DOWN))
+		else if (moveVertical > 0)
 			move(BACKWARD);
 
 		if (_gfx->isGamepadButtonDown(_playerNb, GAMEPAD_A))
@@ -85,19 +88,15 @@ namespace object {
 		switch (lootCategory){
 			case BOMB_UP:
 				_maxBombs++;
-				std::cout << "Player " << std::to_string(_playerNb) << " pickup up a bomb up" << std::endl;
 				break;
 			case FIRE_UP:
 				_blastRadius++;
-				std::cout << "Player " << std::to_string(_playerNb) << " pickup up a fire up" << std::endl;
 				break;
 			case SPEED_UP:
 				_speedBonus += 0.1f;
-				std::cout << "Player " << std::to_string(_playerNb) << " pickup up a speed up" << std::endl;
 				break;
 			case WALL_PASS:
 				_walkThroughBoxes = true;
-				std::cout << "Player " << std::to_string(_playerNb) << " pickup up a wall pass" << std::endl;
 				break;
 			default:
 				std::cout << "This isn't possible" << std::endl;

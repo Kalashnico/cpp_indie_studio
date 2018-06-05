@@ -10,7 +10,7 @@
 static void updateFpsCount(IrrlichtDevice *device, IVideoDriver *videoDriver)
 {
 	auto fps = videoDriver->getFPS();
-	core::stringw str("Render ? [FPS: ");
+	core::stringw str("Bomberman [FPS: ");
 	str += fps;
 	str += "]";
 	device->setWindowCaption(str.c_str());
@@ -166,6 +166,46 @@ bool Gfx::isKeyDown(EKEY_CODE keyCode) const noexcept
 	return eventReceiver->isKeyDown(keyCode);
 }
 
+f32 Gfx::getXJoystickStatus(int playerNb) const noexcept
+{
+	if (this->_eventReceiver == nullptr)
+		return (f32)0;
+	auto eventReceiver = dynamic_cast<CustomEventReceiver *>(
+		this->_eventReceiver);
+	if (eventReceiver == nullptr)
+		return (f32)0;
+
+	if (_gamepadActive)
+		return eventReceiver->getXJoystickStatus(playerNb - 1);
+
+	if (eventReceiver->isKeyDown(KEY_LEFT))
+		return (f32)-1.f;
+	else if (eventReceiver->isKeyDown(KEY_RIGHT))
+		return (f32)1.f;
+
+	return (f32)0;
+}
+
+f32 Gfx::getYJoystickStatus(int playerNb) const noexcept
+{
+	if (this->_eventReceiver == nullptr)
+		return (f32)0;
+	auto eventReceiver = dynamic_cast<CustomEventReceiver *>(
+		this->_eventReceiver);
+	if (eventReceiver == nullptr)
+		return (f32)0;
+
+	if (_gamepadActive)
+		return eventReceiver->getYJoystickStatus(playerNb - 1);
+
+	if (eventReceiver->isKeyDown(KEY_UP))
+		return (f32)-1.f;
+	else if (eventReceiver->isKeyDown(KEY_DOWN))
+		return (f32)1.f;
+
+	return (f32)0;
+}
+
 bool Gfx::isGamepadButtonDown(int playerNb, GamepadButtons button) const noexcept
 {
 	if (this->_eventReceiver == nullptr)
@@ -185,14 +225,8 @@ EKEY_CODE Gfx::translateButton(GamepadButtons button) const noexcept
 	switch (button) {
 		case GAMEPAD_A:
 			return KEY_SPACE;
-		case GAMEPAD_PAD_UP:
-			return KEY_UP;
-		case GAMEPAD_PAD_DOWN:
-			return KEY_DOWN;
-		case GAMEPAD_PAD_LEFT:
-			return KEY_LEFT;
-		case GAMEPAD_PAD_RIGHT:
-			return KEY_RIGHT;
+		case GAMEPAD_START:
+			return KEY_KEY_P;
 	}
 
 	return (EKEY_CODE)-1;
