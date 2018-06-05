@@ -15,7 +15,7 @@
 
 using namespace irr;
 
-using namespace core;
+using namespace irr::core;
 using namespace scene;
 using namespace video;
 using namespace io;
@@ -66,7 +66,7 @@ namespace object {
 
 			int _placedBombs = 0;
 			int _maxBombs = 1;
-			int _blastRadius = 2;
+			int _blastRadius = 1;
 			float _speedBonus = 0.f;
 			bool _walkThroughBoxes = false;
 
