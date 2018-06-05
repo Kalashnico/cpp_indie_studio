@@ -17,6 +17,7 @@ static void updateFpsCount(IrrlichtDevice *device, IVideoDriver *videoDriver)
 }
 
 Gfx::Gfx()
+	: _gamepadActive(false)
 {
 	this->_device = irr::createDevice(irr::video::EDT_OPENGL,
 		dimension2d<u32>(WIN_WIDTH, WIN_HEIGHT), 32, false, false, true,
@@ -176,7 +177,6 @@ bool Gfx::isGamepadButtonDown(int playerNb, GamepadButtons button) const noexcep
 
 	if (_gamepadActive)
 		return eventReceiver->isGamepadButtonDown(playerNb - 1, button);
-
 	return isKeyDown(translateButton(button));
 }
 
@@ -190,9 +190,9 @@ EKEY_CODE Gfx::translateButton(GamepadButtons button) const noexcept
 		case GAMEPAD_PAD_DOWN:
 			return KEY_DOWN;
 		case GAMEPAD_PAD_LEFT:
-			return KEY_RIGHT;
-		case GAMEPAD_PAD_RIGHT:
 			return KEY_LEFT;
+		case GAMEPAD_PAD_RIGHT:
+			return KEY_RIGHT;
 	}
 
 	return (EKEY_CODE)-1;

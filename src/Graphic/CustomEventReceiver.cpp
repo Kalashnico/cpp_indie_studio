@@ -2,12 +2,11 @@
 // Created by jdecombe on 09/05/18.
 //
 
-#include <iostream>
 #include "CustomEventReceiver.hpp"
 
 CustomEventReceiver::CustomEventReceiver()
 {
-	for (auto value : _keyIsDown)
+	for (auto &value : _keyIsDown)
 		value = false;
 }
 

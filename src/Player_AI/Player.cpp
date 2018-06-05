@@ -166,10 +166,10 @@ namespace object {
 		float angle = 0.f;
 
 		switch (rotation) {
-		case RIGHT:
+		case LEFT:
 			angle = 90;
 			break;
-		case LEFT:
+		case RIGHT:
 			angle = -90;
 			break;
 		case BACKWARD:
@@ -247,12 +247,12 @@ namespace object {
 				return;
 			vec = {-1., 0., 0.};
 			break;
-		case RIGHT:
+		case LEFT:
 			if (_playerNode->getPosition().Z <= -25)
 				return;
 			vec = {0., 0., -1.};
 			break;
-		case LEFT:
+		case RIGHT:
 			if (_playerNode->getPosition().Z >= 25)
 				return;
 			vec = {0., 0., 1.};
