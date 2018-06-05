@@ -14,7 +14,7 @@ namespace object {
 
 class Bomb : public AObject {
 
-	#define LIFE 3.0
+	#define LIFE 2.0
 	#define CYCLE 0.5
 
 	public:
