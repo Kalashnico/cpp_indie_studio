@@ -12,10 +12,10 @@
 
 namespace map {
 
-	Map::Map() : _gfx(nullptr), _sceneManager(nullptr)
+	Map::Map() : _gfx(nullptr), _sceneManager(nullptr), _end(false)
 	{}
 
-	Map::Map(Gfx *gfx) : _gfx(gfx), _sceneManager(gfx->getSceneManager())
+	Map::Map(Gfx *gfx) : _gfx(gfx), _sceneManager(gfx->getSceneManager()), _end(false)
 	{
 		generateMap();
 	}
@@ -127,7 +127,7 @@ namespace map {
 					continue;
 
 				if (distribution(engine) < 8) {                // Generate random number - 8/10 chance to spawn box
-					auto loot = std::make_unique<object::Loot>();
+					auto loot = std::make_unique<object::Loot>(x, y, _gfx);
 					auto box = std::make_unique<object::Box>(std::move(loot), this, _gfx, x, y);
 					getTileAt(x, y)->addObject(std::move(box));
 				}
@@ -184,20 +184,15 @@ namespace map {
 			removeObjectFromTile(x, y, LOOT);
 
 		if (getTileAt(x, y)->containsObject(BOX)) {
-			auto loot = getTileAt(x, y)->getObject(
-				BOX)->getLoot();                                                // Remove loot from box
+			auto loot = getTileAt(x, y)->getObject(BOX)->getLoot();
 
-			removeObjectFromTile(x, y,
-				BOX);                                                                        // Remove box
-			addObjectToTile(x, y, std::move(
-				std::unique_ptr<object::AObject>(
-					new object::Fire(x, y,
-						this, _gfx))));        // Place fire
+			removeObjectFromTile(x, y, BOX);
+			addObjectToTile(x, y, std::move(std::unique_ptr<object::AObject>(new object::Fire(x, y, this, _gfx))));
 
-			if (loot.get()->getLootCategory() !=
-				object::EMPTY)                                                                // Check empty loot
-				addObjectToTile(x, y, std::move(
-					loot));                                                                // Add loot to tile
+			if (loot.get()->getLootCategory() != object::EMPTY) {
+				loot.get()->display();
+				addObjectToTile(x, y, std::move(loot));
+			}
 
 			return false;
 		}
@@ -239,13 +234,22 @@ namespace map {
 
 	bool Map::shouldEndGame() noexcept
 	{
+		if (_end) {
+			if ((((std::clock() - _endTimer) / (double) CLOCKS_PER_SEC) >= END_TIME))
+				return true;
+			else
+				return false;
+		}
+
 		int numDead = 0;
 
 		for (auto value : _playersDead)
 			numDead += value;
 
-		if (numDead >= 3)
-			return true;
+		if (numDead >= 3) {
+			_end = true;
+			_endTimer = std::clock();
+		}
 
 		return false;
 	}

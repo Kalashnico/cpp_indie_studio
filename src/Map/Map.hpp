@@ -9,6 +9,7 @@
 
 #include <vector>
 #include <memory>
+#include <ctime>
 #include "Tile.hpp"
 #include "Irrlicht/irrlicht.h"
 #include "Gfx.hpp"
@@ -23,6 +24,7 @@ using namespace gui;
 
 #define MAP_SIZE	13
 #define INDEX(x, y)	(MAP_SIZE * x + y)
+#define END_TIME	1.0
 
 namespace map {
 
@@ -44,6 +46,8 @@ namespace map {
 			ITriangleSelector *_selector;
 
 			bool _playersDead[4];
+			bool _end;
+			std::clock_t _endTimer;
 
 		public:
 			Map();
