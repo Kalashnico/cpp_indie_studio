@@ -146,7 +146,7 @@ IAnimatedMeshSceneNode *Gfx::drawMesh(std::string const &path, std::string const
 
 void Gfx::addCameraFPS()
 {
-	this->_sceneManager->addCameraSceneNode(0, {30, 50, 0}, {0, 0, 0});
+	this->_sceneManager->addCameraSceneNode(0, {20, 50, 0}, {0, 0, 0});
 }
 
 void Gfx::setEventReceiver(IEventReceiver &receiver)
