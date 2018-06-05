@@ -23,6 +23,9 @@ Loot::~Loot()
 
 void Loot::display() noexcept
 {
+	if (_category == SPEED_UP)
+		return;
+
 	irr::core::vector3df pos = {(float)_posy, 0.f, (float)_posx};
 	pos -= 6.f;
 	pos *= 4.f;
@@ -53,8 +56,6 @@ void Loot::setupLoot() noexcept
 	else if (lootCategory == 12)
 		lootCategory = 3;
 
-	lootCategory = 2;
-
 	switch (lootCategory) {
 		case 0:
 			_category = BOMB_UP;
@@ -68,7 +69,7 @@ void Loot::setupLoot() noexcept
 			break;
 		case 2:
 			_category = SPEED_UP;
-			_modelPath = "./media/models/speed/Hover Boots.obj";
+			_modelPath = "";
 			_modelSize = {5.f, 5.f, 5.f};
 			break;
 		case 3:
