@@ -37,7 +37,7 @@ void Loot::setupLoot() noexcept
 	std::mt19937 engine(randomDevice());			// Seed
 	std::uniform_int_distribution<> distribution(1, 5);	// Range
 
-	if (distribution(engine) < 0) {
+	if (distribution(engine) < 5) {
 		_category = EMPTY;
 		return;
 	}
@@ -52,8 +52,6 @@ void Loot::setupLoot() noexcept
 		lootCategory = 2;
 	else if (lootCategory == 12)
 		lootCategory = 3;
-
-	lootCategory = 2;
 
 	switch (lootCategory) {
 		case 0:
