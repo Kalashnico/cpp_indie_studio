@@ -69,7 +69,7 @@ void Loot::setupLoot() noexcept
 		case 2:
 			_category = SPEED_UP;
 			_modelPath = "./media/models/speedup/speed_up_power_up.obj";
-			_modelSize = {2.5f, 2.5f, 2.5f};
+			_modelSize = {2.f, 2.f, 2.f};
 			break;
 		case 3:
 			_category = WALL_PASS;
