@@ -23,9 +23,6 @@ Loot::~Loot()
 
 void Loot::display() noexcept
 {
-	if (_category == SPEED_UP)
-		return;
-
 	irr::core::vector3df pos = {(float)_posy, 0.f, (float)_posx};
 	pos -= 6.f;
 	pos *= 4.f;
@@ -40,7 +37,7 @@ void Loot::setupLoot() noexcept
 	std::mt19937 engine(randomDevice());			// Seed
 	std::uniform_int_distribution<> distribution(1, 5);	// Range
 
-	if (distribution(engine) < 5) {
+	if (distribution(engine) < 0) {
 		_category = EMPTY;
 		return;
 	}
@@ -56,6 +53,8 @@ void Loot::setupLoot() noexcept
 	else if (lootCategory == 12)
 		lootCategory = 3;
 
+	lootCategory = 2;
+
 	switch (lootCategory) {
 		case 0:
 			_category = BOMB_UP;
@@ -69,8 +68,8 @@ void Loot::setupLoot() noexcept
 			break;
 		case 2:
 			_category = SPEED_UP;
-			_modelPath = "";
-			_modelSize = {5.f, 5.f, 5.f};
+			_modelPath = "./media/models/speedup/speed_up_power_up.obj";
+			_modelSize = {2.5f, 2.5f, 2.5f};
 			break;
 		case 3:
 			_category = WALL_PASS;
