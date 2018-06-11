@@ -216,6 +216,9 @@ namespace object {
 	{
 		auto position = getPosition();
 
+		if (tilePos.X < 0 || tilePos.X >= MAP_SIZE || tilePos.Y < 0 || tilePos.Y >= MAP_SIZE)
+			return true;
+
 		if (!(position.X == tilePos.X && position.Y == tilePos.Y)
 			&& (_map->getTileAt(tilePos.X, tilePos.Y)->containsObject(WALL)
 			|| (_map->getTileAt(tilePos.X, tilePos.Y)->containsObject(BOX) && !_walkThroughBoxes)
@@ -232,6 +235,7 @@ namespace object {
 	void Player::move(rotationDirection_e dir, float spd)
 	{
 		vector3df vec = {0, 0, 0};
+		vector3df toAdd = {0, 0, 0};
 		auto angle = getAngleFromDirection(dir);
 		setAbsoluteRotation(angle);
 
@@ -239,22 +243,26 @@ namespace object {
 		case BACKWARD:
 			if (_playerNode->getPosition().X >= 25)
 				return;
-			vec = {1., 0., 0.};
+			vec = {1.f, 0.f, 0.f};
+			toAdd.X = 1.f;
 			break;
 		case FORWARD:
 			if (_playerNode->getPosition().X <= -25)
 				return;
-			vec = {-1., 0., 0.};
+			vec = {-1.f, 0.f, 0.f};
+			toAdd.X = -1.f;
 			break;
 		case LEFT:
 			if (_playerNode->getPosition().Z <= -25)
 				return;
-			vec = {0., 0., -1.};
+			vec = {0.f, 0.f, -1.f};
+			toAdd.Z = -1.f;
 			break;
 		case RIGHT:
 			if (_playerNode->getPosition().Z >= 25)
 				return;
-			vec = {0., 0., 1.};
+			vec = {0.f, 0.f, 1.f};
+			toAdd.Z = 1.f;
 			break;
 		default:
 			break;
@@ -262,7 +270,7 @@ namespace object {
 
 		vec *= (spd + _speedBonus);
 
-		auto newPos = _playerNode->getPosition() + vec;
+		auto newPos = _playerNode->getPosition() + (vec + toAdd);
 		newPos /= 4;
 		newPos += 7.5f;
 		vector2di tilePos = {static_cast<s32>(newPos.Z - 1),
