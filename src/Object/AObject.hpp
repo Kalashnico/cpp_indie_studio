@@ -42,8 +42,6 @@ class AObject {
 
 		virtual void resetGfx() noexcept {}
 
-		virtual bool isDead() noexcept { return false; }
-
 		virtual void detonate() noexcept {}
 		virtual std::unique_ptr<Loot> getLoot() noexcept;
 		virtual LootCategory getLootCategory() const noexcept {}

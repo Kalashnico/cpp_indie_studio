@@ -105,7 +105,6 @@ namespace object {
 
 			bool checkDeath() noexcept;
 			void die() noexcept;
-			bool isDead() noexcept { return _dead; }
 
 			IAnimatedMeshSceneNode *getNode() const;
 	};
