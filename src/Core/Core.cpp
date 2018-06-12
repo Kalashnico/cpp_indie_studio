@@ -36,7 +36,7 @@ Core::Core(int numPlayers)
 			: player2 = std::make_unique<object::AI>(&_map, PLAYER2, &_gfx, POMMY, iPos2.X, iPos2.Y, iPos2.Z, false, 2);
 
 	numPlayers--;
-/*
+
 	(numPlayers > 0) ? player3 = std::make_unique<object::Player>(&_map, PLAYER3, &_gfx, POMMY, iPos3.X, iPos3.Y, iPos3.Z, false, 3)
 			: player3 = std::make_unique<object::AI>(&_map, PLAYER3, &_gfx, POMMY, iPos3.X, iPos3.Y, iPos3.Z, false, 3);
 
@@ -44,7 +44,7 @@ Core::Core(int numPlayers)
 
 	(numPlayers > 0) ? player4 = std::make_unique<object::Player>(&_map, PLAYER4, &_gfx, POMMY, iPos4.X, iPos4.Y, iPos4.Z, false, 4)
 			: player4 = std::make_unique<object::AI>(&_map, PLAYER4, &_gfx, POMMY, iPos4.X, iPos4.Y, iPos4.Z, false, 4);
-*/
+
 	try {
 		_gfx.addCameraFPS();
 		_gfx.addLight(vector3df(-30, 30, -30), SColorf(1.0f, 1.0f, 1.0f), 20);
@@ -58,8 +58,8 @@ Core::Core(int numPlayers)
 
 	_map.addObjectToTile(static_cast<size_t>(tilePos1.X), static_cast<size_t>(tilePos1.Y), std::move(player1));
 	_map.addObjectToTile(static_cast<size_t>(tilePos2.X), static_cast<size_t>(tilePos2.Y), std::move(player2));
-	//_map.addObjectToTile(static_cast<size_t>(tilePos3.X), static_cast<size_t>(tilePos3.Y), std::move(player3));
-	//_map.addObjectToTile(static_cast<size_t>(tilePos4.X), static_cast<size_t>(tilePos4.Y), std::move(player4));
+	_map.addObjectToTile(static_cast<size_t>(tilePos3.X), static_cast<size_t>(tilePos3.Y), std::move(player3));
+	_map.addObjectToTile(static_cast<size_t>(tilePos4.X), static_cast<size_t>(tilePos4.Y), std::move(player4));
 }
 
 Core::~Core()
