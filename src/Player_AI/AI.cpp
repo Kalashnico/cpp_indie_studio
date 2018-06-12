@@ -282,51 +282,57 @@ namespace object {
 		}
 	}
 
+	bool AI::checkMoveToTile(size_t x, size_t y)
+	{
+		if (_map->getTileAt(x, y)->containsObject(WALL)
+			|| _map->getTileAt(x, y)->containsObject(BOX)
+			|| _map->getTileAt(x, y)->containsObject(BOMB)
+			|| _map->getTileAt(x, y)->containsObject(FIRE)
+			|| _map->getTileAt(x, y)->containsObject(PLAYER1)
+			|| _map->getTileAt(x, y)->containsObject(PLAYER2)
+			|| _map->getTileAt(x, y)->containsObject(PLAYER3)
+			|| _map->getTileAt(x, y)->containsObject(PLAYER4))
+			return false;
+		return true;
+	}
+
 	bool AI::moveToXPlayer(vector2di tmp, bool invert)
 	{
-		if ((tmp.X < _closestPlayer.X && !invert) || invert) {
-			if (tmp.X + 1 <= MAP_SIZE - 1 &&
-				!_map->getTileAt(static_cast<size_t>(tmp.X + 1),
-					static_cast<size_t>(tmp.Y))->containsSomethings()) {
+		auto x = static_cast<size_t>(tmp.X);
+		auto y = static_cast<size_t>(tmp.Y);
+
+		if ((x < _closestPlayer.X && !invert) || invert) {
+			if (x + 1 <= MAP_SIZE - 1 && checkMoveToTile(x + 1, y)) {
 				_destinationDirection = RIGHT;
 				return true;
-			} else {
+			} else
 				return false;
-			}
 		} else {
-			if (tmp.X - 1 >= 0 &&
-				!_map->getTileAt(static_cast<size_t>(tmp.X - 1),
-					static_cast<size_t>(tmp.Y))->containsSomethings()) {
+			if (x- 1 >= 0 && checkMoveToTile(x - 1, y)) {
 				_destinationDirection = LEFT;
 				return true;
-			} else {
+			} else
 				return false;
-			}
 		}
 	}
 
 	bool AI::moveToYPlayer(vector2di tmp, bool invert)
 	{
-		if ((tmp.Y < _closestPlayer.Y && !invert) || invert) {
-			if (tmp.Y + 1 <= MAP_SIZE - 1 &&
-				!_map->getTileAt(static_cast<size_t>(tmp.X),
-					static_cast<size_t>(tmp.Y +
-						1))->containsSomethings()) {
+		auto x = static_cast<size_t>(tmp.X);
+		auto y = static_cast<size_t>(tmp.Y);
+
+		if ((y < _closestPlayer.Y && !invert) || invert) {
+			if (y + 1 <= MAP_SIZE - 1 && checkMoveToTile(x, y + 1)) {
 				_destinationDirection = BACKWARD;
 				return true;
-			} else {
+			} else
 				return false;
-			}
 		} else {
-			if (tmp.Y - 1 >= 0 &&
-				!_map->getTileAt(static_cast<size_t>(tmp.X),
-					static_cast<size_t>(tmp.Y -
-						1))->containsSomethings()) {
+			if (y - 1 >= 0 && checkMoveToTile(x, y - 1)) {
 				_destinationDirection = FORWARD;
 				return true;
-			} else {
+			} else
 				return false;
-			}
 		}
 	}
 

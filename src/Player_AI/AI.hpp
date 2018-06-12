@@ -28,6 +28,7 @@ class AI : public AObject {
 		void moveCase(rotationDirection_e dir, float spd = MOVEMENT_SPEED);
 		void findClosestPlayer();
 		void setWayToPlayer();
+		bool checkMoveToTile(size_t x, size_t y);
 		bool moveToXPlayer(vector2di tmp, bool invert);
 		bool moveToYPlayer(vector2di tmp, bool invert);
 		void setSafeDestination();
