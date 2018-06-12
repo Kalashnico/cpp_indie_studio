@@ -92,6 +92,8 @@ namespace object {
 			vector2di getPosition() noexcept;
 			vector2df getPositionFloat();
 
+			bool canWalkThroughBoxes() const noexcept { return _walkThroughBoxes; }
+
 			bool hasCollided(vector2di tilePos) noexcept;
 			void move(enum rotationDirection_e dir = FORWARD,
 				float spd = MOVEMENT_SPEED
