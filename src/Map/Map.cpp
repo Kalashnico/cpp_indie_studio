@@ -31,7 +31,7 @@ namespace map {
 
 	void Map::generateMap()
 	{
-		for (auto value : _playersDead)
+		for (auto &value : _playersDead)
 			value = false;
 
 		createMap();
