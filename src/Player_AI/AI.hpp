@@ -31,7 +31,8 @@ class AI : public AObject {
 		bool checkMoveToTile(size_t x, size_t y, rotationDirection_e dir = NONE);
 		bool moveToXPlayer(vector2di tmp, bool invert);
 		bool moveToYPlayer(vector2di tmp, bool invert);
-		void setSafeDestination();
+		void setSafeDestination(size_t x, size_t y);
+		bool isSafe(size_t x, size_t y);
 		bool checkIfSafeDestination(rotationDirection_e dir);
 		bool checkBombDanger(size_t x, size_t y, rotationDirection_e dir = NONE);
 		bool checkBombImpactAt(size_t x, size_t y, size_t xPlayer, size_t yPlayer) const;

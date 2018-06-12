@@ -33,6 +33,8 @@ namespace object {
 
 	void AI::update() noexcept
 	{
+		auto pos = _player.getPosition();
+
 		if (_player.checkDeath()) {
 			_player.die();
 			return;
@@ -43,21 +45,15 @@ namespace object {
 			_destinationCoordinates = _player.getPositionFloat();
 			setWayToPlayer();
 
-			std::cout << "Destination before " << _destinationDirection << std::endl;
-
 			move();
 
 			if (!checkIfSafeDestination(_destinationDirection)) {
-				setSafeDestination();
+				setSafeDestination(pos.X, pos.Y);
 				_destinationCoordinates = _player.getPositionFloat();
 				move();
 			}
 
-			std::cout << "Destination after " << _destinationDirection << std::endl;
-
-			std::cout << "Destination coords x: " << _destinationCoordinates.X << " y: " << _destinationCoordinates.Y << std::endl;
-
-			if (_destinationDirection == NONE)
+			if (_destinationDirection == NONE && isSafe(pos.X, pos.Y))
 				_player.placeBomb();
 		}
 
@@ -107,17 +103,17 @@ namespace object {
 			break;
 		}
 
-		std::cout << "x: " << x << " y: " << y << std::endl;
-
 		if (_map->getTileAt(x, y)->containsObject(WALL)
-			|| _map->getTileAt(x, y)->containsObject(BOX)) {
-			std::cout << "Stuck" << std::endl;
+			|| (_map->getTileAt(x, y)->containsObject(BOX) && !_player.canWalkThroughBoxes())
+			|| (_map->getTileAt(x, y)->containsObject(PLAYER1) && getType() != PLAYER1)
+			|| (_map->getTileAt(x, y)->containsObject(PLAYER2) && getType() != PLAYER2)
+			|| (_map->getTileAt(x, y)->containsObject(PLAYER3) && getType() != PLAYER3)
+			|| (_map->getTileAt(x, y)->containsObject(PLAYER4) && getType() != PLAYER4)) {
 			return false;
 		}
 
 		if (_map->getTileAt(x, y)->containsObject(BOMB)
 			|| _map->getTileAt(x, y)->containsObject(FIRE)) {
-			std::cout << "Danger" << std::endl;
 			return false;
 		}
 
@@ -154,69 +150,139 @@ namespace object {
 			break;
 		}
 
-		if ((y != 0 && !(_map->getTileAt(x, y - 1)->containsObject(WALL) || _map->getTileAt(x, y - 1)->containsObject(BOX)))
-			|| (y != MAP_SIZE - 1 && !(_map->getTileAt(x, y + 1)->containsObject(WALL) || _map->getTileAt(x, y + 1)->containsObject(BOX)))) {
-			for (size_t tmpY = 0; tmpY < MAP_SIZE - 1; ++tmpY) {
-				if (checkBombImpactAt(x, tmpY, x, y)) {
-					std::cout << "DangerImpactY" << std::endl;
-					return true;
-				}
-			}
+		for (size_t tmpY = 0; tmpY < MAP_SIZE - 1; ++tmpY) {
+			if (checkBombImpactAt(x, tmpY, x, y))
+				return true;
 		}
 
-		if ((x != 0 && !(_map->getTileAt(x - 1, y)->containsObject(WALL) || _map->getTileAt(x - 1, y)->containsObject(BOX)))
-			|| (x != MAP_SIZE - 1 && !(_map->getTileAt(x + 1, y)->containsObject(WALL) || _map->getTileAt(x + 1, y)->containsObject(BOX)))) {
-			for (size_t tmpX = 0; tmpX < MAP_SIZE - 1; ++tmpX) {
-				if (checkBombImpactAt(tmpX, y, x, y)) {
-					std::cout << "DangerImpactX" << std::endl;
-					return true;
-				}
-			}
+		for (size_t tmpX = 0; tmpX < MAP_SIZE - 1; ++tmpX) {
+			if (checkBombImpactAt(tmpX, y, x, y))
+				return true;
 		}
 
 		return false;
 	}
 
-	void AI::setSafeDestination()
+	void AI::setSafeDestination(size_t x, size_t y)
 	{
-		std::mt19937 engine(_random());
-		std::uniform_int_distribution<> distribution(0, 1);
-		std::array<int, 2> tryRemainingY = {1, 1};
-		std::array<int, 2> tryRemainingX = {1, 1};
-		bool done = false;
+		rotationDirection_e dir = LEFT;
+		rotationDirection_e firstDir = LEFT;
+		rotationDirection_e prevDir = NONE;
 
-		while (!done) {
-			if (distribution(engine) == 0 && (tryRemainingY[0] != 0 || tryRemainingY[1] != 0)) {
-				if (tryRemainingY[0] != 0 && (distribution(engine) == 0 || (tryRemainingY[1] == 0))) {
-					done = checkIfSafeDestination(FORWARD);
-					_destinationDirection = (done) ? FORWARD : _destinationDirection;
-					tryRemainingY[0] = 0;
-				} else if (tryRemainingY[1] != 0) {
-					done = checkIfSafeDestination(BACKWARD);
-					_destinationDirection = (done) ? BACKWARD : _destinationDirection;
-					tryRemainingY[1] = 0;
+		auto tmpX = x;
+		auto tmpY = y;
+
+		bool hasMoved = false;
+
+		if (!checkBombDanger(x, y)) {
+			_destinationDirection = NONE;
+			return;
+		}
+
+		while (true) {
+			if (checkMoveToTile(tmpX, tmpY, dir) && dir != prevDir) {
+				if (!checkBombDanger(tmpX, tmpY, dir)) {
+					_destinationDirection = firstDir;
+					return;
+				} else {
+					switch (dir) {
+					case FORWARD:
+						prevDir = BACKWARD;
+						tmpY -= 1;
+						break;
+					case BACKWARD:
+						prevDir = FORWARD;
+						tmpY += 1;
+						break;
+					case LEFT:
+						prevDir = RIGHT;
+						tmpX -= 1;
+						break;
+					case RIGHT:
+						prevDir = LEFT;
+						tmpX += 1;
+						break;
+					}
+
+					dir = LEFT;
+					hasMoved = true;
 				}
-			} else if (!(tryRemainingX[0] == 0 && tryRemainingX[1] == 0)) {
-				if (tryRemainingX[0] != 0 && (distribution(engine) == 0 || (tryRemainingX[1] == 0))) {
-					done = checkIfSafeDestination(LEFT);
-					_destinationDirection = (done) ? LEFT : _destinationDirection;
-					tryRemainingX[0] = 0;
-				} else if (tryRemainingX[1] != 0) {
-					done = checkIfSafeDestination(RIGHT);
-					_destinationDirection = (done) ? RIGHT : _destinationDirection;
-					tryRemainingX[1] = 0;
+			} else {
+				if (hasMoved) {
+					dir = (rotationDirection_e)((size_t)dir + 1);
+					if (dir == NONE) {
+						tmpX = x;
+						tmpY = y;
+						hasMoved = false;
+						prevDir = NONE;
+						dir = firstDir = (rotationDirection_e)((size_t)firstDir + 1);
+						if (firstDir == NONE) {
+							_destinationDirection = firstDir;
+							return;
+						}
+					}
+				} else {
+					prevDir = NONE;
+					dir = firstDir = (rotationDirection_e)((size_t)firstDir + 1);
+					if (firstDir == NONE) {
+						_destinationDirection = firstDir;
+						return;
+					}
 				}
-			}
-			if (!done && (tryRemainingX[0] == 0 && tryRemainingX[1] == 0 && tryRemainingY[0] == 0 && tryRemainingY[1] == 0)) {
-				done = true;
-				_destinationDirection = NONE;
 			}
 		}
+	}
+
+	bool AI::isSafe(size_t x, size_t y)
+	{
+		if (checkBombDanger(x, y)
+			|| (x < MAP_SIZE - 1 && checkBombDanger(x + 1, y))
+			|| (x > 0 && checkBombDanger(x - 1, y))
+			|| (y < MAP_SIZE - 1 && checkBombDanger(x, y)
+			|| (y > 0 && checkBombDanger(x, y))))
+			return false;
+
+		if ((x < MAP_SIZE - 1 && _map->getTileAt(x + 1, y)->containsObject(FIRE))
+			|| ((x > 0 && _map->getTileAt(x - 1, y)->containsObject(FIRE)))
+			|| (y < MAP_SIZE - 1 && _map->getTileAt(x, y + 1)->containsObject(FIRE))
+			|| (y > 0 && _map->getTileAt(x, y - 1)->containsObject(FIRE)))
+			return false;
+
+		return true;
 	}
 
 	void AI::moveCase(rotationDirection_e dir, float spd)
 	{
 		const vector2df tmp = _player.getPositionFloat();
+
+		auto sX = static_cast<size_t>(_destinationCoordinates.X);
+		auto sY = static_cast<size_t>(_destinationCoordinates.Y);
+
+
+		if (_map->getTileAt(sX, sY)->containsObject(BOX)
+			|| _map->getTileAt(sX, sY)->containsObject(BOMB)
+			|| _map->getTileAt(sX, sY)->containsObject(FIRE)
+			|| (_map->getTileAt(sX, sY)->containsObject(PLAYER1) && getType() != PLAYER1)
+			|| (_map->getTileAt(sX, sY)->containsObject(PLAYER2) && getType() != PLAYER2)
+			|| (_map->getTileAt(sX, sY)->containsObject(PLAYER3) && getType() != PLAYER3)
+			|| (_map->getTileAt(sX, sY)->containsObject(PLAYER4) && getType() != PLAYER4)) {
+
+			switch(_destinationDirection) {
+				case FORWARD:
+					_destinationDirection = BACKWARD;
+					break;
+				case BACKWARD:
+					_destinationDirection = FORWARD;
+					break;
+				case LEFT:
+					_destinationDirection = RIGHT;
+					break;
+				case RIGHT:
+					_destinationDirection = LEFT;
+					break;
+			}
+			move();
+		}
 
 		switch (dir) {
 		case BACKWARD:
@@ -344,14 +410,15 @@ namespace object {
 		}
 
 		if (_map->getTileAt(x, y)->containsObject(WALL)
-			|| _map->getTileAt(x, y)->containsObject(BOX)
+			|| (_map->getTileAt(x, y)->containsObject(BOX) && !_player.canWalkThroughBoxes())
 			|| _map->getTileAt(x, y)->containsObject(BOMB)
 			|| _map->getTileAt(x, y)->containsObject(FIRE)
-			|| _map->getTileAt(x, y)->containsObject(PLAYER1)
-			|| _map->getTileAt(x, y)->containsObject(PLAYER2)
-			|| _map->getTileAt(x, y)->containsObject(PLAYER3)
-			|| _map->getTileAt(x, y)->containsObject(PLAYER4))
+			|| (_map->getTileAt(x, y)->containsObject(PLAYER1) && getType() != PLAYER1)
+			|| (_map->getTileAt(x, y)->containsObject(PLAYER2) && getType() != PLAYER2)
+			|| (_map->getTileAt(x, y)->containsObject(PLAYER3) && getType() != PLAYER3)
+			|| (_map->getTileAt(x, y)->containsObject(PLAYER4) && getType() != PLAYER4))
 			return false;
+
 		return true;
 	}
 
@@ -367,7 +434,7 @@ namespace object {
 			} else
 				return false;
 		} else {
-			if (x- 1 >= 0 && checkMoveToTile(x - 1, y)) {
+			if (x > 0 && checkMoveToTile(x - 1, y)) {
 				_destinationDirection = LEFT;
 				return true;
 			} else
@@ -387,7 +454,7 @@ namespace object {
 			} else
 				return false;
 		} else {
-			if (y - 1 >= 0 && checkMoveToTile(x, y - 1)) {
+			if (y > 0 && checkMoveToTile(x, y - 1)) {
 				_destinationDirection = FORWARD;
 				return true;
 			} else
@@ -417,13 +484,38 @@ namespace object {
 
 	bool AI::checkBombImpactAt(size_t x, size_t y, size_t xPlayer, size_t yPlayer) const
 	{
+		if (x > MAP_SIZE - 1 || x < 0 || y > MAP_SIZE - 1 || y < 0)
+			return false;
+
 		auto *tmp = dynamic_cast<object::Bomb*>(_map->getTileAt(x, y)->getObject(BOMB));
 
 		if (tmp != nullptr) {
-			if (abs(static_cast<int>(yPlayer - y)) <= tmp->getBlast())
+			if (abs(static_cast<int>(yPlayer - y)) <= tmp->getBlast() && abs(static_cast<int>(xPlayer - x)) <= tmp->getBlast()) {
+				if (y > yPlayer) {
+					for (int i = yPlayer + 1; i < y; i++) {
+						if (_map->getTileAt(xPlayer, i)->containsObject(BOX) || _map->getTileAt(xPlayer, i)->containsObject(WALL))
+							return false;
+					}
+				} else if (y < yPlayer) {
+					for (int i = y + 1; i < yPlayer; i++) {
+						if (_map->getTileAt(xPlayer, i)->containsObject(BOX) || _map->getTileAt(xPlayer, i)->containsObject(WALL))
+							return false;
+					}
+				}
+
+				if (x > xPlayer) {
+					for (int i = xPlayer + 1; i < x; i++) {
+						if (_map->getTileAt(i, yPlayer)->containsObject(BOX) || _map->getTileAt(i, yPlayer)->containsObject(WALL))
+							return false;
+					}
+				} else if (x < xPlayer) {
+					for (int i = x + 1; i < xPlayer; i++) {
+						if (_map->getTileAt(i, yPlayer)->containsObject(BOX) || _map->getTileAt(i, yPlayer)->containsObject(WALL))
+							return false;
+					}
+				}
 				return true;
-			if (abs(static_cast<int>(xPlayer - x)) <= tmp->getBlast())
-				return true;
+			}
 		}
 		return false;
 	}
