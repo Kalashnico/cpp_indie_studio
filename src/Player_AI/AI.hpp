@@ -26,15 +26,19 @@ class AI : public AObject {
 		vector2di getPosition() noexcept { return _player.getPosition(); }
 	private:
 		void moveCase(rotationDirection_e dir, float spd = MOVEMENT_SPEED);
-		void find_closest_player();
-		void set_direction();
-		bool move_X(vector2di tmp, bool invert);
-		bool move_Y(vector2di tmp, bool invert);
-		vector2di _closest_player;
+		void findClosestPlayer();
+		void setWayToPlayer();
+		bool moveToXPlayer(vector2di tmp, bool invert);
+		bool moveToYPlayer(vector2di tmp, bool invert);
+		void setSafeDestination();
+		bool checkIfSafeDestination(rotationDirection_e dir);
+		bool checkBombImpactAt(size_t x, size_t y, size_t xPlayer, size_t yPlayer) const;
+		void move();
+		vector2di _closestPlayer;
 		object::Player _player;
 		::map::Map *_map;
-		rotationDirection_e _to_go;
-		vector2df _co_to_go;
+		rotationDirection_e _destinationDirection;
+		vector2df _destinationCoordinates;
 		std::random_device _random;
 };
 

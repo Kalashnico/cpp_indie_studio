@@ -58,4 +58,8 @@ void Bomb::explode() noexcept
 	_map->explodeBomb(_posx, _posy, _blastSize);
 }
 
+	int Bomb::getBlast() noexcept
+	{
+		return _blastSize;
+	}
 }

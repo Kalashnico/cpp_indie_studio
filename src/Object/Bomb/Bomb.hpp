@@ -25,6 +25,7 @@ class Bomb : public AObject {
 
 		void detonate() noexcept { _detonate = true; }
 		void update() noexcept;
+		int getBlast() noexcept;
 
 	private:
 		void explode() noexcept;
