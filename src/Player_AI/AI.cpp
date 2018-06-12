@@ -42,13 +42,25 @@ namespace object {
 			this->findClosestPlayer();
 			_destinationCoordinates = _player.getPositionFloat();
 			setWayToPlayer();
-			if (_destinationDirection == NONE || !checkIfSafeDestination(_destinationDirection)) {
+
+			std::cout << "Destination before " << _destinationDirection << std::endl;
+
+			move();
+
+			if (!checkIfSafeDestination(_destinationDirection)) {
 				setSafeDestination();
+				_destinationCoordinates = _player.getPositionFloat();
+				move();
 			}
+
+			std::cout << "Destination after " << _destinationDirection << std::endl;
+
+			std::cout << "Destination coords x: " << _destinationCoordinates.X << " y: " << _destinationCoordinates.Y << std::endl;
+
 			if (_destinationDirection == NONE)
 				_player.placeBomb();
-			move();
 		}
+
 		if (_destinationDirection != NONE)
 			this->moveCase(_destinationDirection);
 	}
@@ -64,59 +76,69 @@ namespace object {
 
 	bool AI::checkIfSafeDestination(rotationDirection_e dir)
 	{
-		auto x = static_cast<size_t>(_destinationCoordinates.X);
-		auto y = static_cast<size_t>(_destinationCoordinates.Y);
+		auto pos = _player.getPositionFloat();
+		auto x = static_cast<size_t>(pos.X);
+		auto y = static_cast<size_t>(pos.Y);
 
 		switch (dir) {
 		case FORWARD:
-			if (y == 0)
+			if (y <= 0)
 				return false;
 			y -= 1;
+			break;
 		case BACKWARD:
-			if (y == MAP_SIZE - 1)
+			if (y >= MAP_SIZE - 1)
 				return false;
 			y += 1;
+			break;
 		case LEFT:
-			if (x == 0)
+			if (x <= 0)
 				return false;
 			x -= 1;
+			break;
 		case RIGHT:
-			if (x == MAP_SIZE - 1)
+			if (x >= MAP_SIZE - 1)
 				return false;
 			x += 1;
+			break;
 		case NONE:
 			break;
 		}
-		if (_map->getTileAt(x, y)->containsSomethings()) {
-			std::cout << _player.getType() << "test " << x << " " << y << std::endl;
+
+		std::cout << "x: " << x << " y: " << y << std::endl;
+
+		if (_map->getTileAt(x, y)->containsObject(WALL)
+			|| _map->getTileAt(x, y)->containsObject(BOX)) {
+			std::cout << "Stuck" << std::endl;
 			return false;
 		}
-		if ((y != 0 &&
-			_map->getTileAt(x, y - 1)->getObject(WALL) !=
-				nullptr) || (y != MAP_SIZE - 1 &&
-			_map->getTileAt(x, y + 1)->getObject(WALL) !=
-				nullptr)) {
+
+		if (_map->getTileAt(x, y)->containsObject(BOMB)
+			|| _map->getTileAt(x, y)->containsObject(FIRE)) {
+			std::cout << "Danger" << std::endl;
+			return false;
+		}
+
+		if ((y != 0 && !(_map->getTileAt(x, y - 1)->containsObject(WALL) || _map->getTileAt(x, y - 1)->containsObject(BOX)))
+			|| (y != MAP_SIZE - 1 && !(_map->getTileAt(x, y + 1)->containsObject(WALL) || _map->getTileAt(x, y + 1)->containsObject(BOX)))) {
 			for (size_t tmpY = 0; tmpY < MAP_SIZE - 1; ++tmpY) {
-				if (tmpY == y)
-					continue;
+				std::cout << "Checking y: " << tmpY << " for bomb impacts" << std::endl;
 				if (checkBombImpactAt(x, tmpY, x, y)) {
+					std::cout << "DangerImpactY" << std::endl;
 					return false;
 				}
 			}
 		}
-		if ((x != 0 &&
-			_map->getTileAt(x - 1, y)->getObject(WALL) !=
-				nullptr) || (x != MAP_SIZE - 1 &&
-			_map->getTileAt(x + 1, y)->getObject(WALL) !=
-				nullptr)) {
+
+		if ((x != 0 && !(_map->getTileAt(x - 1, y)->containsObject(WALL) || _map->getTileAt(x - 1, y)->containsObject(BOX)))
+			|| (x != MAP_SIZE - 1 && !(_map->getTileAt(x + 1, y)->containsObject(WALL) || _map->getTileAt(x + 1, y)->containsObject(BOX)))) {
 			for (size_t tmpX = 0; tmpX < MAP_SIZE - 1; ++tmpX) {
-				if (tmpX == x)
-					continue;
+				std::cout << "Checking x: " << tmpX << " for bomb impacts" << std::endl;
 				if (checkBombImpactAt(tmpX, y, x, y)) {
+					std::cout << "DangerImpactX" << std::endl;
 					return false;
 				}
 			}
-			return false;
 		}
 		return true;
 	}
@@ -212,8 +234,7 @@ namespace object {
 					object->getType() == PLAYER2 ||
 					object->getType() == PLAYER3 ||
 					object->getType() == PLAYER4) &&
-					object->getType() !=
-						_player.getType()) {
+					object->getType() != getType()) {
 					if (_closestPlayer.X == -1 ||
 						_closestPlayer.Y == -1) {
 						_closestPlayer = object->getPosition();
@@ -267,7 +288,7 @@ namespace object {
 			if (tmp.X + 1 <= MAP_SIZE - 1 &&
 				!_map->getTileAt(static_cast<size_t>(tmp.X + 1),
 					static_cast<size_t>(tmp.Y))->containsSomethings()) {
-				_destinationDirection = LEFT;
+				_destinationDirection = RIGHT;
 				return true;
 			} else {
 				return false;
@@ -276,7 +297,7 @@ namespace object {
 			if (tmp.X - 1 >= 0 &&
 				!_map->getTileAt(static_cast<size_t>(tmp.X - 1),
 					static_cast<size_t>(tmp.Y))->containsSomethings()) {
-				_destinationDirection = RIGHT;
+				_destinationDirection = LEFT;
 				return true;
 			} else {
 				return false;
@@ -314,12 +335,16 @@ namespace object {
 		switch (_destinationDirection) {
 		case BACKWARD:
 			_destinationCoordinates.Y += 1;
+			break;
 		case FORWARD:
 			_destinationCoordinates.Y -= 1;
+			break;
 		case LEFT:
 			_destinationCoordinates.X -= 1;
+			break;
 		case RIGHT:
 			_destinationCoordinates.X += 1;
+			break;
 		case NONE:
 			break;
 		}
