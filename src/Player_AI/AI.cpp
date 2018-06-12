@@ -69,9 +69,11 @@ namespace object {
 	{
 		auto position = _player.getPosition();
 
-		if (position.X != oldx || position.Y != oldy)
-			_map->movePlayer(getType(), oldx, oldy, position.X,
-				position.Y);
+		if (position.X != oldx || position.Y != oldy) {
+			_map->movePlayer(getType(), oldx, oldy, position.X, position.Y);
+			if (_map->getTileAt(position.X, position.Y)->containsObject(LOOT))
+				_player.pickupLoot(position);
+		}
 	}
 
 	bool AI::checkIfSafeDestination(rotationDirection_e dir)
@@ -119,13 +121,45 @@ namespace object {
 			return false;
 		}
 
+		if (checkBombDanger(x, y))
+			return false;
+
+		return true;
+	}
+
+	bool AI::checkBombDanger(size_t x, size_t y, rotationDirection_e dir)
+	{
+		switch (dir) {
+		case FORWARD:
+			if (y <= 0)
+				return false;
+			y -= 1;
+			break;
+		case BACKWARD:
+			if (y >= MAP_SIZE - 1)
+				return false;
+			y += 1;
+			break;
+		case LEFT:
+			if (x <= 0)
+				return false;
+			x -= 1;
+			break;
+		case RIGHT:
+			if (x >= MAP_SIZE - 1)
+				return false;
+			x += 1;
+			break;
+		case NONE:
+			break;
+		}
+
 		if ((y != 0 && !(_map->getTileAt(x, y - 1)->containsObject(WALL) || _map->getTileAt(x, y - 1)->containsObject(BOX)))
 			|| (y != MAP_SIZE - 1 && !(_map->getTileAt(x, y + 1)->containsObject(WALL) || _map->getTileAt(x, y + 1)->containsObject(BOX)))) {
 			for (size_t tmpY = 0; tmpY < MAP_SIZE - 1; ++tmpY) {
-				std::cout << "Checking y: " << tmpY << " for bomb impacts" << std::endl;
 				if (checkBombImpactAt(x, tmpY, x, y)) {
 					std::cout << "DangerImpactY" << std::endl;
-					return false;
+					return true;
 				}
 			}
 		}
@@ -133,14 +167,14 @@ namespace object {
 		if ((x != 0 && !(_map->getTileAt(x - 1, y)->containsObject(WALL) || _map->getTileAt(x - 1, y)->containsObject(BOX)))
 			|| (x != MAP_SIZE - 1 && !(_map->getTileAt(x + 1, y)->containsObject(WALL) || _map->getTileAt(x + 1, y)->containsObject(BOX)))) {
 			for (size_t tmpX = 0; tmpX < MAP_SIZE - 1; ++tmpX) {
-				std::cout << "Checking x: " << tmpX << " for bomb impacts" << std::endl;
 				if (checkBombImpactAt(tmpX, y, x, y)) {
 					std::cout << "DangerImpactX" << std::endl;
-					return false;
+					return true;
 				}
 			}
 		}
-		return true;
+
+		return false;
 	}
 
 	void AI::setSafeDestination()
@@ -282,8 +316,33 @@ namespace object {
 		}
 	}
 
-	bool AI::checkMoveToTile(size_t x, size_t y)
+	bool AI::checkMoveToTile(size_t x, size_t y, rotationDirection_e dir)
 	{
+		switch (dir) {
+		case FORWARD:
+			if (y <= 0)
+				return false;
+			y -= 1;
+			break;
+		case BACKWARD:
+			if (y >= MAP_SIZE - 1)
+				return false;
+			y += 1;
+			break;
+		case LEFT:
+			if (x <= 0)
+				return false;
+			x -= 1;
+			break;
+		case RIGHT:
+			if (x >= MAP_SIZE - 1)
+				return false;
+			x += 1;
+			break;
+		case NONE:
+			break;
+		}
+
 		if (_map->getTileAt(x, y)->containsObject(WALL)
 			|| _map->getTileAt(x, y)->containsObject(BOX)
 			|| _map->getTileAt(x, y)->containsObject(BOMB)

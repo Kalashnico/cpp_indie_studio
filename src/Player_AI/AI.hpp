@@ -28,11 +28,12 @@ class AI : public AObject {
 		void moveCase(rotationDirection_e dir, float spd = MOVEMENT_SPEED);
 		void findClosestPlayer();
 		void setWayToPlayer();
-		bool checkMoveToTile(size_t x, size_t y);
+		bool checkMoveToTile(size_t x, size_t y, rotationDirection_e dir = NONE);
 		bool moveToXPlayer(vector2di tmp, bool invert);
 		bool moveToYPlayer(vector2di tmp, bool invert);
 		void setSafeDestination();
 		bool checkIfSafeDestination(rotationDirection_e dir);
+		bool checkBombDanger(size_t x, size_t y, rotationDirection_e dir = NONE);
 		bool checkBombImpactAt(size_t x, size_t y, size_t xPlayer, size_t yPlayer) const;
 		void move();
 		vector2di _closestPlayer;
