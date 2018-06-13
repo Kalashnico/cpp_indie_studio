@@ -53,7 +53,7 @@ namespace object {
 				move();
 			}
 
-			if (isSafe(pos.X, pos.Y) && (_destinationDirection == NONE || isBoxNearby(pos.X, pos.Y, _player.getBlastRadius()))) {
+			if (isSafe(pos.X, pos.Y) && (_destinationDirection == NONE || (isBoxNearby(pos.X, pos.Y, _player.getBlastRadius()) && !_player.canWalkThroughBoxes()))) {
 				_destinationDirection = NONE;
 				_player.placeBomb();
 			}
