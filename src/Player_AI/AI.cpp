@@ -255,7 +255,7 @@ namespace object {
 		auto sY = static_cast<size_t>(_destinationCoordinates.Y);
 
 
-		if (_map->getTileAt(sX, sY)->containsObject(BOX)
+		if ((_map->getTileAt(sX, sY)->containsObject(BOX) && !_player.canWalkThroughBoxes())
 			|| _map->getTileAt(sX, sY)->containsObject(BOMB)
 			|| _map->getTileAt(sX, sY)->containsObject(FIRE)
 			|| (_map->getTileAt(sX, sY)->containsObject(PLAYER1) && getType() != PLAYER1)
