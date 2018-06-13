@@ -36,7 +36,7 @@ class AI : public AObject {
 		bool checkIfSafeDestination(rotationDirection_e dir);
 		bool checkBombDanger(size_t x, size_t y, rotationDirection_e dir = NONE);
 		bool checkBombImpactAt(size_t x, size_t y, size_t xPlayer, size_t yPlayer) const;
-		bool isBoxNearby(size_t x, size_t y, int bombSize);
+		bool isBoxNearby(int x, int y, int bombSize);
 		void move();
 		vector2di _closestPlayer;
 		object::Player _player;
