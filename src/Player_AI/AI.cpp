@@ -516,16 +516,16 @@ namespace object {
 	bool AI::isBoxNearby(size_t x, size_t y, int bombSize)
 	{
 		for (int i = 0 ; i < bombSize ; i++) {
-			if (x != 0 &&
+			if (x - i != 0 &&
 				_map->getTileAt(x - (i + 1), y)->containsObject(BOX))
 				return true;
-			else if (x != MAP_SIZE - 1 &&
+			else if (x + i != MAP_SIZE - 1 &&
 				_map->getTileAt(x + (i + 1), y)->containsObject(BOX))
 				return true;
-			else if (y != 0 &&
+			else if (y - i != 0 &&
 				_map->getTileAt(x, y - (i + 1))->containsObject(BOX))
 				return true;
-			else if (y != MAP_SIZE - 1 &&
+			else if (y + i != MAP_SIZE - 1 &&
 				_map->getTileAt(x, y + (i + 1))->containsObject(BOX))
 				return true;
 		}
