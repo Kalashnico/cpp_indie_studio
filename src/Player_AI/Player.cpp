@@ -334,4 +334,9 @@ namespace object {
 		_map->removeObjectFromTile(tile.X, tile.Y, getType());
 		_gfx->deleteElement("Player " + std::to_string(_playerNb));
 	}
+
+	int Player::getBlastRadius() noexcept
+	{
+		return _blastRadius;
+	}
 }

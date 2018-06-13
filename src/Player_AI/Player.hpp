@@ -104,7 +104,7 @@ namespace object {
 			void setAbsoluteRotation(
 				enum rotationDirection_e rotation
 			);
-
+			int getBlastRadius() noexcept;
 			bool checkDeath() noexcept;
 			void die() noexcept;
 

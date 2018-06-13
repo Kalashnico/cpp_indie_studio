@@ -53,8 +53,10 @@ namespace object {
 				move();
 			}
 
-			if (_destinationDirection == NONE && isSafe(pos.X, pos.Y))
+			if (isSafe(pos.X, pos.Y) && (_destinationDirection == NONE || isBoxNearby(pos.X, pos.Y, _player.getBlastRadius()))) {
+				_destinationDirection = NONE;
 				_player.placeBomb();
+			}
 		}
 
 		if (_destinationDirection != NONE)
@@ -117,10 +119,7 @@ namespace object {
 			return false;
 		}
 
-		if (checkBombDanger(x, y))
-			return false;
-
-		return true;
+		return !checkBombDanger(x, y);
 	}
 
 	bool AI::checkBombDanger(size_t x, size_t y, rotationDirection_e dir)
@@ -242,13 +241,10 @@ namespace object {
 			|| (y > 0 && checkBombDanger(x, y))))
 			return false;
 
-		if ((x < MAP_SIZE - 1 && _map->getTileAt(x + 1, y)->containsObject(FIRE))
-			|| ((x > 0 && _map->getTileAt(x - 1, y)->containsObject(FIRE)))
-			|| (y < MAP_SIZE - 1 && _map->getTileAt(x, y + 1)->containsObject(FIRE))
-			|| (y > 0 && _map->getTileAt(x, y - 1)->containsObject(FIRE)))
-			return false;
-
-		return true;
+		return !((x < MAP_SIZE - 1 && _map->getTileAt(x + 1, y)->containsObject(FIRE))
+		|| ((x > 0 && _map->getTileAt(x - 1, y)->containsObject(FIRE)))
+		|| (y < MAP_SIZE - 1 && _map->getTileAt(x, y + 1)->containsObject(FIRE))
+		|| (y > 0 && _map->getTileAt(x, y - 1)->containsObject(FIRE)));
 	}
 
 	void AI::moveCase(rotationDirection_e dir, float spd)
@@ -409,17 +405,14 @@ namespace object {
 			break;
 		}
 
-		if (_map->getTileAt(x, y)->containsObject(WALL)
-			|| (_map->getTileAt(x, y)->containsObject(BOX) && !_player.canWalkThroughBoxes())
-			|| _map->getTileAt(x, y)->containsObject(BOMB)
-			|| _map->getTileAt(x, y)->containsObject(FIRE)
-			|| (_map->getTileAt(x, y)->containsObject(PLAYER1) && getType() != PLAYER1)
-			|| (_map->getTileAt(x, y)->containsObject(PLAYER2) && getType() != PLAYER2)
-			|| (_map->getTileAt(x, y)->containsObject(PLAYER3) && getType() != PLAYER3)
-			|| (_map->getTileAt(x, y)->containsObject(PLAYER4) && getType() != PLAYER4))
-			return false;
-
-		return true;
+		return !(_map->getTileAt(x, y)->containsObject(WALL)
+		|| (_map->getTileAt(x, y)->containsObject(BOX) && !_player.canWalkThroughBoxes())
+		|| _map->getTileAt(x, y)->containsObject(BOMB)
+		|| _map->getTileAt(x, y)->containsObject(FIRE)
+		|| (_map->getTileAt(x, y)->containsObject(PLAYER1) && getType() != PLAYER1)
+		|| (_map->getTileAt(x, y)->containsObject(PLAYER2) && getType() != PLAYER2)
+		|| (_map->getTileAt(x, y)->containsObject(PLAYER3) && getType() != PLAYER3)
+		|| (_map->getTileAt(x, y)->containsObject(PLAYER4) && getType() != PLAYER4));
 	}
 
 	bool AI::moveToXPlayer(vector2di tmp, bool invert)
@@ -520,4 +513,22 @@ namespace object {
 		return false;
 	}
 
+	bool AI::isBoxNearby(size_t x, size_t y, int bombSize)
+	{
+		for (int i = 0 ; i < bombSize ; i++) {
+			if (x != 0 &&
+				_map->getTileAt(x - (i + 1), y)->containsObject(BOX))
+				return true;
+			else if (x != MAP_SIZE - 1 &&
+				_map->getTileAt(x + (i + 1), y)->containsObject(BOX))
+				return true;
+			else if (y != 0 &&
+				_map->getTileAt(x, y - (i + 1))->containsObject(BOX))
+				return true;
+			else if (y != MAP_SIZE - 1 &&
+				_map->getTileAt(x, y + (i + 1))->containsObject(BOX))
+				return true;
+		}
+		return false;
+	}
 }
