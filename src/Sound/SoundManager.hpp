@@ -8,24 +8,27 @@
 #include <string>
 #include <SFML/Audio.hpp>
 
+namespace sound {
+
 enum soundType {
 	BACKGROUND,
 	MENU,
 	CLICK,
 	BOMB,
 	LOOT,
+	DEATH
 };
-
 
 class SoundManager {
 	public:
-		static SoundManager &getInstance() noexcept { static SoundManager _instance; return _instance; };
+		static SoundManager &getInstance() noexcept { static SoundManager instance; return instance; };
 
 		SoundManager(const SoundManager&) = delete;
 		void operator=(const SoundManager&) = delete;
 
 		void playBomb() noexcept;
 		void playLoot() noexcept;
+		void playDeath() noexcept;
 		void playBackground() noexcept;
 		void playClick() noexcept;
 
@@ -35,3 +38,5 @@ class SoundManager {
 
 		std::map<soundType, sf::Music>	_soundsList;
 };
+
+}
