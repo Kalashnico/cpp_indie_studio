@@ -19,7 +19,10 @@ enum soundType {
 
 class SoundManager {
 	public:
-		static SoundManager &getInstance() noexcept { return _instance; };
+		static SoundManager &getInstance() noexcept { static SoundManager _instance; return _instance; };
+
+		SoundManager(const SoundManager&) = delete;
+		void operator=(const SoundManager&) = delete;
 
 		void playBomb() noexcept;
 		void playLoot() noexcept;
@@ -30,6 +33,5 @@ class SoundManager {
 		SoundManager();
 		~SoundManager();
 
-		static SoundManager	_instance;
 		std::map<soundType, sf::Music>	_soundsList;
 };
