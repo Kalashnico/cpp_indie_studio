@@ -1,6 +1,7 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.9)
 PROJECT(bomberman)
 
+set(CMAKE_CXX_STANDARD 17)
 SET(CMAKE_CXX_FLAGS_RELEASE "-O3")
 SET(CMAKE_CXX_FLAGS_DEBUG  "-g")
 SET(CMAKE_CXX_FLAGS "-lXxf86vm -lpthread -lsfml-audio")
