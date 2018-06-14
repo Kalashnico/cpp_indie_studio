@@ -8,10 +8,9 @@ int main()
 {
 	SoundManager	&soundManager = SoundManager::getInstance();
 
-	soundManager.playBackground();
-
-	while(1);
-
-	return 0;
+	//	soundManager.playBackground();
+       	  soundManager.playBomb();
+	  while(1);
+       	return 0;
 
 }

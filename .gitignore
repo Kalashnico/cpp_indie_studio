@@ -8,3 +8,5 @@
 !include/
 !include/Irrlicht/*.h
 !lib/libIrrlicht.a
+!media/
+!media/**
