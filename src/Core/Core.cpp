@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "Core.hpp"
+#include "SoundManager.hpp"
 
 namespace core {
 
@@ -67,6 +68,9 @@ Core::~Core()
 
 void Core::run() noexcept
 {
+
+	sound::SoundManager::getInstance().playBackground();
+
 	_begin = std::clock();
 
 	while (_gfx.isRunning() && !_map.shouldEndGame()) {
