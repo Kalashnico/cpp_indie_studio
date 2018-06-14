@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "Bomb.hpp"
+#include "SoundManager.hpp"
 
 namespace object {
 
@@ -54,6 +55,7 @@ void Bomb::explode() noexcept
 
 	_hasExploded = true;
 
+	sound::SoundManager::getInstance().playBomb();
 	_parent->bombExploaded();
 	_map->explodeBomb(_posx, _posy, _blastSize);
 }
