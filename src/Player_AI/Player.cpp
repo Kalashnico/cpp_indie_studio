@@ -12,6 +12,7 @@
 #include "Player.hpp"
 #include "Bomb.hpp"
 #include "CustomEventReceiver.hpp"
+#include "SoundManager.hpp"
 
 
 namespace object {
@@ -102,6 +103,7 @@ namespace object {
 				std::cout << "This isn't possible" << std::endl;
 		}
 
+		sound::SoundManager::getInstance().playLoot();
 		_map->removeObjectFromTile(tilePos.X, tilePos.Y, LOOT);
 	}
 
@@ -322,6 +324,8 @@ namespace object {
 	{
 		if (_dead)
 			return;
+
+		sound::SoundManager::getInstance().playDeath();
 
 		_dead = true;
 
