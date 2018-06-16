@@ -13,14 +13,6 @@
 #include "AObject.hpp"
 #include "Map.hpp"
 
-using namespace irr;
-
-using namespace irr::core;
-using namespace scene;
-using namespace video;
-using namespace io;
-using namespace gui;
-
 enum rotationDirection_e {
 	LEFT,
 	RIGHT,
@@ -31,7 +23,7 @@ enum rotationDirection_e {
 
 struct playerSpriteInfo_s {
 	std::string path;
-	vector3df scale;
+	irr::core::vector3df scale;
 };
 
 using playerSpriteInfo_t = playerSpriteInfo_s;
@@ -51,7 +43,7 @@ namespace object {
 			Gfx *_gfx;
 			bool _useController;
 			size_t _playerNb;
-			IAnimatedMeshSceneNode *_playerNode;
+			irr::scene::IAnimatedMeshSceneNode *_playerNode;
 
 			// Rotation
 			std::thread _rotationThread;
@@ -84,17 +76,17 @@ namespace object {
 			void update() noexcept;
 			void updatePosition(size_t oldx, size_t oldy) noexcept;
 
-			void pickupLoot(vector2di tilePos) noexcept;
+			void pickupLoot(irr::core::vector2di tilePos) noexcept;
 
 			void bombExploaded() noexcept;
 			void placeBomb() noexcept;
 
-			vector2di getPosition() noexcept;
-			vector2df getPositionFloat();
+			irr::core::vector2di getPosition() noexcept;
+			irr::core::vector2df getPositionFloat();
 
 			bool canWalkThroughBoxes() const noexcept { return _walkThroughBoxes; }
 
-			bool hasCollided(vector2di tilePos) noexcept;
+			bool hasCollided(irr::core::vector2di tilePos) noexcept;
 			void move(enum rotationDirection_e dir = FORWARD,
 				float spd = MOVEMENT_SPEED
 			);
@@ -108,6 +100,6 @@ namespace object {
 			bool checkDeath() noexcept;
 			void die() noexcept;
 
-			IAnimatedMeshSceneNode *getNode() const;
+			irr::scene::IAnimatedMeshSceneNode *getNode() const;
 	};
 };

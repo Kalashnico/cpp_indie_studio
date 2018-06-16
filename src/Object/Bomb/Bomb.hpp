@@ -21,7 +21,7 @@ class Bomb : public AObject {
 		Bomb(int posx, int posy, int blast, ::map::Map *map, Gfx *gfx, Player *parent);
 		~Bomb();
 
-		IAnimatedMeshSceneNode *getNode() const { return _node; }
+		irr::scene::IAnimatedMeshSceneNode *getNode() const { return _node; }
 
 		void detonate() noexcept { _detonate = true; }
 		void update() noexcept;
@@ -36,7 +36,7 @@ class Bomb : public AObject {
 		::map::Map *_map;
 		Gfx *_gfx;
 		Player *_parent;
-		IAnimatedMeshSceneNode *_node;
+		irr::scene::IAnimatedMeshSceneNode *_node;
 
 		std::clock_t _begin;
 

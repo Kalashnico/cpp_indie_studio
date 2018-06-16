@@ -16,8 +16,8 @@ Fire::Fire(size_t posx, size_t posy, ::map::Map *map, Gfx *gfx)
 	_dissipated{false}
 {
 	auto modelPath = "./media/models/fire/WpnMetaridleyFireballS.obj";
-	vector3df modelSize = {0.25f, 0.25f, 0.25f};
-	vector3df pos = {(float)posy, 0.f, (float)posx};
+	irr::core::vector3df modelSize = {0.25f, 0.25f, 0.25f};
+	irr::core::vector3df pos = {(float)posy, 0.f, (float)posx};
 	pos -= 6.f;
 	pos *= 4.f;
 	pos.Y = 0.1f;

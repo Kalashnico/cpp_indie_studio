@@ -11,14 +11,6 @@
 #define WIN_WIDTH	1920
 #define WIN_HEIGHT	1080
 
-using namespace irr;
-
-using namespace irr::core;
-using namespace scene;
-using namespace video;
-using namespace io;
-using namespace gui;
-
 enum GamepadButtons {
 	GAMEPAD_A = 0,
 	GAMEPAD_START =  7
@@ -26,23 +18,23 @@ enum GamepadButtons {
 
 class Gfx {
 	private:
-		IrrlichtDevice *_device;
-		IVideoDriver *_videoDriver;
-		IGUIEnvironment *_guiEnv;
-		ISceneManager *_sceneManager;
-		IEventReceiver *_eventReceiver;
-		std::unordered_map<std::string, ISceneNode *> _nodeCache;
+		irr::IrrlichtDevice *_device;
+		irr::video::IVideoDriver *_videoDriver;
+		irr::gui::IGUIEnvironment *_guiEnv;
+		irr::scene::ISceneManager *_sceneManager;
+		irr::IEventReceiver *_eventReceiver;
+		std::unordered_map<std::string, irr::scene::ISceneNode *> _nodeCache;
 
 		bool _gamepadActive;
 
-		EKEY_CODE translateButton(GamepadButtons button) const noexcept;
+		irr::EKEY_CODE translateButton(GamepadButtons button) const noexcept;
 
 		void setupGamepads() noexcept;
 
 	public:
 		Gfx();
 
-		explicit Gfx(IEventReceiver &receiver);
+		explicit Gfx(irr::IEventReceiver &receiver);
 
 		virtual ~Gfx();
 
@@ -50,41 +42,41 @@ class Gfx {
 
 		bool isRunning();
 
-		void drawStaticText(stringw const &str, rect<s32> const &pos);
+		void drawStaticText(irr::core::stringw const &str, irr::core::rect<irr::s32> const &pos);
 
-		ISceneManager *getSceneManager() const;
+		irr::scene::ISceneManager *getSceneManager() const;
 
-		IAnimatedMeshSceneNode *drawMesh(std::string const &path,
+		irr::scene::IAnimatedMeshSceneNode *drawMesh(std::string const &path,
 			std::string const &material, bool lighting,
 			const std::string &name,
-			const vector3df &pos = {0.0f, 0.0f, 0.0f},
-			const vector3df &scale = {1.0f, 1.0f, 1.0f}
+			const irr::core::vector3df &pos = {0.0f, 0.0f, 0.0f},
+			const irr::core::vector3df &scale = {1.0f, 1.0f, 1.0f}
 		);
 
 		void addCameraFPS();
 
-		void setEventReceiver(IEventReceiver &receiver);
+		void setEventReceiver(irr::IEventReceiver &receiver);
 
-		bool isKeyDown(EKEY_CODE keyCode) const noexcept;
+		bool isKeyDown(irr::EKEY_CODE keyCode) const noexcept;
 
-		f32 getXJoystickStatus(int playerNb) const noexcept;
+		irr::f32 getXJoystickStatus(int playerNb) const noexcept;
 
-		f32 getYJoystickStatus(int playerNb) const noexcept;
+		irr::f32 getYJoystickStatus(int playerNb) const noexcept;
 
 		bool isGamepadButtonDown(int playerNb, GamepadButtons button) const noexcept;
 
 		bool isGamepadActive() const noexcept { return _gamepadActive; }
 
-		void moveElement(std::string const &name, vector3df const &vec,
+		void moveElement(std::string const &name, irr::core::vector3df const &vec,
 			float speed = 100.0
 		);
 
-		void rotateElement(std::string const &name, vector3df const &vec
+		void rotateElement(std::string const &name, irr::core::vector3df const &vec
 		);
 
 		void deleteElement(std::string const &name);
 
-		void addLight(vector3df const &pos, SColorf const &color,
+		void addLight(irr::core::vector3df const &pos, irr::video::SColorf const &color,
 			float radius = 1000.0f
 		);
 

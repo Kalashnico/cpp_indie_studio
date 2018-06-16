@@ -14,10 +14,10 @@ Core::Core(int numPlayers)
 	_gfx.setEventReceiver(_eventReceiver);
 	_map.setGfx(&_gfx);
 
-	vector3df tilePos1 = {0.f, 0.f, 0.f};
-	vector3df tilePos2 = {0.f, 0.f, MAP_SIZE - 1.f};
-	vector3df tilePos3 = {MAP_SIZE - 1.f, 0.f, 0.f};
-	vector3df tilePos4 = {MAP_SIZE - 1.f, 0.f, MAP_SIZE - 1.f};
+	irr::core::vector3df tilePos1 = {0.f, 0.f, 0.f};
+	irr::core::vector3df tilePos2 = {0.f, 0.f, MAP_SIZE - 1.f};
+	irr::core::vector3df tilePos3 = {MAP_SIZE - 1.f, 0.f, 0.f};
+	irr::core::vector3df tilePos4 = {MAP_SIZE - 1.f, 0.f, MAP_SIZE - 1.f};
 	auto iPos1 = tileToIrrlicht(tilePos1);
 	auto iPos2 = tileToIrrlicht(tilePos2);
 	auto iPos3 = tileToIrrlicht(tilePos3);
@@ -48,10 +48,10 @@ Core::Core(int numPlayers)
 
 	try {
 		_gfx.addCameraFPS();
-		_gfx.addLight(vector3df(-30, 30, -30), SColorf(1.0f, 1.0f, 1.0f), 20);
-		_gfx.addLight(vector3df(-30, 30, 30), SColorf(1.0f, 1.0f, 1.0f), 20);
-		_gfx.addLight(vector3df(30, 30, -30), SColorf(1.0f, 1.0f, 1.0f), 20);
-		_gfx.addLight(vector3df(30, 30, 30), SColorf(1.0f, 1.0f, 1.0f), 20);
+		_gfx.addLight(irr::core::vector3df(-30, 30, -30), irr::video::SColorf(1.0f, 1.0f, 1.0f), 20);
+		_gfx.addLight(irr::core::vector3df(-30, 30, 30), irr::video::SColorf(1.0f, 1.0f, 1.0f), 20);
+		_gfx.addLight(irr::core::vector3df(30, 30, -30), irr::video::SColorf(1.0f, 1.0f, 1.0f), 20);
+		_gfx.addLight(irr::core::vector3df(30, 30, 30), irr::video::SColorf(1.0f, 1.0f, 1.0f), 20);
 	} catch (...) {
 		std::cerr << "Something went wrong" << std::endl;
 		return;
@@ -75,7 +75,7 @@ void Core::run() noexcept
 
 	while (_gfx.isRunning() && !_map.shouldEndGame()) {
 
-		if (_gfx.isKeyDown(KEY_ESCAPE))
+		if (_gfx.isKeyDown(irr::KEY_ESCAPE))
 			return;
 
 		if (((std::clock() - _begin) / (double) CLOCKS_PER_SEC) < (1.0 / 60.0))
@@ -88,7 +88,7 @@ void Core::run() noexcept
 	}
 }
 
-vector3df Core::tileToIrrlicht(vector3df tilePos) noexcept
+irr::core::vector3df Core::tileToIrrlicht(irr::core::vector3df tilePos) noexcept
 {
 	auto pos = tilePos;
 	pos -= 6.f;

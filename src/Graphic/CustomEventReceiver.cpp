@@ -15,7 +15,7 @@ CustomEventReceiver::~CustomEventReceiver()
 {
 }
 
-bool CustomEventReceiver::OnEvent(const SEvent &event)
+bool CustomEventReceiver::OnEvent(const irr::SEvent &event)
 {
 	if (event.EventType == irr::EET_KEY_INPUT_EVENT)
 		_keyIsDown[event.KeyInput.Key] = event.KeyInput.PressedDown;
@@ -34,25 +34,25 @@ bool CustomEventReceiver::OnEvent(const SEvent &event)
 	return false;
 }
 
-bool CustomEventReceiver::isKeyDown(EKEY_CODE keyCode) const noexcept
+bool CustomEventReceiver::isKeyDown(irr::EKEY_CODE keyCode) const noexcept
 {
 	return _keyIsDown[keyCode];
 }
 
-f32 CustomEventReceiver::getXJoystickStatus(int joystick) const noexcept
+irr::f32 CustomEventReceiver::getXJoystickStatus(int joystick) const noexcept
 {
-	f32 value = (f32)_joystickStates[joystick].Axis[SEvent::SJoystickEvent::AXIS_X] / 32767.f;
+	irr::f32 value = (irr::f32)_joystickStates[joystick].Axis[irr::SEvent::SJoystickEvent::AXIS_X] / 32767.f;
 
-	if (fabs(value) < (f32)DEAD_ZONE)
+	if (fabs(value) < (irr::f32)DEAD_ZONE)
 		value = 0.f;
 	return value;
 }
 
-f32 CustomEventReceiver::getYJoystickStatus(int joystick) const noexcept
+irr::f32 CustomEventReceiver::getYJoystickStatus(int joystick) const noexcept
 {
-	f32 value = (f32)_joystickStates[joystick].Axis[SEvent::SJoystickEvent::AXIS_Y] / 32767.f;
+	irr::f32 value = (irr::f32)_joystickStates[joystick].Axis[irr::SEvent::SJoystickEvent::AXIS_Y] / 32767.f;
 
-	if (fabs(value) < (f32)DEAD_ZONE)
+	if (fabs(value) < (irr::f32)DEAD_ZONE)
 		value = 0.f;
 	return value;
 }

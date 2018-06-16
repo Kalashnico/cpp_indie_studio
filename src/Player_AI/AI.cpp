@@ -249,7 +249,7 @@ namespace object {
 
 	void AI::moveCase(rotationDirection_e dir, float spd)
 	{
-		const vector2df tmp = _player.getPositionFloat();
+		const irr::core::vector2df tmp = _player.getPositionFloat();
 
 		auto sX = static_cast<size_t>(_destinationCoordinates.X);
 		auto sY = static_cast<size_t>(_destinationCoordinates.Y);
@@ -357,7 +357,7 @@ namespace object {
 	{
 		std::mt19937 engine(_random());
 		std::uniform_int_distribution<> distribution(0, 1);
-		vector2di tmp = _player.getPosition();
+		irr::core::vector2di tmp = _player.getPosition();
 		int tryRemainingX = 2;
 		int tryRemainingY = 2;
 		bool invertX = false;
@@ -415,7 +415,7 @@ namespace object {
 		|| (_map->getTileAt(x, y)->containsObject(PLAYER4) && getType() != PLAYER4));
 	}
 
-	bool AI::moveToXPlayer(vector2di tmp, bool invert)
+	bool AI::moveToXPlayer(irr::core::vector2di tmp, bool invert)
 	{
 		auto x = static_cast<size_t>(tmp.X);
 		auto y = static_cast<size_t>(tmp.Y);
@@ -435,7 +435,7 @@ namespace object {
 		}
 	}
 
-	bool AI::moveToYPlayer(vector2di tmp, bool invert)
+	bool AI::moveToYPlayer(irr::core::vector2di tmp, bool invert)
 	{
 		auto x = static_cast<size_t>(tmp.X);
 		auto y = static_cast<size_t>(tmp.Y);

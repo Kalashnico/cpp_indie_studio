@@ -20,13 +20,13 @@ class Box : public AObject {
 		~Box() ;
 
 		std::unique_ptr<Loot> getLoot() noexcept { return std::move(_loot); }
-		IAnimatedMeshSceneNode *getNode() const { return _node; }
+		irr::scene::IAnimatedMeshSceneNode *getNode() const { return _node; }
 
 	private:
 		std::unique_ptr<Loot> _loot;
 		::map::Map *_map;
 		Gfx *_gfx;
-		IAnimatedMeshSceneNode *_node;
+		irr::scene::IAnimatedMeshSceneNode *_node;
 
 		int _posx;
 		int _posy;

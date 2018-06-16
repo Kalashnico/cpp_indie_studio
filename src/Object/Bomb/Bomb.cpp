@@ -21,8 +21,8 @@ Bomb::Bomb(int posx, int posy, int blast, ::map::Map *map, Gfx *gfx, Player *par
 	_hasExploded{false}
 {
 	auto modelPath = "./media/models/bomb/bomb.obj";
-	vector3df modelSize = {0.5f, 0.5f, 0.5f};
-	vector3df pos = {(float)posy, 0.f, (float)posx};
+	irr::core::vector3df modelSize = {0.5f, 0.5f, 0.5f};
+	irr::core::vector3df pos = {(float)posy, 0.f, (float)posx};
 	pos -= 6.f;
 	pos *= 4.f;
 	pos.Y = 0.1f;

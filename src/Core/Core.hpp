@@ -25,7 +25,7 @@ class Core {
 		std::clock_t _begin;
 
 		bool shouldEndGame() const noexcept;
-		vector3df tileToIrrlicht(vector3df tilePos) noexcept;
+		irr::core::vector3df tileToIrrlicht(irr::core::vector3df tilePos) noexcept;
 };
 
 }

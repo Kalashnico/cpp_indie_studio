@@ -22,7 +22,7 @@ class Fire : public object::AObject {
 		void resetGfx() noexcept;
 
 		void update() noexcept;
-		IAnimatedMeshSceneNode *getNode() const { return _node; }
+		irr::scene::IAnimatedMeshSceneNode *getNode() const { return _node; }
 
 	private:
 		void dissipate() noexcept;
@@ -31,7 +31,7 @@ class Fire : public object::AObject {
 		size_t _posy;
 		::map::Map *_map;
 		Gfx *_gfx;
-		IAnimatedMeshSceneNode *_node;
+		irr::scene::IAnimatedMeshSceneNode *_node;
 
 		bool _dissipated;
 		std::clock_t _begin;

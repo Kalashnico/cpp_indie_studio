@@ -81,7 +81,7 @@ namespace object {
 		}
 	}
 
-	void Player::pickupLoot(vector2di tilePos) noexcept
+	void Player::pickupLoot(irr::core::vector2di tilePos) noexcept
 	{
 		auto loot = _map->getTileAt(tilePos.X, tilePos.Y)->getObject(LOOT);
 		auto lootCategory = loot->getLootCategory();
@@ -214,7 +214,7 @@ namespace object {
 	 * Movements
 	 */
 
-	bool Player::hasCollided(vector2di tilePos) noexcept
+	bool Player::hasCollided(irr::core::vector2di tilePos) noexcept
 	{
 		auto position = getPosition();
 
@@ -236,8 +236,8 @@ namespace object {
 
 	void Player::move(rotationDirection_e dir, float spd)
 	{
-		vector3df vec = {0, 0, 0};
-		vector3df toAdd = {0, 0, 0};
+		irr::core::vector3df vec = {0, 0, 0};
+		irr::core::vector3df toAdd = {0, 0, 0};
 		auto angle = getAngleFromDirection(dir);
 		setAbsoluteRotation(angle);
 
@@ -275,8 +275,8 @@ namespace object {
 		auto newPos = _playerNode->getPosition() + (vec + toAdd);
 		newPos /= 4;
 		newPos += 7.5f;
-		vector2di tilePos = {static_cast<s32>(newPos.Z - 1),
-			static_cast<s32>(newPos.X - 1)};
+		irr::core::vector2di tilePos = {static_cast<irr::s32>(newPos.Z - 1),
+			static_cast<irr::s32>(newPos.X - 1)};
 
 		if (hasCollided(tilePos))
 			return;
@@ -288,25 +288,25 @@ namespace object {
 	 * Getters
 	 */
 
-	vector2di Player::getPosition() noexcept
+	irr::core::vector2di Player::getPosition() noexcept
 	{
 		auto vectorFloat = this->_playerNode->getPosition() / 4;
 		vectorFloat += 6.5f;
-		vector2di value = {static_cast<s32>(vectorFloat.Z),
-			static_cast<s32>(vectorFloat.X)};
+		irr::core::vector2di value = {static_cast<irr::s32>(vectorFloat.Z),
+			static_cast<irr::s32>(vectorFloat.X)};
 		return value;
 	}
 
-	IAnimatedMeshSceneNode *Player::getNode() const
+	irr::scene::IAnimatedMeshSceneNode *Player::getNode() const
 	{
 		return _playerNode;
 	}
 
-	vector2df Player::getPositionFloat()
+	irr::core::vector2df Player::getPositionFloat()
 	{
 		auto vectorFloat = this->_playerNode->getPosition() / 4;
 		vectorFloat += 6.5f;
-		vector2df value = {vectorFloat.Z, vectorFloat.X};
+		irr::core::vector2df value = {vectorFloat.Z, vectorFloat.X};
 		return value;
 	}
 

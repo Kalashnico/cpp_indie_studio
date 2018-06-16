@@ -23,14 +23,14 @@ class AI : public AObject {
 		void update() noexcept;
 		void updatePosition(size_t oldx, size_t oldy) noexcept;
 		object::Player &getPlayer();
-		vector2di getPosition() noexcept { return _player.getPosition(); }
+		irr::core::vector2di getPosition() noexcept { return _player.getPosition(); }
 	private:
 		void moveCase(rotationDirection_e dir, float spd = MOVEMENT_SPEED);
 		void findClosestPlayer();
 		void setWayToPlayer();
 		bool checkMoveToTile(size_t x, size_t y, rotationDirection_e dir = NONE);
-		bool moveToXPlayer(vector2di tmp, bool invert);
-		bool moveToYPlayer(vector2di tmp, bool invert);
+		bool moveToXPlayer(irr::core::vector2di tmp, bool invert);
+		bool moveToYPlayer(irr::core::vector2di tmp, bool invert);
 		void setSafeDestination(size_t x, size_t y);
 		bool isSafe(size_t x, size_t y);
 		bool checkIfSafeDestination(rotationDirection_e dir);
@@ -38,11 +38,11 @@ class AI : public AObject {
 		bool checkBombImpactAt(size_t x, size_t y, size_t xPlayer, size_t yPlayer) const;
 		bool isBoxNearby(int x, int y, int bombSize);
 		void move();
-		vector2di _closestPlayer;
+		irr::core::vector2di _closestPlayer;
 		object::Player _player;
 		::map::Map *_map;
 		rotationDirection_e _destinationDirection;
-		vector2df _destinationCoordinates;
+		irr::core::vector2df _destinationCoordinates;
 		std::random_device _random;
 };
 

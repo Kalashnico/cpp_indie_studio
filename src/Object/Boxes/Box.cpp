@@ -23,8 +23,8 @@ Box::Box(std::unique_ptr<Loot> loot, ::map::Map *map, Gfx *gfx, int posx, int po
 	_posy{posy}
 {
 	auto modelPath = "./media/models/box/ItmBox00.obj";
-	vector3df modelSize = {0.25f, 0.25f, 0.25f};
-	vector3df pos = {(float)posy, 0.f, (float)posx};
+	irr::core::vector3df modelSize = {0.25f, 0.25f, 0.25f};
+	irr::core::vector3df pos = {(float)posy, 0.f, (float)posx};
 	pos -= 6.f;
 	pos *= 4.f;
 	pos.Y = 2.f;

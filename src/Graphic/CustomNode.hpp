@@ -7,39 +7,30 @@
 
 #include "Irrlicht/irrlicht.h"
 
-using namespace irr;
-
-using namespace core;
-using namespace scene;
-using namespace video;
-using namespace io;
-using namespace gui;
-
-
-class CustomNode : public ISceneNode {
+class CustomNode : public irr::scene::ISceneNode {
 
 	private:
-		aabbox3df	_box;
-		S3DVertex	_vertices[4];
-		SMaterial	_material;
+		irr::core::aabbox3df	_box;
+		irr::video::S3DVertex	_vertices[4];
+		irr::video::SMaterial	_material;
 
 	public:
-		CustomNode(ISceneNode *parent, ISceneManager *mgr, s32 id);
+		CustomNode(ISceneNode *parent, irr::scene::ISceneManager *mgr, irr::s32 id);
 
-		CustomNode(ISceneNode *parent, ISceneManager *mgr, s32 id,
-			const vector3df &position, const vector3df &rotation,
-			const vector3df &scale
+		CustomNode(ISceneNode *parent, irr::scene::ISceneManager *mgr, irr::s32 id,
+			const irr::core::vector3df &position, const irr::core::vector3df &rotation,
+			const irr::core::vector3df &scale
 		);
 
 		void OnRegisterSceneNode() override;
 
 		void render() override;
 
-		const aabbox3d<f32> &getBoundingBox() const override;
+		const irr::core::aabbox3d<irr::f32> &getBoundingBox() const override;
 
-		u32 getMaterialCount() const override;
+		irr::u32 getMaterialCount() const override;
 
-		SMaterial &getMaterial(u32 num) override;
+		irr::video::SMaterial &getMaterial(irr::u32 num) override;
 };
 
 #endif //IRRLICHTTESTS_CUSTOMNODE_HPP

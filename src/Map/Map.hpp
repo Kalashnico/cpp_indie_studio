@@ -14,14 +14,6 @@
 #include "Irrlicht/irrlicht.h"
 #include "Gfx.hpp"
 
-using namespace irr;
-
-using namespace irr::core;
-using namespace scene;
-using namespace video;
-using namespace io;
-using namespace gui;
-
 #define MAP_SIZE	13
 #define INDEX(x, y)	(MAP_SIZE * x + y)
 #define END_TIME	1.0
@@ -41,9 +33,9 @@ namespace map {
 			//Variable
 			std::vector<std::unique_ptr<Tile>> _map;
 			Gfx *_gfx;
-			ISceneManager *_sceneManager;
-			IMeshSceneNode *_mapNode;
-			ITriangleSelector *_selector;
+			irr::scene::ISceneManager *_sceneManager;
+			irr::scene::IMeshSceneNode *_mapNode;
+			irr::scene::ITriangleSelector *_selector;
 
 			bool _playersDead[4];
 			bool _end;
@@ -60,8 +52,8 @@ namespace map {
 
 			//Getter
 
-			IMeshSceneNode *getMapNode() const;
-			ITriangleSelector *getSelector() const;
+			irr::scene::IMeshSceneNode *getMapNode() const;
+			irr::scene::ITriangleSelector *getSelector() const;
 			std::vector<std::unique_ptr<Tile>> &getMap() noexcept { return _map; };
 			Tile *getTileAt(size_t x, size_t y) noexcept { return _map[INDEX(x, y)].get(); }
 			size_t getTileIndex(size_t x, size_t y) const noexcept { return INDEX(x, y); }

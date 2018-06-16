@@ -42,19 +42,19 @@ namespace map {
 			throw std::exception();
 		_mapNode = _sceneManager->addOctreeSceneNode(mesh->getMesh(0),
 			nullptr, 0);
-		_mapNode->setScale(vector3df(2, 2, 2));
+		_mapNode->setScale(irr::core::vector3df(2, 2, 2));
 		if (!_mapNode)
 			throw std::exception();
 		_selector = _sceneManager->createOctreeTriangleSelector(
 			_mapNode->getMesh(), _mapNode, 128);
 	}
 
-	ITriangleSelector *Map::getSelector() const
+	irr::scene::ITriangleSelector *Map::getSelector() const
 	{
 		return _selector;
 	}
 
-	IMeshSceneNode *Map::getMapNode() const
+	irr::scene::IMeshSceneNode *Map::getMapNode() const
 	{
 		return _mapNode;
 	}
