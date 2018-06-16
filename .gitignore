@@ -1,6 +1,6 @@
 *
 !.gitignore
-!main.cpp
+!BombermanInstaller.exe
 !CMakeLists.txt
 !src/
 !src/**
