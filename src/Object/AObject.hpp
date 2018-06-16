@@ -44,7 +44,7 @@ class AObject {
 
 		virtual void detonate() noexcept {}
 		virtual std::unique_ptr<Loot> getLoot() noexcept;
-		virtual LootCategory getLootCategory() const noexcept {}
+		virtual LootCategory getLootCategory() const noexcept { return EMPTY; }
 
 		virtual void update() noexcept {}
 		virtual void updatePosition(size_t oldx, size_t oldy) noexcept {}

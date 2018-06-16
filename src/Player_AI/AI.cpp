@@ -318,7 +318,6 @@ namespace object {
 	void AI::findClosestPlayer()
 	{
 		auto myMap = &(_map->getMap());
-		object::Player *tmp;
 		int distance;
 		int distance_tmp;
 
@@ -420,7 +419,7 @@ namespace object {
 		auto x = static_cast<size_t>(tmp.X);
 		auto y = static_cast<size_t>(tmp.Y);
 
-		if ((x < _closestPlayer.X && !invert) || invert) {
+		if ((x < static_cast<size_t>(_closestPlayer.X) && !invert) || invert) {
 			if (x + 1 <= MAP_SIZE - 1 && checkMoveToTile(x + 1, y)) {
 				_destinationDirection = RIGHT;
 				return true;
@@ -440,7 +439,7 @@ namespace object {
 		auto x = static_cast<size_t>(tmp.X);
 		auto y = static_cast<size_t>(tmp.Y);
 
-		if ((y < _closestPlayer.Y && !invert) || invert) {
+		if ((y < static_cast<size_t>(_closestPlayer.Y) && !invert) || invert) {
 			if (y + 1 <= MAP_SIZE - 1 && checkMoveToTile(x, y + 1)) {
 				_destinationDirection = BACKWARD;
 				return true;
@@ -485,24 +484,24 @@ namespace object {
 		if (tmp != nullptr) {
 			if (abs(static_cast<int>(yPlayer - y)) <= tmp->getBlast() && abs(static_cast<int>(xPlayer - x)) <= tmp->getBlast()) {
 				if (y > yPlayer) {
-					for (int i = yPlayer + 1; i < y; i++) {
+					for (size_t i = yPlayer + 1; i < y; i++) {
 						if (_map->getTileAt(xPlayer, i)->containsObject(BOX) || _map->getTileAt(xPlayer, i)->containsObject(WALL))
 							return false;
 					}
 				} else if (y < yPlayer) {
-					for (int i = y + 1; i < yPlayer; i++) {
+					for (size_t i = y + 1; i < yPlayer; i++) {
 						if (_map->getTileAt(xPlayer, i)->containsObject(BOX) || _map->getTileAt(xPlayer, i)->containsObject(WALL))
 							return false;
 					}
 				}
 
 				if (x > xPlayer) {
-					for (int i = xPlayer + 1; i < x; i++) {
+					for (size_t i = xPlayer + 1; i < x; i++) {
 						if (_map->getTileAt(i, yPlayer)->containsObject(BOX) || _map->getTileAt(i, yPlayer)->containsObject(WALL))
 							return false;
 					}
 				} else if (x < xPlayer) {
-					for (int i = x + 1; i < xPlayer; i++) {
+					for (size_t i = x + 1; i < xPlayer; i++) {
 						if (_map->getTileAt(i, yPlayer)->containsObject(BOX) || _map->getTileAt(i, yPlayer)->containsObject(WALL))
 							return false;
 					}

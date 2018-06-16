@@ -13,6 +13,8 @@ AObject::AObject(Type type)
 {}
 
 std::unique_ptr<Loot> AObject::getLoot() noexcept
-{}
+{
+	return nullptr;
+}
 
 }
