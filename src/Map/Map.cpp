@@ -20,7 +20,10 @@ namespace map {
 		generateMap();
 	}
 
-	Map::~Map() = default;
+	Map::~Map()
+	{
+		_mapNode->remove();
+	}
 
 	void Map::setGfx(Gfx *gfx)
 	{
@@ -112,21 +115,21 @@ namespace map {
 
 	void Map::addBoxes() noexcept
 	{
-		std::random_device randomDevice;                        // Random device
-		std::mt19937 engine(randomDevice());                        // Seed
-		std::uniform_int_distribution<> distribution(1, 10);        // Range
+		std::random_device randomDevice;
+		std::mt19937 engine(randomDevice());
+		std::uniform_int_distribution<> distribution(1, 10);
 
 		for (int x = 0; x < MAP_SIZE; x++) {
 			for (int y = 0; y < MAP_SIZE; y++) {
-				if (isCornerTile(x, y)) {                // Player spawn check
+				if (isCornerTile(x, y)) {
 					getTileAt(x, y)->setSetup(true);
 					continue;
 				}
 
-				if (x % 2 == 1 && y % 2 == 1)                // Wall check
+				if (x % 2 == 1 && y % 2 == 1)
 					continue;
 
-				if (distribution(engine) < 8) {                // Generate random number - 8/10 chance to spawn box
+				if (distribution(engine) < 8) {
 					auto loot = std::make_unique<object::Loot>(x, y, _gfx);
 					auto box = std::make_unique<object::Box>(std::move(loot), this, _gfx, x, y);
 					getTileAt(x, y)->addObject(std::move(box));
@@ -252,5 +255,26 @@ namespace map {
 		}
 
 		return false;
+	}
+
+	int Map::getWinner() noexcept
+	{
+		int numDead = 0;
+
+		for (auto value : _playersDead)
+			numDead += value;
+
+		if (numDead == 4)
+			return 0;
+		else {
+			int i = 0;
+			for (auto value : _playersDead) {
+				if (value == false)
+					return i + 1;
+				i++;
+			}
+		}
+
+		return -1;
 	}
 }

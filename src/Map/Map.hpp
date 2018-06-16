@@ -71,6 +71,8 @@ namespace map {
 
 			bool shouldEndGame() noexcept;
 
+			int getWinner() noexcept;
+
 			virtual ~Map();
 	};
 };
