@@ -2,7 +2,7 @@
 
 int main()
 {
-	::core::Core core(1);
+	core::Core core;
 	core.run();
 	return 0;
 }
