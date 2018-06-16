@@ -46,6 +46,9 @@ class Gfx {
 
 		irr::scene::ISceneManager *getSceneManager() const;
 
+		irr::video::IVideoDriver *getDriver() const noexcept { return _videoDriver; }
+		irr::IrrlichtDevice *getDevice() const noexcept { return _device; }
+
 		irr::scene::IAnimatedMeshSceneNode *drawMesh(std::string const &path,
 			std::string const &material, bool lighting,
 			const std::string &name,
@@ -56,6 +59,8 @@ class Gfx {
 		void addCameraFPS();
 
 		void setEventReceiver(irr::IEventReceiver &receiver);
+
+		bool isGuiButtonPressed(int buttonId) noexcept;
 
 		bool isKeyDown(irr::EKEY_CODE keyCode) const noexcept;
 

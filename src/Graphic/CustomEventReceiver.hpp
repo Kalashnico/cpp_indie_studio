@@ -13,11 +13,13 @@ class CustomEventReceiver : public irr::IEventReceiver {
 	private:
 		bool _keyIsDown[irr::KEY_KEY_CODES_COUNT];
 		irr::SEvent::SJoystickEvent _joystickStates[4];
+		bool _isGuiButtonClicked[4];
 
 	public:
 		CustomEventReceiver();
 		virtual ~CustomEventReceiver();
 		bool OnEvent(const irr::SEvent &event) override;
+		bool isGuiButtonPressed(int buttonId) noexcept;
 		bool isKeyDown(irr::EKEY_CODE keyCode) const noexcept;
 		irr::f32 getXJoystickStatus(int joystick) const noexcept;
 		irr::f32 getYJoystickStatus(int joystick) const noexcept;

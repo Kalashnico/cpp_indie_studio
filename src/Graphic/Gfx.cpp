@@ -29,7 +29,6 @@ Gfx::Gfx()
 	this->_videoDriver = _device->getVideoDriver();
 	this->_sceneManager = _device->getSceneManager();
 	this->_guiEnv = _device->getGUIEnvironment();
-	this->_device->getCursorControl()->setVisible(false);
 	this->_eventReceiver = nullptr;
 }
 
@@ -46,7 +45,6 @@ Gfx::Gfx(irr::IEventReceiver &receiver)
 	this->_videoDriver = _device->getVideoDriver();
 	this->_sceneManager = _device->getSceneManager();
 	this->_guiEnv = _device->getGUIEnvironment();
-	this->_device->getCursorControl()->setVisible(false);
 	this->_eventReceiver = _device->getEventReceiver();
 
 	setupGamepads();
@@ -154,6 +152,18 @@ void Gfx::setEventReceiver(irr::IEventReceiver &receiver)
 	this->_device->setEventReceiver(&receiver);
 	_eventReceiver = _device->getEventReceiver();
 	setupGamepads();
+}
+
+bool Gfx::isGuiButtonPressed(int buttonId) noexcept
+{
+	buttonId -= 101;
+	if (buttonId < 0)
+		return false;
+
+	auto eventReceiver = dynamic_cast<CustomEventReceiver *>(
+		this->_eventReceiver);
+	return eventReceiver->isGuiButtonPressed(buttonId);
+
 }
 
 bool Gfx::isKeyDown(irr::EKEY_CODE keyCode) const noexcept
