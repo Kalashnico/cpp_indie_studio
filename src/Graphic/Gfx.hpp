@@ -24,6 +24,7 @@ class Gfx {
 		irr::scene::ISceneManager *_sceneManager;
 		irr::IEventReceiver *_eventReceiver;
 		std::unordered_map<std::string, irr::scene::ISceneNode *> _nodeCache;
+		irr::video::ITexture *_background;
 
 		bool _gamepadActive;
 
