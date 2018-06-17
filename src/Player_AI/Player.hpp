@@ -30,7 +30,10 @@ using playerSpriteInfo_t = playerSpriteInfo_s;
 
 enum playerSprite_e {
 	POMMY = 1 << 0,
-	UNKNOWN = 1 << 1
+	UNKNOWN = 1 << 1,
+		RED_POMMY = 1 << 2,
+			BLUE_POMMY = 1 << 3,
+				PURPLE_POMMY = 1 << 4
 };
 
 #define MOVEMENT_SPEED 0.2

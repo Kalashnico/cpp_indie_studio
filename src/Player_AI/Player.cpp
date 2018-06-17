@@ -22,6 +22,9 @@ namespace object {
 
 	static std::unordered_map<playerSprite_e, playerSpriteInfo_t> playersPossibilities = {
 		{POMMY, {"./media/models/pommy/pommyV3.obj", {2.f, 2.f, 2.f}}},
+		{RED_POMMY, {"./media/models/red_pommy/pommyV3.obj", {2.f, 2.f, 2.f}}},
+		{BLUE_POMMY, {"./media/models/blue_pommy/pommyV3.obj", {2.f, 2.f, 2.f}}},
+		{PURPLE_POMMY, {"./media/models/purple_pommy/pommyV3.obj", {2.f, 2.f, 2.f}}},
 		{UNKNOWN, {"", {0, 0, 0}}}};
 
 	Player::Player(::map::Map *map, Type type, Gfx *gfx, playerSprite_e playerType, float x, float y,

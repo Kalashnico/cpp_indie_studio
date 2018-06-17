@@ -140,18 +140,18 @@ void Core::game() noexcept
 
 	numPlayers--;
 
-	(numPlayers > 0) ? player2 = std::make_unique<object::Player>(_map.get(), PLAYER2, &_gfx, POMMY, iPos2.X, iPos2.Y, iPos2.Z, false, 2)
-			: player2 = std::make_unique<object::AI>(_map.get(), PLAYER2, &_gfx, POMMY, iPos2.X, iPos2.Y, iPos2.Z, false, 2);
+	(numPlayers > 0) ? player2 = std::make_unique<object::Player>(_map.get(), PLAYER2, &_gfx, RED_POMMY, iPos2.X, iPos2.Y, iPos2.Z, false, 2)
+			: player2 = std::make_unique<object::AI>(_map.get(), PLAYER2, &_gfx, RED_POMMY, iPos2.X, iPos2.Y, iPos2.Z, false, 2);
 
 	numPlayers--;
 
-	(numPlayers > 0) ? player3 = std::make_unique<object::Player>(_map.get(), PLAYER3, &_gfx, POMMY, iPos3.X, iPos3.Y, iPos3.Z, false, 3)
-			: player3 = std::make_unique<object::AI>(_map.get(), PLAYER3, &_gfx, POMMY, iPos3.X, iPos3.Y, iPos3.Z, false, 3);
+	(numPlayers > 0) ? player3 = std::make_unique<object::Player>(_map.get(), PLAYER3, &_gfx, PURPLE_POMMY, iPos3.X, iPos3.Y, iPos3.Z, false, 3)
+			: player3 = std::make_unique<object::AI>(_map.get(), PLAYER3, &_gfx, PURPLE_POMMY, iPos3.X, iPos3.Y, iPos3.Z, false, 3);
 
 	numPlayers--;
 
-	(numPlayers > 0) ? player4 = std::make_unique<object::Player>(_map.get(), PLAYER4, &_gfx, POMMY, iPos4.X, iPos4.Y, iPos4.Z, false, 4)
-			: player4 = std::make_unique<object::AI>(_map.get(), PLAYER4, &_gfx, POMMY, iPos4.X, iPos4.Y, iPos4.Z, false, 4);
+	(numPlayers > 0) ? player4 = std::make_unique<object::Player>(_map.get(), PLAYER4, &_gfx, BLUE_POMMY, iPos4.X, iPos4.Y, iPos4.Z, false, 4)
+			: player4 = std::make_unique<object::AI>(_map.get(), PLAYER4, &_gfx, BLUE_POMMY, iPos4.X, iPos4.Y, iPos4.Z, false, 4);
 
 
 	_map.get()->addObjectToTile(static_cast<size_t>(tilePos1.X), static_cast<size_t>(tilePos1.Y), std::move(player1));
