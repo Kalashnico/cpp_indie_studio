@@ -16,7 +16,8 @@ enum soundType {
 	CLICK,
 	BOMB,
 	LOOT,
-	DEATH
+	DEATH,
+	WIN
 };
 
 class SoundManager {
@@ -31,6 +32,7 @@ class SoundManager {
 		void playDeath() noexcept;
 		void playBackground() noexcept;
 		void playClick() noexcept;
+		void playWin() noexcept;
 
 	private:
 		SoundManager();

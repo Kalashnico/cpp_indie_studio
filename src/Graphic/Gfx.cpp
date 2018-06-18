@@ -104,7 +104,7 @@ void Gfx::update()
 	updateFpsCount(_device, _videoDriver);
 	_videoDriver->draw2DImage(_background,
 		irr::core::position2d<irr::s32>(0,0),
-		irr::core::rect<irr::s32>(0,0,1920,1080),
+		irr::core::rect<irr::s32>(0,0,1920,1080		),
 		0,
 		irr::video::SColor (255,255,255,255),
 		true);

@@ -24,6 +24,9 @@ SoundManager::SoundManager()
 	if (!_soundsList[CLICK].openFromFile("media/sound/loot.ogg"))
 		throw std::invalid_argument("Sound media couldn't be found");
 
+	if (!_soundsList[WIN].openFromFile("media/sound/win.ogg"))
+		throw std::invalid_argument("Sound media couldn't be found");
+
 	_soundsList[BOMB].setVolume(20);
 	_soundsList[LOOT].setVolume(70);
 	_soundsList[DEATH].setVolume(50);
@@ -52,6 +55,11 @@ void SoundManager::playBackground() noexcept
 {
 	_soundsList[BACKGROUND].setLoop(true);
 	_soundsList[BACKGROUND].play();
+}
+
+void SoundManager::playWin() noexcept
+{
+	_soundsList[WIN].play();
 }
 
 void SoundManager::playClick() noexcept

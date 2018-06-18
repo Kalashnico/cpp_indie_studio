@@ -183,6 +183,7 @@ void Core::game() noexcept
 		_map.get()->updateTileObjects();
 	}
 
+	sound::SoundManager::getInstance().playWin();
 	_playerWon = _map.get()->getWinner();
 
 	_playerWonTextSetup = false;
